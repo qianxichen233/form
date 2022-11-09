@@ -1,9 +1,11 @@
 import logo from './logo.svg';
 import './App.css';
 
+import MultipleChoice from './components/Forms/MultipleChoice';
+
 function App() {
   return (
-    <h1>Hello World</h1>
+    <MultipleChoice></MultipleChoice>
   );
 }
 
