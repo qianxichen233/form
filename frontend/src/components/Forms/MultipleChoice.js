@@ -1,11 +1,12 @@
 import { useState, useEffect, useRef } from "react";
 
+import Form from "../UI/Form";
+
 const MultipleChoice = (props) => {
     const [options, setOptions] = useState([]);
 
     const optionsRef = useRef();
     optionsRef.current = options; //to escape closure
-
 
     const DeleteOptionHandler = (e) => {
         e.preventDefault();
@@ -46,13 +47,13 @@ const MultipleChoice = (props) => {
         setOptions(options);
     }, []);
 
-    return <form>
+    return <Form>
         <div>
             <input type="text" placeholder="Question Statement"></input>
         </div>
         {options}
         <input type="text" placeholder="Add Option" onClick={AddOptionHandler}></input>
-    </form>;
+    </Form>;
 }
 
 export default MultipleChoice;

@@ -1,11 +1,14 @@
-import logo from './logo.svg';
 import './App.css';
 
-import MultipleChoice from './components/Forms/MultipleChoice';
+import Questionnaire from './components/Questionnaire/Questionnaire';
+import Header from './components/header/header';
 
 function App() {
   return (
-    <MultipleChoice></MultipleChoice>
+    <>
+      <Header/>
+      <Questionnaire/>
+    </>
   );
 }
 

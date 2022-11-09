@@ -1,0 +1,7 @@
+.header{
+    position: fixed;
+    background-color: white;
+
+    height: 20vh;
+    width: 100vw;
+}
