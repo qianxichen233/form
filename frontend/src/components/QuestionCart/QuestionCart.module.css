@@ -2,3 +2,14 @@
     position: absolute;
     left: 10px;
 }
+
+.AddButton{
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+}
+
+.DeleteButton{
+    position: absolute;
+    right: 10px;
+}

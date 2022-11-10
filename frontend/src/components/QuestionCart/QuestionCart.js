@@ -5,7 +5,7 @@ import Cart from '../UI/Cart';
 
 import classes from './QuestionCart.module.css';
 
-const QuestionCart = () => {
+const QuestionCart = (props) => {
     const [cart, setCart] = useState(
         <MultipleChoice/>
     );
@@ -17,12 +17,14 @@ const QuestionCart = () => {
             setCart(<ShortAnswer/>);
     }
 
-    return <Cart>
+    return <Cart onClick={props.onEdit} id={props.id}>
         <select className={classes.QuestionType} onChange={ChangeQuestionHandler}>
             <option value="multiple_choice">Multiple Choice</option>
             <option value="short_answer">Short Answer</option>
         </select>
+        <button name="DeleteButton" className={classes.DeleteButton}>X</button>
         {cart}
+        <button name="AddButton" className={classes.AddButton}>+</button>
     </Cart>
 }
 
