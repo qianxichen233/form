@@ -1,58 +1,155 @@
 import { useState, useEffect, useRef } from "react";
+import lodash from 'lodash';
+
+import { useDispatch } from 'react-redux';
+import { setQuestionStore } from '../stores/questionSlice';
 
 import Form from "../UI/Form";
 
-const MultipleChoice = (props) => {
-    const [options, setOptions] = useState([]);
+let key = 3;
+const getKey = () => {
+    return ++key;
+}
 
-    const optionsRef = useRef();
-    optionsRef.current = options; //to escape closure
+const MultipleChoice = (props) => {
+    const [question, setQuestion] = useState(props.content || {
+        description: '',
+        options: [
+            {
+                content: '',
+                key: 0,
+                focus: false
+            },
+            {
+                content: '',
+                key: 1,
+                focus: false
+            },
+            {
+                content: '',
+                key: 2,
+                focus: false
+            },
+            {
+                content: '',
+                key: 3,
+                focus: false
+            }
+        ]
+    });
+
+    const dispatch = useDispatch()
+
+    const questionRef = useRef();
+    questionRef.current = question;
+
+    useEffect(() => {
+        dispatch(setQuestionStore({
+            id: props.id,
+            content: questionRef.current
+        }));
+    }, []);
+
+    const OnOptionContentChangeHandler = (e) => {
+        let newQuestion = lodash.cloneDeep(questionRef.current);
+
+        for(const option of newQuestion.options)
+        {
+            if(option.key === +e.currentTarget.id)
+                option.content = e.target.value;
+        }
+
+        dispatch(setQuestionStore({
+            id: props.id,
+            content: newQuestion
+        }));
+        setQuestion(newQuestion);
+    }
 
     const DeleteOptionHandler = (e) => {
         e.preventDefault();
+
+        let newQuestion = lodash.cloneDeep(questionRef.current);
+
         if(e.target.type == "button")
         {
-            const newOptions = optionsRef.current.filter((elem) => {
-                return +elem.props.id !== +e.currentTarget.id;
+            if(newQuestion.options.length <= 2) return;
+            newQuestion.options = newQuestion.options.filter((option) => {
+                return option.key !== +e.currentTarget.id;
             });
-            setOptions(newOptions);
+
+            dispatch(setQuestionStore({
+                id: props.id,
+                content: newQuestion
+            }));
+            setQuestion(newQuestion);
         }
     }
 
     const AddOptionHandler = (e) => {
         e.preventDefault();
-        let newOptions = [...optionsRef.current];
-        const key = Math.random(); //use random number as key
-        newOptions.push(
-            <div onClick={DeleteOptionHandler} key={key} id={key}>
-                <input type="text" autoFocus></input>
-                <button type="button">X</button>
-            </div>
+
+        let newQuestion = lodash.cloneDeep(questionRef.current);
+        newQuestion.options = newQuestion.options.map(option => {
+            return {
+                ...option,
+                focus: false
+            }
+        });
+        const key = getKey();
+        newQuestion.options.push(
+            {
+                content: '',
+                key: key,
+                focus: true
+            }
         );
-        setOptions(newOptions);
+
+        dispatch(setQuestionStore({
+            id: props.id,
+            content: newQuestion
+        }));
+        setQuestion(newQuestion);
     }
 
-    useEffect(() => {
-        let options = [];
-        for(let i = 0; i < 4; ++i) //4 options initially
-        {
-            const key = Math.random(); //use random number as key
-            options.push(
-                <div onClick={DeleteOptionHandler} key={key} id={key}>
-                    <input type="text"></input>
-                    <button type="button">X</button>
-                </div>
-            );
-        }
-        setOptions(options);
-    }, []);
+    const OnStatementChangeHandler = (e) => {
+        const newQuestion = lodash.cloneDeep(questionRef.current);
+        newQuestion.description = e.target.value;
+
+        dispatch(setQuestionStore({
+            id: props.id,
+            content: newQuestion
+        }));
+        setQuestion(newQuestion);
+    }
 
     return <Form>
         <div>
-            <input type="text" placeholder="Question Statement"></input>
+            <input
+                type="text"
+                placeholder="Question Statement"
+                value={question.description}
+                onChange={OnStatementChangeHandler}
+                >
+            </input>
         </div>
-        {options}
-        <input type="text" placeholder="Add Option" onClick={AddOptionHandler}></input>
+        {question.options.map(option => {
+            return <div
+                        onClick={DeleteOptionHandler}
+                        key={option.key}
+                        id={option.key}
+                    >
+                        <input
+                            type="text"
+                            value={option.content}
+                            id={option.key}
+                            onChange={OnOptionContentChangeHandler}
+                            autoFocus={option.focus}
+                        ></input>
+                        <button type="button">X</button>
+                    </div>
+        })}
+        <input type="text" placeholder="Add Option" onClick={AddOptionHandler} readOnly></input>
     </Form>;
 }
 

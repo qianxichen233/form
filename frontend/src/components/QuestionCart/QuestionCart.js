@@ -7,14 +7,14 @@ import classes from './QuestionCart.module.css';
 
 const QuestionCart = (props) => {
     const [cart, setCart] = useState(
-        <MultipleChoice/>
+        <MultipleChoice id={props.id} content={props.content}/>
     );
 
     const ChangeQuestionHandler = (e) => {
         if(e.target.value === "multiple_choice")
-            setCart(<MultipleChoice/>);
+            setCart(<MultipleChoice id={props.id}/>);
         else if(e.target.value === "short_answer")
-            setCart(<ShortAnswer/>);
+            setCart(<ShortAnswer id={props.id}/>);
     }
 
     return <Cart onClick={props.onEdit} id={props.id}>
@@ -25,6 +25,7 @@ const QuestionCart = (props) => {
         <button name="DeleteButton" className={classes.DeleteButton}>X</button>
         {cart}
         <button name="AddButton" className={classes.AddButton}>+</button>
+        <button name="CopyButton" className={classes.CopyButton}>Copy</button>
     </Cart>
 }
 
