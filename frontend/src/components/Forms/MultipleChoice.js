@@ -13,27 +13,24 @@ const getKey = () => {
 
 const MultipleChoice = (props) => {
     const [question, setQuestion] = useState(props.content || {
+        type: 'MultipleChoice',
         description: '',
         options: [
             {
                 content: '',
-                key: 0,
-                focus: false
+                key: 0
             },
             {
                 content: '',
-                key: 1,
-                focus: false
+                key: 1
             },
             {
                 content: '',
-                key: 2,
-                focus: false
+                key: 2
             },
             {
                 content: '',
-                key: 3,
-                focus: false
+                key: 3
             }
         ]
     });
@@ -90,18 +87,11 @@ const MultipleChoice = (props) => {
         e.preventDefault();
 
         let newQuestion = lodash.cloneDeep(questionRef.current);
-        newQuestion.options = newQuestion.options.map(option => {
-            return {
-                ...option,
-                focus: false
-            }
-        });
         const key = getKey();
         newQuestion.options.push(
             {
                 content: '',
-                key: key,
-                focus: true
+                key: key
             }
         );
 
@@ -144,7 +134,6 @@ const MultipleChoice = (props) => {
                             value={option.content}
                             id={option.key}
                             onChange={OnOptionContentChangeHandler}
-                            autoFocus={option.focus}
                         ></input>
                         <button type="button">X</button>
                     </div>

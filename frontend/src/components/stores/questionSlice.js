@@ -29,14 +29,10 @@ export const questionSlice = createSlice({
         return question.key !== action.payload.id;
       })
       return state;
-    },
-
-    test: (state, action) => {
-        console.log('test');
     }
   },
 })
 
-export const { setQuestionStore, deleteQuestionStore, test } = questionSlice.actions
+export const { setQuestionStore, deleteQuestionStore } = questionSlice.actions
 
 export default questionSlice.reducer
