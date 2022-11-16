@@ -9,7 +9,8 @@ import Form from '../UI/Form';
 const ShortAnswer = (props) => {
     const [question, setQuestion] = useState(props.content || {
         type: 'ShortAnswer',
-        description: ''
+        description: '',
+        required: true
     });
 
     const dispatch = useDispatch();
@@ -22,11 +23,22 @@ const ShortAnswer = (props) => {
             id: props.id,
             content: questionRef.current
         }));
-    }, []);
+    }, [dispatch, props.id]);
 
     const onQuestionChangeHandler = (e) => {
         let newQuestion = lodash.cloneDeep(questionRef.current);
         newQuestion.description = e.target.value;
+
+        dispatch(setQuestionStore({
+            id: props.id,
+            content: newQuestion
+        }));
+        setQuestion(newQuestion);
+    }
+
+    const OnRequiredChangeHandler = (e) => {
+        const newQuestion = lodash.cloneDeep(questionRef.current);
+        newQuestion.required = e.target.checked;
 
         dispatch(setQuestionStore({
             id: props.id,
@@ -43,6 +55,13 @@ const ShortAnswer = (props) => {
                 value={question.description}
                 onChange={onQuestionChangeHandler}
             ></input>
+            <input
+                type="checkbox"
+                name="required"
+                checked={question.required}
+                onChange={OnRequiredChangeHandler}
+            />
+            <label for="required"> Required</label>
         </div>
         <input type="text" disabled></input>
     </Form>

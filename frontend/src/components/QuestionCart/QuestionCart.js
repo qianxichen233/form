@@ -12,17 +12,17 @@ const getInitState = (props) => {
     if(!type)
     {
         currentType = currentType ? currentType : "multiple_choice";
-        return <MultipleChoice id={props.id}/>; //non-copy initial state
+        return <MultipleChoice id={props.id} className={classes.question}/>; //non-copy initial state
     }
     if(type === 'MultipleChoice')
     {
         currentType = currentType ? currentType : "multiple_choice";
-        return <MultipleChoice id={props.id} content={props.content}/>;
+        return <MultipleChoice id={props.id} content={props.content} className={classes.question}/>;
     }
     if(type === 'ShortAnswer')
     {
         currentType = currentType ? currentType : "short_answer";
-        return <ShortAnswer id={props.id} content={props.content}/>;
+        return <ShortAnswer id={props.id} content={props.content} className={classes.question}/>;
     }
 }
 
@@ -33,12 +33,12 @@ const QuestionCart = (props) => {
         if(e.target.value === "multiple_choice")
         {
             currentType = "multiple_choice";
-            setCart(<MultipleChoice id={props.id}/>);
+            setCart(<MultipleChoice id={props.id} className={classes.question}/>);
         }
         else if(e.target.value === "short_answer")
         {
             currentType = "short_answer";
-            setCart(<ShortAnswer id={props.id}/>);
+            setCart(<ShortAnswer id={props.id} className={classes.question}/>);
         }
     }
     

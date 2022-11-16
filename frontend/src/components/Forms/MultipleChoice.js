@@ -32,7 +32,8 @@ const MultipleChoice = (props) => {
                 content: '',
                 key: 3
             }
-        ]
+        ],
+        required: true
     });
 
     const dispatch = useDispatch()
@@ -45,7 +46,7 @@ const MultipleChoice = (props) => {
             id: props.id,
             content: questionRef.current
         }));
-    }, []);
+    }, [dispatch, props.id]);
 
     const OnOptionContentChangeHandler = (e) => {
         let newQuestion = lodash.cloneDeep(questionRef.current);
@@ -68,7 +69,7 @@ const MultipleChoice = (props) => {
 
         let newQuestion = lodash.cloneDeep(questionRef.current);
 
-        if(e.target.type == "button")
+        if(e.target.type === "button")
         {
             if(newQuestion.options.length <= 2) return;
             newQuestion.options = newQuestion.options.filter((option) => {
@@ -113,6 +114,17 @@ const MultipleChoice = (props) => {
         setQuestion(newQuestion);
     }
 
+    const OnRequiredChangeHandler = (e) => {
+        const newQuestion = lodash.cloneDeep(questionRef.current);
+        newQuestion.required = e.target.checked;
+
+        dispatch(setQuestionStore({
+            id: props.id,
+            content: newQuestion
+        }));
+        setQuestion(newQuestion);
+    }
+
     return <Form>
         <div>
             <input
@@ -120,8 +132,15 @@ const MultipleChoice = (props) => {
                 placeholder="Question Statement"
                 value={question.description}
                 onChange={OnStatementChangeHandler}
-                >
+            >
             </input>
+            <input
+                type="checkbox"
+                name="required"
+                checked={question.required}
+                onChange={OnRequiredChangeHandler}
+            />
+            <label for="required"> Required</label>
         </div>
         {question.options.map(option => {
             return <div
