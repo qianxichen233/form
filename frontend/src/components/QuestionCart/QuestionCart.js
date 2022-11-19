@@ -53,8 +53,11 @@ const QuestionCart = (props) => {
         </select>
         <button name="DeleteButton" className={classes.DeleteButton}>X</button>
         {cart}
-        <button name="AddButton" className={classes.AddButton}>+</button>
-        <button name="CopyButton" className={classes.CopyButton}>Copy</button>
+        <div className={classes.optionDiv}>
+            <div className={classes.divLine}></div>
+            <button name="AddButton" className={classes.AddButton}>+</button>
+            <button name="CopyButton" className={classes.CopyButton}>Copy</button>
+        </div>
     </Cart>
 }
 

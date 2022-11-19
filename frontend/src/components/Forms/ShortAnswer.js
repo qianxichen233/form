@@ -5,6 +5,8 @@ import { useDispatch } from 'react-redux';
 import { setQuestionStore } from '../stores/questionSlice';
 
 import Form from '../UI/Form';
+import QuestionInput from '../UI/QuestionInput';
+import OptionInput from '../UI/OptionInput';
 
 const ShortAnswer = (props) => {
     const [question, setQuestion] = useState(props.content || {
@@ -49,12 +51,12 @@ const ShortAnswer = (props) => {
 
     return <Form>
         <div>
-            <input
+            <QuestionInput
                 type="text"
                 placeholder='Question Statement'
                 value={question.description}
                 onChange={onQuestionChangeHandler}
-            ></input>
+            ></QuestionInput>
             <input
                 type="checkbox"
                 name="required"
@@ -63,7 +65,7 @@ const ShortAnswer = (props) => {
             />
             <label for="required"> Required</label>
         </div>
-        <input type="text" disabled></input>
+        <OptionInput type="text" disabled></OptionInput>
     </Form>
 }
 

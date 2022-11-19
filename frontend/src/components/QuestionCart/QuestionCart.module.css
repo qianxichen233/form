@@ -6,7 +6,7 @@
 .AddButton{
     position: absolute;
     right: 10px;
-    bottom: 10px;
+    bottom: 0px;
 }
 
 .DeleteButton{
@@ -17,5 +17,20 @@
 .CopyButton{
     position: absolute;
     right: 40px;
-    bottom: 10px;
+    bottom: 0px;
+}
+
+.optionDiv{
+    position: relative;
+    height: 30px;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.divLine{
+    position: absolute;
+    left: 5%;
+    width: 90%;
+    height: 1px;
+    border-top: 1px solid grey;
 }

@@ -4,7 +4,13 @@ import lodash from 'lodash';
 import { useDispatch } from 'react-redux';
 import { setQuestionStore } from '../stores/questionSlice';
 
+import classes from './MultipleChoice.module.css';
+
 import Form from "../UI/Form";
+import QuestionInput from '../UI/QuestionInput';
+import OptionInput from '../UI/OptionInput';
+
+import { RiCheckboxBlankCircleLine } from 'react-icons/ri';
 
 let key = 3;
 const getKey = () => {
@@ -12,6 +18,7 @@ const getKey = () => {
 }
 
 const MultipleChoice = (props) => {
+    const [Focus, setFocus] = useState(false);
     const [question, setQuestion] = useState(props.content || {
         type: 'MultipleChoice',
         description: '',
@@ -127,37 +134,51 @@ const MultipleChoice = (props) => {
 
     return <Form>
         <div>
-            <input
+            <QuestionInput
                 type="text"
                 placeholder="Question Statement"
                 value={question.description}
                 onChange={OnStatementChangeHandler}
             >
-            </input>
+            </QuestionInput>
             <input
                 type="checkbox"
                 name="required"
                 checked={question.required}
                 onChange={OnRequiredChangeHandler}
             />
-            <label for="required"> Required</label>
+            <label htmlFor="required"> Required</label>
         </div>
-        {question.options.map(option => {
+        {question.options.map((option, index, array) => {
             return <div
+                        className={classes.option}
                         onClick={DeleteOptionHandler}
                         key={option.key}
                         id={option.key}
                     >
-                        <input
+                        <RiCheckboxBlankCircleLine className={classes.icon} size={20}/>
+                        <OptionInput
                             type="text"
                             value={option.content}
                             id={option.key}
                             onChange={OnOptionContentChangeHandler}
-                        ></input>
+                            placeholder={`Option ${index + 1}`}
+                            autoFocus={index === array.length - 1 && Focus}
+                            onFocus={() => {
+                                if(index === array.length - 1 && Focus)
+                                    setFocus(false);
+                            }}
+                        ></OptionInput>
                         <button type="button">X</button>
                     </div>
         })}
-        <input type="text" placeholder="Add Option" onClick={AddOptionHandler} readOnly></input>
+        <OptionInput
+            type="text"
+            placeholder="Add Option"
+            onClick={AddOptionHandler}
+            readOnly
+            onFocus={() => setFocus(true)}
+        ></OptionInput>
     </Form>;
 }
 

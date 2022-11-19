@@ -1,0 +1,50 @@
+.container {
+    display: inline-block;
+    position: relative;
+}
+
+.input[type="text"] {
+    width: 800px;
+    font-size: 15px;
+    height: 30px;
+    border-style: hidden;
+    margin-bottom: 5px;
+    border-width: 1px;
+}
+
+.input[type="text"]:hover {
+    border-bottom-style: groove;
+}
+
+.input[type="text"]:focus {
+    outline: none;
+}
+
+.bar:after, .bar:before{
+    content: '';
+    display: block;
+    position: absolute;
+    width: 0;
+    bottom: 1px;
+    height: 2px;
+    background-color: purple;
+    transition: width 0.3s ease-in-out;
+}
+
+.bar:after{
+    left: 50%;
+}
+
+.bar:before{
+    right: 50%;
+}
+
+.input[type="text"]:focus ~ .bar:after,
+.input[type="text"]:focus ~ .bar:before {
+    width: 50%;
+}
+
+.inputContainer {
+    display: inline-block;
+    height: 35px;
+}
