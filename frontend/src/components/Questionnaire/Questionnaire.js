@@ -53,6 +53,10 @@ const Questionnaire = () => {
         setEditQuestion(+id);
     }
 
+    const ClearErrorMessage = () => {
+        setErrorHint(null);
+    }
+
     const onAddQuestion = (e) => {
         OnEditQuestionChange(e.currentTarget.id);
         if(!e.target.attributes['name']) return;
@@ -157,14 +161,14 @@ const Questionnaire = () => {
                 onEdit={onAddQuestion}
                 content={question.content}
                 Focus={question.key === EditQuestion}
-                MissingItem={
-                    ErrorHint ?
-                        (ErrorHint.id === question.key ?
-                            {
-                                type: ErrorHint.type,
-                                index: ErrorHint.index
-                            } : null) : null
+                missingItem={
+                    ErrorHint?.id === question.key ?
+                        {
+                            type: ErrorHint.type,
+                            index: ErrorHint.index
+                        } : null
                 }
+                onErrorClear={ClearErrorMessage}
             />
         })}
         <button type="submit" onClick={OnSubmitHandler}>Submit</button>

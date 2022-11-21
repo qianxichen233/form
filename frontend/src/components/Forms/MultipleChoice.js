@@ -134,7 +134,7 @@ const MultipleChoice = (props) => {
         }));
         setQuestion(newQuestion);
     }
-
+    console.log(props.missingItem);
     return <Form>
         <div>
             <QuestionInput
@@ -142,6 +142,8 @@ const MultipleChoice = (props) => {
                 placeholder="Question Statement"
                 value={question.description}
                 onChange={OnStatementChangeHandler}
+                MissingError={props.missingItem?.type === "description"}
+                onClick={props.missingItem?.type === "description" ? props.onErrorClear : null}
             >
             </QuestionInput>
             <input
@@ -171,6 +173,15 @@ const MultipleChoice = (props) => {
                                 if(index === array.length - 1 && Focus)
                                     setFocus(false);
                             }}
+                            MissingError={
+                                props.missingItem?.type === "option" &&
+                                props.missingItem?.index === index
+                            }
+                            onClick={
+                                props.missingItem?.type === "option" &&
+                                props.missingItem?.index === index ?
+                                props.onErrorClear : null
+                            }
                         ></OptionInput>
                         <OptionDeleteButton/>
                     </div>

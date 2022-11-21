@@ -48,3 +48,8 @@
     display: inline-block;
     height: 35px;
 }
+
+.error{
+    border-bottom-style: groove !important;
+    border-color: red !important;
+}

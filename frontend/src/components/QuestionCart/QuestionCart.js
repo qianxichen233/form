@@ -45,7 +45,6 @@ const QuestionCart = (props) => {
             id: props.id
         });
     }
-    
     return <Cart onClick={props.onEdit} id={props.id} Focus={props.Focus}>
         <div className={classes.ButtonGroupTop}>
             <select
@@ -71,6 +70,8 @@ const QuestionCart = (props) => {
                     id={cart.id}
                     className={classes.question}
                     content={cart.content}
+                    missingItem={props.missingItem}
+                    onErrorClear={props.onErrorClear}
                 />
             }
             else if(cart.type === "ShortAnswer")
@@ -79,6 +80,8 @@ const QuestionCart = (props) => {
                     id={cart.id}
                     className={classes.question}
                     content={cart.content}
+                    missingItem={props.missingItem}
+                    onErrorClear={props.onErrorClear}
                 />
             }
         })(cart)}

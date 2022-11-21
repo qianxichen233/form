@@ -56,6 +56,8 @@ const ShortAnswer = (props) => {
                 placeholder='Question Statement'
                 value={question.description}
                 onChange={onQuestionChangeHandler}
+                MissingError={props.missingItem?.type === "description"}
+                onClick={props.missingItem?.type === "description" ? props.onErrorClear : null}
             ></QuestionInput>
             <input
                 type="checkbox"
