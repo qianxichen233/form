@@ -14,6 +14,7 @@ const getKey = () => {
 
 const Questionnaire = () => {
     const [questions, setQuestions] = useState([]);
+    const [EditQuestion, setEditQuestion] = useState(0);
     const questionContent = useSelector((state) => state.question.questions);
 
     const dispatch = useDispatch()
@@ -24,24 +25,41 @@ const Questionnaire = () => {
     const questionContentRef = useRef();
     questionContentRef.current = questionContent;
 
+    const EditQuestionRef = useRef();
+    EditQuestionRef.current = EditQuestion;
+
+    const OnEditQuestionChange = (id) => {
+        if(id === EditQuestionRef) return;
+        setEditQuestion(id);
+    }
+
     const onAddQuestion = (e) => {
-        if(e.target.name === "AddButton")
+        OnEditQuestionChange(e.currentTarget.id);
+        if(!e.target.attributes['name']) return;
+        const name = e.target.attributes['name'].value;
+        if(name === "AddButton")
         {
             let newQuestions = [];
+            const key = getKey();
             for(let i = 0; i < questionRef.current.length; ++i)
             {
-                const key = getKey();
                 newQuestions.push(questionRef.current[i]);
                 if(+questionRef.current[i].props.id === +e.currentTarget.id)
                 {
                     newQuestions.push(
-                        <QuestionCart key={key} id={key} onEdit={onAddQuestion}/>
+                        <QuestionCart
+                            key={key}
+                            id={key}
+                            onEdit={onAddQuestion}
+                            onFocus={OnEditQuestionChange}
+                        />
                     );
                 }
             }
             setQuestions(newQuestions);
+            setEditQuestion(key);
         }
-        else if(e.target.name === "DeleteButton")
+        else if(name === "DeleteButton")
         {
             if(questionRef.current.length === 1) return;
             let newQuestions = [];
@@ -52,7 +70,7 @@ const Questionnaire = () => {
             dispatch(deleteQuestionStore({id: +e.currentTarget.id}))
             setQuestions(newQuestions);
         }
-        else if(e.target.name === "CopyButton")
+        else if(name === "CopyButton")
         {
             let questionContentCopy;
             for(const question of questionContentRef.current)
@@ -74,6 +92,7 @@ const Questionnaire = () => {
                             id={key}
                             onEdit={onAddQuestion}
                             content={questionContentCopy}
+                            onFocus={OnEditQuestionChange}
                         />
                     );
                 }
@@ -85,8 +104,14 @@ const Questionnaire = () => {
     useEffect(() => {
         const key = getKey();
         setQuestions([
-            <QuestionCart key={key} id={key} onEdit={onAddQuestion}/>
+            <QuestionCart
+                key={key}
+                id={key}
+                onEdit={onAddQuestion}
+                onFocus={OnEditQuestionChange}
+            />
         ]);
+        setEditQuestion(key);
     }, []);
 
     const OnSubmitHandler = async (e) => {

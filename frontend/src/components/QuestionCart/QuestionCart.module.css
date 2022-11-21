@@ -1,36 +1,59 @@
 .QuestionType{
-    position: absolute;
-    right: 40px;
+    margin-right: 10px;
+}
+
+.AddButton, .DeleteButton, .CopyButton{
+    width: 30px;
+    height: 30px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
 }
 
 .AddButton{
-    position: absolute;
-    right: 10px;
-    bottom: 0px;
+    margin-right: 10px;
 }
 
 .DeleteButton{
-    position: absolute;
-    right: 10px;
+    margin-right: 10px;
+}
+
+.DeleteButton:hover, .AddButton:hover, .CopyButton:hover{
+    background-color: rgba(211, 211, 211, 0.3);
 }
 
 .CopyButton{
-    position: absolute;
-    right: 40px;
-    bottom: 0px;
+    margin-right: 10px;
 }
 
 .optionDiv{
-    position: relative;
-    height: 30px;
-    width: 100%;
-    margin-top: 20px;
+    background-color: rgba(211, 211, 211, 0.3);
+    width: 90%;
+    margin-left: 5%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    height: 1px
 }
 
-.divLine{
+.ButtonGroupBottom{
+    position: relative;
+    bottom: 0;
+    margin-right: 0;
+    margin-left: auto;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ButtonGroupTop{
     position: absolute;
-    left: 5%;
-    width: 90%;
-    height: 1px;
-    border-top: 1px solid grey;
+    right: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }

@@ -9,6 +9,7 @@ import classes from './MultipleChoice.module.css';
 import Form from "../UI/Form";
 import QuestionInput from '../UI/QuestionInput';
 import OptionInput from '../UI/OptionInput';
+import OptionDeleteButton from "../UI/OptionDeleteButton";
 
 import { RiCheckboxBlankCircleLine } from 'react-icons/ri';
 
@@ -76,7 +77,7 @@ const MultipleChoice = (props) => {
 
         let newQuestion = lodash.cloneDeep(questionRef.current);
 
-        if(e.target.type === "button")
+        if(e.target.attributes['name'].value === "DeleteOption")
         {
             if(newQuestion.options.length <= 2) return;
             newQuestion.options = newQuestion.options.filter((option) => {
@@ -169,7 +170,7 @@ const MultipleChoice = (props) => {
                                     setFocus(false);
                             }}
                         ></OptionInput>
-                        <button type="button">X</button>
+                        <OptionDeleteButton/>
                     </div>
         })}
         <OptionInput
