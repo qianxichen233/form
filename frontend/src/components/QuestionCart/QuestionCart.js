@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import MultipleChoice from '../Forms/MultipleChoice';
 import ShortAnswer from '../Forms/ShortAnswer';
 import Cart from '../UI/Cart';
@@ -9,24 +9,30 @@ import { HiOutlineTrash } from 'react-icons/hi';
 import { MdContentCopy } from 'react-icons/md';
 import { GrAddCircle } from 'react-icons/gr';
 
-let currentType = null;
-
 const getInitState = (props) => {
     const type = props.content?.type;
     if(!type)
     {
-        currentType = currentType ? currentType : "multiple_choice";
-        return <MultipleChoice id={props.id} className={classes.question}/>; //non-copy initial state
+        return {
+            type: "MultipleChoice",
+            id: props.id
+        }
     }
     if(type === 'MultipleChoice')
     {
-        currentType = currentType ? currentType : "multiple_choice";
-        return <MultipleChoice id={props.id} content={props.content} className={classes.question}/>;
+        return {
+            type: "MultipleChoice",
+            id: props.id,
+            content: props.content
+        }
     }
     if(type === 'ShortAnswer')
     {
-        currentType = currentType ? currentType : "short_answer";
-        return <ShortAnswer id={props.id} content={props.content} className={classes.question}/>;
+        return {
+            type: "ShortAnswer",
+            id: props.id,
+            content: props.content
+        }
     }
 }
 
@@ -34,27 +40,21 @@ const QuestionCart = (props) => {
     const [cart, setCart] = useState(getInitState(props));
 
     const ChangeQuestionHandler = (e) => {
-        if(e.target.value === "multiple_choice")
-        {
-            currentType = "multiple_choice";
-            setCart(<MultipleChoice id={props.id} className={classes.question}/>);
-        }
-        else if(e.target.value === "short_answer")
-        {
-            currentType = "short_answer";
-            setCart(<ShortAnswer id={props.id} className={classes.question}/>);
-        }
+        setCart({
+            type: e.target.value,
+            id: props.id
+        });
     }
     
-    return <Cart onClick={props.onEdit} id={props.id}>
+    return <Cart onClick={props.onEdit} id={props.id} Focus={props.Focus}>
         <div className={classes.ButtonGroupTop}>
             <select
                 className={classes.QuestionType}
                 onChange={ChangeQuestionHandler}
-                value={currentType}
+                value={cart.type}
             >
-                <option value="multiple_choice">Multiple Choice</option>
-                <option value="short_answer">Short Answer</option>
+                <option value="MultipleChoice">Multiple Choice</option>
+                <option value="ShortAnswer">Short Answer</option>
             </select>
             <div
                 name="DeleteButton"
@@ -64,7 +64,24 @@ const QuestionCart = (props) => {
                 <HiOutlineTrash size={20}/>
             </div>
         </div>
-        {cart}
+        {(cart => {
+            if(cart.type === "MultipleChoice")
+            {
+                return <MultipleChoice
+                    id={cart.id}
+                    className={classes.question}
+                    content={cart.content}
+                />
+            }
+            else if(cart.type === "ShortAnswer")
+            {
+                return <ShortAnswer
+                    id={cart.id}
+                    className={classes.question}
+                    content={cart.content}
+                />
+            }
+        })(cart)}
         <div className={classes.optionDiv}></div>
         <div className={classes.ButtonGroupBottom}>
             <div

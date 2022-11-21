@@ -75,6 +75,8 @@ const MultipleChoice = (props) => {
     const DeleteOptionHandler = (e) => {
         e.preventDefault();
 
+        if(!e.target.attributes['name']) return;
+
         let newQuestion = lodash.cloneDeep(questionRef.current);
 
         if(e.target.attributes['name'].value === "DeleteOption")

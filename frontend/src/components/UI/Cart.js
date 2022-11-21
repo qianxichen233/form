@@ -1,8 +1,9 @@
 import classes from './Cart.module.css';
 
 const Cart = (props) => {
+    const className = `${classes.cart} ${props.Focus ? classes.focus : ''}`;
     return <div
-        className={classes.cart}
+        className={className}
         onClick={props.onClick}
         id={props.id}
     >

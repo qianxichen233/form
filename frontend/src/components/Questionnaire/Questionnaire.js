@@ -12,9 +12,29 @@ const getKey = () => {
     return ++key;
 }
 
+const checkValidity = (questions) => {
+    for(const question of questions)
+    {
+        if(!question.content.description)
+            return {
+                id: question.key,
+                type: 'description'
+            };
+        for(let i = 0; i < question.content.options.length; ++i)
+            if(!question.content.options[i].content)
+                return {
+                    id: question.key,
+                    type: 'option',
+                    index: i
+                }
+    }
+    return null;
+}
+
 const Questionnaire = () => {
     const [questions, setQuestions] = useState([]);
     const [EditQuestion, setEditQuestion] = useState(0);
+    const [ErrorHint, setErrorHint] = useState();
     const questionContent = useSelector((state) => state.question.questions);
 
     const dispatch = useDispatch()
@@ -30,7 +50,7 @@ const Questionnaire = () => {
 
     const OnEditQuestionChange = (id) => {
         if(id === EditQuestionRef) return;
-        setEditQuestion(id);
+        setEditQuestion(+id);
     }
 
     const onAddQuestion = (e) => {
@@ -44,27 +64,25 @@ const Questionnaire = () => {
             for(let i = 0; i < questionRef.current.length; ++i)
             {
                 newQuestions.push(questionRef.current[i]);
-                if(+questionRef.current[i].props.id === +e.currentTarget.id)
+                if(+questionRef.current[i].id === +e.currentTarget.id)
                 {
                     newQuestions.push(
-                        <QuestionCart
-                            key={key}
-                            id={key}
-                            onEdit={onAddQuestion}
-                            onFocus={OnEditQuestionChange}
-                        />
+                        {
+                            key: key,
+                            id: key
+                        }
                     );
                 }
             }
             setQuestions(newQuestions);
-            setEditQuestion(key);
+            setEditQuestion(+key);
         }
         else if(name === "DeleteButton")
         {
             if(questionRef.current.length === 1) return;
             let newQuestions = [];
             for(let i = 0; i < questionRef.current.length; ++i)
-                if(+questionRef.current[i].props.id !== +e.currentTarget.id)
+                if(+questionRef.current[i].id !== +e.currentTarget.id)
                     newQuestions.push(questionRef.current[i]);
             
             dispatch(deleteQuestionStore({id: +e.currentTarget.id}))
@@ -84,16 +102,14 @@ const Questionnaire = () => {
             {
                 const key = getKey();
                 newQuestions.push(questionRef.current[i]);
-                if(+questionRef.current[i].props.id === +e.currentTarget.id)
+                if(+questionRef.current[i].id === +e.currentTarget.id)
                 {
                     newQuestions.push(
-                        <QuestionCart
-                            key={key}
-                            id={key}
-                            onEdit={onAddQuestion}
-                            content={questionContentCopy}
-                            onFocus={OnEditQuestionChange}
-                        />
+                        {
+                            key: key,
+                            id: key,
+                            content: questionContentCopy
+                        }
                     );
                 }
             }
@@ -104,18 +120,23 @@ const Questionnaire = () => {
     useEffect(() => {
         const key = getKey();
         setQuestions([
-            <QuestionCart
-                key={key}
-                id={key}
-                onEdit={onAddQuestion}
-                onFocus={OnEditQuestionChange}
-            />
+            {
+                key: key,
+                id: key
+            }
         ]);
-        setEditQuestion(key);
+        setEditQuestion(+key);
     }, []);
 
     const OnSubmitHandler = async (e) => {
         e.preventDefault();
+
+        const missingPart = checkValidity(questionContent);
+        if(missingPart)
+        {
+            setErrorHint(missingPart);
+            return;
+        }
         
         await fetch(`${process.env.REACT_APP_BACKEND_URL}/questionnaire`,{
             method: 'POST',
@@ -125,12 +146,27 @@ const Questionnaire = () => {
             },
             body: JSON.stringify(questionContent)
         });
-        
     }
 
     return <div className={classes.questionnaire}>
         <FormTitle/>
-        {questions}
+        {questions.map(question => {
+            return <QuestionCart
+                key={question.key}
+                id={question.key}
+                onEdit={onAddQuestion}
+                content={question.content}
+                Focus={question.key === EditQuestion}
+                MissingItem={
+                    ErrorHint ?
+                        (ErrorHint.id === question.key ?
+                            {
+                                type: ErrorHint.type,
+                                index: ErrorHint.index
+                            } : null) : null
+                }
+            />
+        })}
         <button type="submit" onClick={OnSubmitHandler}>Submit</button>
     </div>
 }
