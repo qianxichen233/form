@@ -11,6 +11,7 @@ import QuestionInput from '../UI/QuestionInput';
 import OptionInput from '../UI/OptionInput';
 import OptionDeleteButton from "../UI/OptionDeleteButton";
 import QuestionInputBar from '../UI/QuestionInputBar';
+import OptionInputBar from '../UI/OptionInputBar';
 
 import { RiCheckboxBlankCircleLine } from 'react-icons/ri';
 
@@ -155,8 +156,7 @@ const MultipleChoice = (props) => {
             <label htmlFor="required"> Required</label>
         </QuestionInputBar>
         {question.options.map((option, index, array) => {
-            return <div
-                        className={classes.option}
+            return <OptionInputBar
                         onClick={DeleteOptionHandler}
                         key={option.key}
                         id={option.key}
@@ -184,7 +184,7 @@ const MultipleChoice = (props) => {
                             }
                         ></OptionInput>
                         <OptionDeleteButton/>
-                    </div>
+                    </OptionInputBar>
         })}
         <div className={classes.option}>
             <OptionInput

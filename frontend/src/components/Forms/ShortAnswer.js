@@ -7,6 +7,8 @@ import { setQuestionStore } from '../stores/questionSlice';
 import Form from '../UI/Form';
 import QuestionInput from '../UI/QuestionInput';
 import OptionInput from '../UI/OptionInput';
+import QuestionInputBar from '../UI/QuestionInputBar';
+import OptionInputBar from '../UI/OptionInputBar';
 
 const ShortAnswer = (props) => {
     const [question, setQuestion] = useState(props.content || {
@@ -50,7 +52,7 @@ const ShortAnswer = (props) => {
     }
 
     return <Form>
-        <div>
+        <QuestionInputBar>
             <QuestionInput
                 type="text"
                 placeholder='Question Statement'
@@ -65,9 +67,11 @@ const ShortAnswer = (props) => {
                 checked={question.required}
                 onChange={OnRequiredChangeHandler}
             />
-            <label for="required"> Required</label>
-        </div>
-        <OptionInput type="text" disabled></OptionInput>
+            <label htmlFor="required"> Required</label>
+        </QuestionInputBar>
+        <OptionInputBar>
+            <OptionInput type="text" disabled></OptionInput>
+        </OptionInputBar>
     </Form>
 }
 

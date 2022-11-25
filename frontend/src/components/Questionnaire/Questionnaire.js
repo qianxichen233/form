@@ -20,13 +20,17 @@ const checkValidity = (questions) => {
                 id: question.key,
                 type: 'description'
             };
-        for(let i = 0; i < question.content.options.length; ++i)
-            if(!question.content.options[i].content)
-                return {
-                    id: question.key,
-                    type: 'option',
-                    index: i
-                }
+        
+        if(question.content.options)
+        {
+            for(let i = 0; i < question.content.options.length; ++i)
+                if(!question.content.options[i].content)
+                    return {
+                        id: question.key,
+                        type: 'option',
+                        index: i
+                    }
+        }
     }
     return null;
 }
