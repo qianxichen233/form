@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 
-import FormTitle from '../Forms/FormTitle';
+import FormTitleCart from '../QuestionCart/FormTitleCart';
 import QuestionCart from '../QuestionCart/QuestionCart';
 import { useSelector, useDispatch } from 'react-redux';
 import { deleteQuestionStore } from '../stores/questionSlice';
@@ -12,9 +12,26 @@ const getKey = () => {
     return ++key;
 }
 
+const TitleKey = 0;
+
 const checkValidity = (questions) => {
     for(const question of questions)
     {
+        if(question.content.type === 'title')
+        {
+            if(!question.content.title)
+                return {
+                    id: question.key,
+                    type: 'title'
+                }
+            if(!question.content.description)
+                return {
+                    id: question.key,
+                    type: 'description'
+                }
+            continue;
+        }
+
         if(!question.content.description)
             return {
                 id: question.key,
@@ -126,6 +143,10 @@ const Questionnaire = () => {
         }
     }
 
+    const onTitleCartClick = e => {
+        OnEditQuestionChange(TitleKey);
+    }
+
     useEffect(() => {
         const key = getKey();
         setQuestions([
@@ -134,7 +155,7 @@ const Questionnaire = () => {
                 id: key
             }
         ]);
-        setEditQuestion(+key);
+        setEditQuestion(TitleKey);
     }, []);
 
     const OnSubmitHandler = async (e) => {
@@ -159,7 +180,13 @@ const Questionnaire = () => {
     }
 
     return <div className={classes.questionnaire}>
-        <FormTitle/>
+        <FormTitleCart
+            Focus={TitleKey === EditQuestion}
+            missingItem={ErrorHint?.id === TitleKey ? {type: ErrorHint.type} : null}
+            onErrorClear={ClearErrorMessage}
+            onClick={onTitleCartClick}
+            onFocus={onTitleCartClick}
+        />
         {questions.map(question => {
             const missingItem = ErrorHint?.id === question.key ?
                                 {
@@ -172,6 +199,7 @@ const Questionnaire = () => {
                 onEdit={onAddQuestion}
                 content={question.content}
                 Focus={question.key === EditQuestion}
+                onFocus={setEditQuestion.bind(null, question.key)}
                 missingItem={missingItem}
                 onErrorClear={ClearErrorMessage}
             />

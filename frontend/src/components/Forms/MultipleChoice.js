@@ -48,7 +48,7 @@ const MultipleChoice = (props) => {
         required: true
     });
 
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
 
     const questionRef = useRef();
     questionRef.current = question;
@@ -156,13 +156,13 @@ const MultipleChoice = (props) => {
     return <Form>
         <QuestionInputBar>
             <QuestionInput
-                type="text"
                 placeholder="Question Statement"
                 value={question.description}
                 onChange={OnStatementChangeHandler.bind(null, props.missingItem?.type === 'description')}
                 MissingError={props.missingItem?.type === "description"}
                 onClick={props.missingItem?.type === "description" ? props.onErrorClear : null}
                 preview={props.preview}
+                onFocus={props.onFocus}
             >
             </QuestionInput>
             {props.preview ? null :
@@ -190,7 +190,6 @@ const MultipleChoice = (props) => {
                             <MdCheckBoxOutlineBlank className={classes.icon} size={20}/>
                         }
                         <OptionInput
-                            type="text"
                             value={option.content}
                             id={option.key}
                             onChange={OnOptionContentChangeHandler.bind(null, showError)}
@@ -212,7 +211,6 @@ const MultipleChoice = (props) => {
         })}
         {props.preview ? null : <OptionInputBar>
             <OptionInput
-                type="text"
                 placeholder="Add Option"
                 onClick={AddOptionHandler}
                 readOnly

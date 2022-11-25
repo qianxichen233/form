@@ -56,7 +56,6 @@ const QuestionCart = (props) => {
             id: props.id
         });
     }
-
     return <Cart onClick={props.onEdit} id={props.id} Focus={props.Focus}>
         {props.Focus &&
         <div className={classes.ButtonGroupTop}>
@@ -88,6 +87,7 @@ const QuestionCart = (props) => {
                     missingItem={props.missingItem}
                     onErrorClear={props.onErrorClear}
                     preview={!props.Focus}
+                    onFocus={props.onFocus}
                 />
             }
             else if(cart.type === "Checkbox")
@@ -100,6 +100,7 @@ const QuestionCart = (props) => {
                     missingItem={props.missingItem}
                     onErrorClear={props.onErrorClear}
                     preview={!props.Focus}
+                    onFocus={props.onFocus}
                 />
             }
             else if(cart.type === "ShortAnswer")
@@ -111,6 +112,7 @@ const QuestionCart = (props) => {
                     missingItem={props.missingItem}
                     onErrorClear={props.onErrorClear}
                     preview={!props.Focus}
+                    onFocus={props.onFocus}
                 />
             }
         })(cart)}

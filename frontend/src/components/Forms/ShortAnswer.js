@@ -6,9 +6,9 @@ import { setQuestionStore } from '../stores/questionSlice';
 
 import Form from '../UI/Form';
 import QuestionInput from '../UI/QuestionInput';
-import OptionInput from '../UI/OptionInput';
+import TextInput from '../UI/TextInput';
 import QuestionInputBar from '../UI/QuestionInputBar';
-import OptionInputBar from '../UI/OptionInputBar';
+import TextInputBar from '../UI/TextInputBar';
 
 const ShortAnswer = (props) => {
     const [question, setQuestion] = useState(props.content || {
@@ -55,13 +55,13 @@ const ShortAnswer = (props) => {
     return <Form>
         <QuestionInputBar>
             <QuestionInput
-                type="text"
                 placeholder='Question Statement'
                 value={question.description}
                 onChange={onQuestionChangeHandler.bind(null, props.missingItem?.type === "description")}
                 MissingError={props.missingItem?.type === "description"}
                 onClick={props.missingItem?.type === "description" ? props.onErrorClear : null}
                 preview={props.preview}
+                onFocus={props.onFocus}
             ></QuestionInput>
             {props.preview ? null :
             <>
@@ -74,13 +74,13 @@ const ShortAnswer = (props) => {
                 <label htmlFor="required"> Required</label>
             </>}
         </QuestionInputBar>
-        <OptionInputBar>
-            <OptionInput
-                type="text"
-                disabled
+        <TextInputBar>
+            <TextInput
+                disabled={true}
+                placeholder='Short Answer Text'
                 preview={props.preview}
-            ></OptionInput>
-        </OptionInputBar>
+            ></TextInput>
+        </TextInputBar>
     </Form>
 }
 

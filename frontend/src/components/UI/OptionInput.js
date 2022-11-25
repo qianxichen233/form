@@ -14,6 +14,7 @@ const OptionInput = props => {
         <div className={classes.inputContainer}>
             <input
                 {...leftProps}
+                type="text"
                 className={`${classes.input} 
                             ${MissingError ? classes.error : ''} 
                             ${preview ? classes.preview : ''}`}
