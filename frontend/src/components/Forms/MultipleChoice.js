@@ -14,6 +14,7 @@ import QuestionInputBar from '../UI/QuestionInputBar';
 import OptionInputBar from '../UI/OptionInputBar';
 
 import { RiCheckboxBlankCircleLine } from 'react-icons/ri';
+import { MdCheckBoxOutlineBlank } from 'react-icons/md';
 
 let key = 3;
 const getKey = () => {
@@ -24,6 +25,7 @@ const MultipleChoice = (props) => {
     const [Focus, setFocus] = useState(false);
     const [question, setQuestion] = useState(props.content || {
         type: 'MultipleChoice',
+        subtype: props.subtype ? props.subtype : 'multichoice',
         description: '',
         options: [
             {
@@ -58,7 +60,20 @@ const MultipleChoice = (props) => {
         }));
     }, [dispatch, props.id]);
 
-    const OnOptionContentChangeHandler = (e) => {
+
+    useEffect(() => {
+        let newQuestion = lodash.cloneDeep(questionRef.current);
+        newQuestion.subtype = props.subtype;
+
+        dispatch(setQuestionStore({
+            id: props.id,
+            content: newQuestion
+        }));
+        setQuestion(newQuestion);
+    }, [props.subtype, props.id, dispatch]);
+
+    const OnOptionContentChangeHandler = (clearError, e) => {
+        if(clearError) props.onErrorClear();
         let newQuestion = lodash.cloneDeep(questionRef.current);
 
         for(const option of newQuestion.options)
@@ -115,7 +130,8 @@ const MultipleChoice = (props) => {
         setQuestion(newQuestion);
     }
 
-    const OnStatementChangeHandler = (e) => {
+    const OnStatementChangeHandler = (clearError, e) => {
+        if(clearError) props.onErrorClear();
         const newQuestion = lodash.cloneDeep(questionRef.current);
         newQuestion.description = e.target.value;
 
@@ -136,57 +152,65 @@ const MultipleChoice = (props) => {
         }));
         setQuestion(newQuestion);
     }
+
     return <Form>
         <QuestionInputBar>
             <QuestionInput
                 type="text"
                 placeholder="Question Statement"
                 value={question.description}
-                onChange={OnStatementChangeHandler}
+                onChange={OnStatementChangeHandler.bind(null, props.missingItem?.type === 'description')}
                 MissingError={props.missingItem?.type === "description"}
                 onClick={props.missingItem?.type === "description" ? props.onErrorClear : null}
+                preview={props.preview}
             >
             </QuestionInput>
-            <input
-                type="checkbox"
-                name="required"
-                checked={question.required}
-                onChange={OnRequiredChangeHandler}
-            />
-            <label htmlFor="required"> Required</label>
+            {props.preview ? null :
+            <>
+                <input
+                    type="checkbox"
+                    name="required"
+                    checked={question.required}
+                    onChange={OnRequiredChangeHandler}
+                />
+                <label htmlFor="required"> Required</label>
+            </>}
         </QuestionInputBar>
         {question.options.map((option, index, array) => {
+            const showError = props.missingItem?.type === "option" &&
+                              props.missingItem?.index === index;
             return <OptionInputBar
                         onClick={DeleteOptionHandler}
                         key={option.key}
                         id={option.key}
                     >
-                        <RiCheckboxBlankCircleLine className={classes.icon} size={20}/>
+                        {
+                            props.subtype === 'multichoice' ?
+                            <RiCheckboxBlankCircleLine className={classes.icon} size={20}/> :
+                            <MdCheckBoxOutlineBlank className={classes.icon} size={20}/>
+                        }
                         <OptionInput
                             type="text"
                             value={option.content}
                             id={option.key}
-                            onChange={OnOptionContentChangeHandler}
+                            onChange={OnOptionContentChangeHandler.bind(null, showError)}
                             placeholder={`Option ${index + 1}`}
-                            autoFocus={index === array.length - 1 && Focus}
+                            autoFocus={(index === array.length - 1 && Focus)}
                             onFocus={() => {
                                 if(index === array.length - 1 && Focus)
                                     setFocus(false);
                             }}
-                            MissingError={
-                                props.missingItem?.type === "option" &&
-                                props.missingItem?.index === index
-                            }
+                            MissingError={showError}
                             onClick={
-                                props.missingItem?.type === "option" &&
-                                props.missingItem?.index === index ?
+                                showError ?
                                 props.onErrorClear : null
                             }
+                            preview={props.preview}
                         ></OptionInput>
-                        <OptionDeleteButton/>
+                        {props.preview ? null : <OptionDeleteButton/>}
                     </OptionInputBar>
         })}
-        <div className={classes.option}>
+        {props.preview ? null : <OptionInputBar>
             <OptionInput
                 type="text"
                 placeholder="Add Option"
@@ -194,7 +218,7 @@ const MultipleChoice = (props) => {
                 readOnly
                 onFocus={() => setFocus(true)}
             ></OptionInput>
-        </div>
+        </OptionInputBar>}
     </Form>;
 }
 

@@ -20,10 +20,21 @@ const getInitState = (props) => {
     }
     if(type === 'MultipleChoice')
     {
-        return {
-            type: "MultipleChoice",
-            id: props.id,
-            content: props.content
+        if(props.content.subtype === 'multichoice')
+        {
+            return {
+                type: "MultipleChoice",
+                id: props.id,
+                content: props.content
+            }
+        }
+        if(props.content.subtype === 'checkbox')
+        {
+            return {
+                type: "Checkbox",
+                id: props.id,
+                content: props.content
+            }
         }
     }
     if(type === 'ShortAnswer')
@@ -45,7 +56,9 @@ const QuestionCart = (props) => {
             id: props.id
         });
     }
+
     return <Cart onClick={props.onEdit} id={props.id} Focus={props.Focus}>
+        {props.Focus &&
         <div className={classes.ButtonGroupTop}>
             <select
                 className={classes.QuestionType}
@@ -53,6 +66,7 @@ const QuestionCart = (props) => {
                 value={cart.type}
             >
                 <option value="MultipleChoice">Multiple Choice</option>
+                <option value="Checkbox">Checkbox</option>
                 <option value="ShortAnswer">Short Answer</option>
             </select>
             <div
@@ -62,16 +76,30 @@ const QuestionCart = (props) => {
             >
                 <HiOutlineTrash size={20}/>
             </div>
-        </div>
+        </div>}
         {(cart => {
             if(cart.type === "MultipleChoice")
             {
                 return <MultipleChoice
                     id={cart.id}
+                    subtype='multichoice'
                     className={classes.question}
                     content={cart.content}
                     missingItem={props.missingItem}
                     onErrorClear={props.onErrorClear}
+                    preview={!props.Focus}
+                />
+            }
+            else if(cart.type === "Checkbox")
+            {
+                return <MultipleChoice
+                    id={cart.id}
+                    subtype='checkbox'
+                    className={classes.question}
+                    content={cart.content}
+                    missingItem={props.missingItem}
+                    onErrorClear={props.onErrorClear}
+                    preview={!props.Focus}
                 />
             }
             else if(cart.type === "ShortAnswer")
@@ -82,26 +110,30 @@ const QuestionCart = (props) => {
                     content={cart.content}
                     missingItem={props.missingItem}
                     onErrorClear={props.onErrorClear}
+                    preview={!props.Focus}
                 />
             }
         })(cart)}
-        <div className={classes.optionDiv}></div>
-        <div className={classes.ButtonGroupBottom}>
-            <div
-                name="AddButton"
-                className={classes.AddButton}
-                onClick={e => e.target = e.currentTarget}
-            >
-                <GrAddCircle size={20}/>
+        {props.Focus &&
+        <>
+            <div className={classes.optionDiv}></div>
+            <div className={classes.ButtonGroupBottom}>
+                <div
+                    name="AddButton"
+                    className={classes.AddButton}
+                    onClick={e => e.target = e.currentTarget}
+                >
+                    <GrAddCircle size={20}/>
+                </div>
+                <div
+                    name="CopyButton"
+                    className={classes.CopyButton}
+                    onClick={e => e.target = e.currentTarget}
+                >
+                    <MdContentCopy size={20}/>
+                </div>
             </div>
-            <div
-                name="CopyButton"
-                className={classes.CopyButton}
-                onClick={e => e.target = e.currentTarget}
-            >
-                <MdContentCopy size={20}/>
-            </div>
-        </div>
+        </>}
     </Cart>
 }
 

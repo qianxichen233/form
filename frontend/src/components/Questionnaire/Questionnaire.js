@@ -106,9 +106,9 @@ const Questionnaire = () => {
             }
 
             let newQuestions = [];
+            const key = getKey();
             for(let i = 0; i < questionRef.current.length; ++i)
             {
-                const key = getKey();
                 newQuestions.push(questionRef.current[i]);
                 if(+questionRef.current[i].id === +e.currentTarget.id)
                 {
@@ -122,6 +122,7 @@ const Questionnaire = () => {
                 }
             }
             setQuestions(newQuestions);
+            setEditQuestion(key);
         }
     }
 
@@ -142,6 +143,7 @@ const Questionnaire = () => {
         const missingPart = checkValidity(questionContent);
         if(missingPart)
         {
+            setEditQuestion(missingPart.id);
             setErrorHint(missingPart);
             return;
         }
@@ -159,19 +161,18 @@ const Questionnaire = () => {
     return <div className={classes.questionnaire}>
         <FormTitle/>
         {questions.map(question => {
+            const missingItem = ErrorHint?.id === question.key ?
+                                {
+                                    type: ErrorHint.type,
+                                    index: ErrorHint.index
+                                } : null;
             return <QuestionCart
                 key={question.key}
                 id={question.key}
                 onEdit={onAddQuestion}
                 content={question.content}
                 Focus={question.key === EditQuestion}
-                missingItem={
-                    ErrorHint?.id === question.key ?
-                        {
-                            type: ErrorHint.type,
-                            index: ErrorHint.index
-                        } : null
-                }
+                missingItem={missingItem}
                 onErrorClear={ClearErrorMessage}
             />
         })}

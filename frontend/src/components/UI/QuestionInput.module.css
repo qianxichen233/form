@@ -24,7 +24,7 @@
     outline: none;
 }
 
-.input[type="text"]:hover{
+input.input[type="text"]:hover:not(.preview){
     background-color: #eeeeee;
 }
 
@@ -54,4 +54,11 @@
 
 .error{
     border-color: red !important;
+}
+
+.preview{
+    background-color: white !important;
+    border-width: 0 !important;
+    margin-bottom: 0 !important;
+    padding: 0 !important;
 }

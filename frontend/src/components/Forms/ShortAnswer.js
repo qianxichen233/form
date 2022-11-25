@@ -29,7 +29,8 @@ const ShortAnswer = (props) => {
         }));
     }, [dispatch, props.id]);
 
-    const onQuestionChangeHandler = (e) => {
+    const onQuestionChangeHandler = (clearError, e) => {
+        if(clearError) props.onErrorClear();
         let newQuestion = lodash.cloneDeep(questionRef.current);
         newQuestion.description = e.target.value;
 
@@ -57,20 +58,28 @@ const ShortAnswer = (props) => {
                 type="text"
                 placeholder='Question Statement'
                 value={question.description}
-                onChange={onQuestionChangeHandler}
+                onChange={onQuestionChangeHandler.bind(null, props.missingItem?.type === "description")}
                 MissingError={props.missingItem?.type === "description"}
                 onClick={props.missingItem?.type === "description" ? props.onErrorClear : null}
+                preview={props.preview}
             ></QuestionInput>
-            <input
-                type="checkbox"
-                name="required"
-                checked={question.required}
-                onChange={OnRequiredChangeHandler}
-            />
-            <label htmlFor="required"> Required</label>
+            {props.preview ? null :
+            <>
+                <input
+                    type="checkbox"
+                    name="required"
+                    checked={question.required}
+                    onChange={OnRequiredChangeHandler}
+                />
+                <label htmlFor="required"> Required</label>
+            </>}
         </QuestionInputBar>
         <OptionInputBar>
-            <OptionInput type="text" disabled></OptionInput>
+            <OptionInput
+                type="text"
+                disabled
+                preview={props.preview}
+            ></OptionInput>
         </OptionInputBar>
     </Form>
 }
