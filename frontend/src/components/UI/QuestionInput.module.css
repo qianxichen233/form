@@ -1,13 +1,15 @@
 .container{
     display: inline-block;
     position: relative;
+    width: 85%;
 }
 
 .input[type="text"]{
-    width: 500px;
+    width: calc(100% - 10px);
     height: 50px;
     font-size: 15px;
     padding-left: 10px;
+    padding-right: 0;
     border-top-style: hidden;
     border-left-style: hidden;
     border-right-style: hidden;

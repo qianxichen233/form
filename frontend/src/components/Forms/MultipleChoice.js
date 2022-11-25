@@ -10,6 +10,7 @@ import Form from "../UI/Form";
 import QuestionInput from '../UI/QuestionInput';
 import OptionInput from '../UI/OptionInput';
 import OptionDeleteButton from "../UI/OptionDeleteButton";
+import QuestionInputBar from '../UI/QuestionInputBar';
 
 import { RiCheckboxBlankCircleLine } from 'react-icons/ri';
 
@@ -134,9 +135,8 @@ const MultipleChoice = (props) => {
         }));
         setQuestion(newQuestion);
     }
-    console.log(props.missingItem);
     return <Form>
-        <div>
+        <QuestionInputBar>
             <QuestionInput
                 type="text"
                 placeholder="Question Statement"
@@ -153,7 +153,7 @@ const MultipleChoice = (props) => {
                 onChange={OnRequiredChangeHandler}
             />
             <label htmlFor="required"> Required</label>
-        </div>
+        </QuestionInputBar>
         {question.options.map((option, index, array) => {
             return <div
                         className={classes.option}
@@ -186,13 +186,15 @@ const MultipleChoice = (props) => {
                         <OptionDeleteButton/>
                     </div>
         })}
-        <OptionInput
-            type="text"
-            placeholder="Add Option"
-            onClick={AddOptionHandler}
-            readOnly
-            onFocus={() => setFocus(true)}
-        ></OptionInput>
+        <div className={classes.option}>
+            <OptionInput
+                type="text"
+                placeholder="Add Option"
+                onClick={AddOptionHandler}
+                readOnly
+                onFocus={() => setFocus(true)}
+            ></OptionInput>
+        </div>
     </Form>;
 }
 
