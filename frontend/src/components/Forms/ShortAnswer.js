@@ -9,6 +9,7 @@ import TextInput from '../UI/TextInput';
 import QuestionInputBar from '../UI/QuestionInputBar';
 import TextInputBar from '../UI/TextInputBar';
 import RichTextEditor from '../UI/RichTextEditor';
+import RequiredInput from '../UI/RequiredInput';
 
 const ShortAnswer = (props) => {
     const [question, setQuestion] = useState(props.content || {
@@ -41,9 +42,9 @@ const ShortAnswer = (props) => {
         setQuestion(newQuestion);
     }
 
-    const OnRequiredChangeHandler = (e) => {
+    const OnRequiredChangeHandler = (state) => {
         const newQuestion = lodash.cloneDeep(questionRef.current);
-        newQuestion.required = e.target.checked;
+        newQuestion.required = state;
 
         dispatch(setQuestionStore({
             id: props.id,
@@ -64,15 +65,11 @@ const ShortAnswer = (props) => {
                 width={'85%'}
             />
             {props.preview ? null :
-            <>
-                <input
-                    type="checkbox"
-                    name="required"
-                    checked={question.required}
-                    onChange={OnRequiredChangeHandler}
-                />
-                <label htmlFor="required"> Required</label>
-            </>}
+            <RequiredInput
+                checked={question.required}
+                onChange={OnRequiredChangeHandler}
+                label='Required'
+            />}
         </QuestionInputBar>
         <TextInputBar>
             <TextInput

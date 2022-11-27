@@ -12,6 +12,7 @@ import OptionDeleteButton from "../UI/OptionDeleteButton";
 import QuestionInputBar from '../UI/QuestionInputBar';
 import OptionInputBar from '../UI/OptionInputBar';
 import RichTextEditor from "../UI/RichTextEditor";
+import RequiredInput from "../UI/RequiredInput";
 
 import { RiCheckboxBlankCircleLine } from 'react-icons/ri';
 import { MdCheckBoxOutlineBlank } from 'react-icons/md';
@@ -142,9 +143,9 @@ const MultipleChoice = (props) => {
         setQuestion(newQuestion);
     }
 
-    const OnRequiredChangeHandler = (e) => {
+    const OnRequiredChangeHandler = (state) => {
         const newQuestion = lodash.cloneDeep(questionRef.current);
-        newQuestion.required = e.target.checked;
+        newQuestion.required = state;
 
         dispatch(setQuestionStore({
             id: props.id,
@@ -166,15 +167,11 @@ const MultipleChoice = (props) => {
                 width={'85%'}
             />
             {props.preview ? null :
-            <div>
-                <input
-                    type="checkbox"
-                    name="required"
-                    checked={question.required}
-                    onChange={OnRequiredChangeHandler}
-                />
-                <label htmlFor="required"> Required</label>
-            </div>}
+            <RequiredInput
+                checked={question.required}
+                onChange={OnRequiredChangeHandler}
+                label='Required'
+            />}
         </QuestionInputBar>
         {question.options.map((option, index, array) => {
             const showError = props.missingItem?.type === "option" &&
@@ -215,6 +212,7 @@ const MultipleChoice = (props) => {
                 onClick={AddOptionHandler}
                 readOnly
                 onFocus={() => setFocus(true)}
+                tabindex={-1}
             ></OptionInput>
         </OptionInputBar>}
     </Form>;

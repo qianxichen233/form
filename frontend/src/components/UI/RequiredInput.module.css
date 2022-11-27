@@ -1,0 +1,68 @@
+.container{
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 5px;
+
+    margin-top: 15px;
+    margin-left: 10px;
+}
+
+.inputContainer{
+    position: relative;
+    width: 45px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+}
+
+.bar{
+    width: 100%;
+    height: 20px;
+    border-radius: 10px;
+    background-color: lightgrey;
+}
+
+.barActive{
+    background-color: rgb(225, 216, 241);
+}
+
+.circleContainer{
+    position: absolute;
+    left: -7.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+
+    transition: all 0.1s ease-in-out;
+}
+
+.circleContainerActive{
+    transform: translate(20px, 0);
+}
+
+.circle{
+    height: 25px;
+    width: 25px;
+    border-radius: 50%;
+
+    border: 1px solid lightgrey;
+
+    background-color: white;
+}
+
+.circleActive{
+    background-color: rgb(103, 58, 183);
+}
+
+.inputContainer:hover > div.circleContainer:not(.circleContainerActive){
+    background-color: rgba(211, 211, 211, 0.2);
+}
+
+.inputContainer:hover > div.circleContainerActive{
+    background-color: rgba(103, 58, 183, 0.1);
+}
