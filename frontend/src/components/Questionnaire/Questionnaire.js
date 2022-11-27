@@ -14,17 +14,23 @@ const getKey = () => {
 
 const TitleKey = 0;
 
+const checkRichTextEmpty = (content) => {
+    if(!content) return true;
+    if(typeof(content) === 'string') return false;
+    return content['blocks'][0]['text'] === '';
+}
+
 const checkValidity = (questions) => {
     for(const question of questions)
     {
         if(question.content.type === 'title')
         {
-            if(!question.content.title)
+            if(checkRichTextEmpty(question.content.title))
                 return {
                     id: question.key,
                     type: 'title'
                 }
-            if(!question.content.description)
+            if(checkRichTextEmpty(question.content.description))
                 return {
                     id: question.key,
                     type: 'description'
@@ -32,7 +38,7 @@ const checkValidity = (questions) => {
             continue;
         }
 
-        if(!question.content.description)
+        if(checkRichTextEmpty(question.content.description))
             return {
                 id: question.key,
                 type: 'description'

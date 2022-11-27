@@ -4,6 +4,7 @@ import lodash from 'lodash';
 import Form from '../UI/Form';
 import TextInputBar from '../UI/TextInputBar';
 import TextInput from '../UI/TextInput';
+import RichTextEditor from '../UI/RichTextEditor';
 
 import { useDispatch } from 'react-redux';
 import { setQuestionStore } from '../stores/questionSlice';
@@ -27,10 +28,22 @@ const FormTitle = (props) => {
         }));
     }, [dispatch]);
 
-    const onContentChangeHandler = (type, clearError, e) => {
+    const onTitleChangeHandler = (clearError, content) => {
         if(clearError) props.onErrorClear();
         let newContent = lodash.cloneDeep(contentRef.current);
-        newContent[type] = e.target.value;
+        newContent['title'] = content;
+
+        dispatch(setQuestionStore({
+            id: 0,
+            content: newContent
+        }));
+        setContent(newContent);
+    }
+
+    const onDescriptionChangeHandler = (clearError, e) => {
+        if(clearError) props.onErrorClear();
+        let newContent = lodash.cloneDeep(contentRef.current);
+        newContent['description'] = e.target.value;
 
         dispatch(setQuestionStore({
             id: 0,
@@ -43,25 +56,24 @@ const FormTitle = (props) => {
     const DescriptionError = props.missingItem?.type === 'description';
 
     return <Form>
-        <TextInputBar>
-            <TextInput
-                placeholder="Form Title"
-                value={content.title}
-                onChange={onContentChangeHandler.bind(null, 'title', TitleError)}
-                size='big'
-                preview={props.preview}
-                MissingError={TitleError}
-                onClick={
-                    TitleError ?
-                    props.onErrorClear : null
-                }
-            ></TextInput>
-        </TextInputBar>
+        <RichTextEditor
+            placeholder="Form Title"
+            passValue={onTitleChangeHandler.bind(null, TitleError)}
+            preview={props.preview}
+            MissingError={TitleError}
+            onClick={
+                TitleError ?
+                props.onErrorClear : null
+            }
+            onFocus={props.onFocus}
+            fontsize={'24pt'}
+            transparent={true}
+        />
         <TextInputBar>
             <TextInput
                 placeholder="Form Description"
                 value={content.description}
-                onChange={onContentChangeHandler.bind(null, 'description', DescriptionError)}
+                onChange={onDescriptionChangeHandler.bind(null, DescriptionError)}
                 size='normal'
                 preview={props.preview}
                 MissingError={DescriptionError}

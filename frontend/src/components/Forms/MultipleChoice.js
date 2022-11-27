@@ -7,11 +7,11 @@ import { setQuestionStore } from '../stores/questionSlice';
 import classes from './MultipleChoice.module.css';
 
 import Form from "../UI/Form";
-import QuestionInput from '../UI/QuestionInput';
 import OptionInput from '../UI/OptionInput';
 import OptionDeleteButton from "../UI/OptionDeleteButton";
 import QuestionInputBar from '../UI/QuestionInputBar';
 import OptionInputBar from '../UI/OptionInputBar';
+import RichTextEditor from "../UI/RichTextEditor";
 
 import { RiCheckboxBlankCircleLine } from 'react-icons/ri';
 import { MdCheckBoxOutlineBlank } from 'react-icons/md';
@@ -26,7 +26,7 @@ const MultipleChoice = (props) => {
     const [question, setQuestion] = useState(props.content || {
         type: 'MultipleChoice',
         subtype: props.subtype ? props.subtype : 'multichoice',
-        description: '',
+        description: null,
         options: [
             {
                 content: '',
@@ -130,10 +130,10 @@ const MultipleChoice = (props) => {
         setQuestion(newQuestion);
     }
 
-    const OnStatementChangeHandler = (clearError, e) => {
+    const OnStatementChangeHandler = (clearError, content) => {
         if(clearError) props.onErrorClear();
         const newQuestion = lodash.cloneDeep(questionRef.current);
-        newQuestion.description = e.target.value;
+        newQuestion.description = lodash.cloneDeep(content);
 
         dispatch(setQuestionStore({
             id: props.id,
@@ -155,18 +155,18 @@ const MultipleChoice = (props) => {
 
     return <Form>
         <QuestionInputBar>
-            <QuestionInput
+            <RichTextEditor
                 placeholder="Question Statement"
                 value={question.description}
-                onChange={OnStatementChangeHandler.bind(null, props.missingItem?.type === 'description')}
+                passValue={OnStatementChangeHandler.bind(null, props.missingItem?.type === 'description')}
                 MissingError={props.missingItem?.type === "description"}
                 onClick={props.missingItem?.type === "description" ? props.onErrorClear : null}
                 preview={props.preview}
                 onFocus={props.onFocus}
-            >
-            </QuestionInput>
+                width={'85%'}
+            />
             {props.preview ? null :
-            <>
+            <div>
                 <input
                     type="checkbox"
                     name="required"
@@ -174,7 +174,7 @@ const MultipleChoice = (props) => {
                     onChange={OnRequiredChangeHandler}
                 />
                 <label htmlFor="required"> Required</label>
-            </>}
+            </div>}
         </QuestionInputBar>
         {question.options.map((option, index, array) => {
             const showError = props.missingItem?.type === "option" &&

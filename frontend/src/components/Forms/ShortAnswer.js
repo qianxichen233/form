@@ -5,15 +5,15 @@ import { useDispatch } from 'react-redux';
 import { setQuestionStore } from '../stores/questionSlice';
 
 import Form from '../UI/Form';
-import QuestionInput from '../UI/QuestionInput';
 import TextInput from '../UI/TextInput';
 import QuestionInputBar from '../UI/QuestionInputBar';
 import TextInputBar from '../UI/TextInputBar';
+import RichTextEditor from '../UI/RichTextEditor';
 
 const ShortAnswer = (props) => {
     const [question, setQuestion] = useState(props.content || {
         type: 'ShortAnswer',
-        description: '',
+        description: null,
         required: true
     });
 
@@ -29,10 +29,10 @@ const ShortAnswer = (props) => {
         }));
     }, [dispatch, props.id]);
 
-    const onQuestionChangeHandler = (clearError, e) => {
+    const onQuestionChangeHandler = (clearError, content) => {
         if(clearError) props.onErrorClear();
         let newQuestion = lodash.cloneDeep(questionRef.current);
-        newQuestion.description = e.target.value;
+        newQuestion.description = content;
 
         dispatch(setQuestionStore({
             id: props.id,
@@ -54,15 +54,15 @@ const ShortAnswer = (props) => {
 
     return <Form>
         <QuestionInputBar>
-            <QuestionInput
-                placeholder='Question Statement'
-                value={question.description}
-                onChange={onQuestionChangeHandler.bind(null, props.missingItem?.type === "description")}
+            <RichTextEditor
+                placeholder="Question Statement"
+                passValue={onQuestionChangeHandler.bind(null, props.missingItem?.type === 'description')}
                 MissingError={props.missingItem?.type === "description"}
                 onClick={props.missingItem?.type === "description" ? props.onErrorClear : null}
                 preview={props.preview}
                 onFocus={props.onFocus}
-            ></QuestionInput>
+                width={'85%'}
+            />
             {props.preview ? null :
             <>
                 <input

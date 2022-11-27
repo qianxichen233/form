@@ -14,7 +14,7 @@ const fontsize = {
 }
 
 const TextInput = (props) => {
-    const {children, MissingError, preview, size, ...leftProps} = props;
+    const {children, MissingError, preview, size, onFocus, ...leftProps} = props;
 
     const inputRef = useRef(null);
     useEffect(() => {
@@ -32,6 +32,7 @@ const TextInput = (props) => {
             style={{'--height': height[size],
                     '--fontsize': fontsize[size]}}
             ref={inputRef}
+            onFocus={onFocus}
         >
             {children}
         </input>
