@@ -32,7 +32,8 @@ const RichTextEditor = (props) => {
         editorRef.current.focus();
     }
 
-    const onClickHandler = () => {
+    const onClickHandler = (e) => {
+        e.preventDefault();
         FocusEditor();
         if(props.onClick) props.onClick();
     }
@@ -72,7 +73,7 @@ const RichTextEditor = (props) => {
         className={`${classes.container} ${Focus ? classes.containerActive : ''}`}
         style={{'--width': props.width ? props.width : '100%'}}
     >
-        <div className={classes.inputContainer} onClick={onClickHandler}>
+        <div className={classes.inputContainer} onMouseDown={onClickHandler}>
             <div
                 className={`${classes.editor} 
                              ${props.preview ? classes.preview : ''} 

@@ -212,7 +212,7 @@ const MultipleChoice = (props) => {
                 onClick={AddOptionHandler}
                 readOnly
                 onFocus={() => setFocus(true)}
-                tabindex={-1}
+                tabIndex={-1}
             ></OptionInput>
         </OptionInputBar>}
     </Form>;
