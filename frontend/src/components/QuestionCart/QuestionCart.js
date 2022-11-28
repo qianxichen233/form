@@ -3,6 +3,9 @@ import MultipleChoice from '../Forms/MultipleChoice';
 import ShortAnswer from '../Forms/ShortAnswer';
 import Cart from '../UI/Cart';
 
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+
 import classes from './QuestionCart.module.css';
 
 import { HiOutlineTrash } from 'react-icons/hi';
@@ -79,41 +82,47 @@ const QuestionCart = (props) => {
         {(cart => {
             if(cart.type === "MultipleChoice")
             {
-                return <MultipleChoice
-                    id={cart.id}
-                    subtype='multichoice'
-                    className={classes.question}
-                    content={cart.content}
-                    missingItem={props.missingItem}
-                    onErrorClear={props.onErrorClear}
-                    preview={!props.Focus}
-                    onFocus={props.onFocus}
-                />
+                return <DndProvider backend={HTML5Backend}>
+                    <MultipleChoice
+                        id={cart.id}
+                        subtype='multichoice'
+                        className={classes.question}
+                        content={cart.content}
+                        missingItem={props.missingItem}
+                        onErrorClear={props.onErrorClear}
+                        preview={!props.Focus}
+                        onFocus={props.onFocus}
+                    />
+                </DndProvider>
             }
             else if(cart.type === "Checkbox")
             {
-                return <MultipleChoice
-                    id={cart.id}
-                    subtype='checkbox'
-                    className={classes.question}
-                    content={cart.content}
-                    missingItem={props.missingItem}
-                    onErrorClear={props.onErrorClear}
-                    preview={!props.Focus}
-                    onFocus={props.onFocus}
-                />
+                return  <DndProvider backend={HTML5Backend}>
+                    <MultipleChoice
+                        id={cart.id}
+                        subtype='checkbox'
+                        className={classes.question}
+                        content={cart.content}
+                        missingItem={props.missingItem}
+                        onErrorClear={props.onErrorClear}
+                        preview={!props.Focus}
+                        onFocus={props.onFocus}
+                    />
+                </DndProvider>
             }
             else if(cart.type === "ShortAnswer")
             {
-                return <ShortAnswer
-                    id={cart.id}
-                    className={classes.question}
-                    content={cart.content}
-                    missingItem={props.missingItem}
-                    onErrorClear={props.onErrorClear}
-                    preview={!props.Focus}
-                    onFocus={props.onFocus}
-                />
+                return <DndProvider backend={HTML5Backend}>
+                    <ShortAnswer
+                        id={cart.id}
+                        className={classes.question}
+                        content={cart.content}
+                        missingItem={props.missingItem}
+                        onErrorClear={props.onErrorClear}
+                        preview={!props.Focus}
+                        onFocus={props.onFocus}
+                    />
+                </DndProvider>
             }
         })(cart)}
         {props.Focus &&

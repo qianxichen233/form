@@ -1,0 +1,8 @@
+.dragBar{
+    width: 20px;
+    height: 100%;
+}
+
+.dragBar:hover{
+    cursor: grab;
+}

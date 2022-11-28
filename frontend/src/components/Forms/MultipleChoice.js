@@ -14,6 +14,8 @@ import OptionInputBar from '../UI/OptionInputBar';
 import RichTextEditor from "../UI/RichTextEditor";
 import RequiredInput from "../UI/RequiredInput";
 
+import update from 'immutability-helper';
+
 import { RiCheckboxBlankCircleLine } from 'react-icons/ri';
 import { MdCheckBoxOutlineBlank } from 'react-icons/md';
 
@@ -60,7 +62,6 @@ const MultipleChoice = (props) => {
             content: questionRef.current
         }));
     }, [dispatch, props.id]);
-
 
     useEffect(() => {
         let newQuestion = lodash.cloneDeep(questionRef.current);
@@ -154,6 +155,34 @@ const MultipleChoice = (props) => {
         setQuestion(newQuestion);
     }
 
+    const moveCard = (dragIndex, hoverIndex) => {
+        setQuestion((prevQuestions) => {
+            let newQuestion = lodash.cloneDeep(questionRef.current);
+            newQuestion.options = update(prevQuestions.options, {
+                $splice: [
+                    [dragIndex, 1],
+                    [hoverIndex, 0, prevQuestions.options[dragIndex]],
+                ],
+            })
+            return newQuestion;
+        },
+        )
+      }
+      const renderCard = (option, index, children) => {
+        return (
+            <OptionInputBar
+                key={option.key}
+                index={index}
+                id={option.key}
+                moveCard={moveCard}
+                onClick={DeleteOptionHandler}
+                Dragable={true}
+            >
+                {children}
+            </OptionInputBar>
+        )
+      }
+
     return <Form>
         <QuestionInputBar>
             <RichTextEditor
@@ -176,35 +205,31 @@ const MultipleChoice = (props) => {
         {question.options.map((option, index, array) => {
             const showError = props.missingItem?.type === "option" &&
                               props.missingItem?.index === index;
-            return <OptionInputBar
-                        onClick={DeleteOptionHandler}
-                        key={option.key}
-                        id={option.key}
-                    >
-                        {
-                            props.subtype === 'multichoice' ?
-                            <RiCheckboxBlankCircleLine className={classes.icon} size={20}/> :
-                            <MdCheckBoxOutlineBlank className={classes.icon} size={20}/>
-                        }
-                        <OptionInput
-                            value={option.content}
-                            id={option.key}
-                            onChange={OnOptionContentChangeHandler.bind(null, showError)}
-                            placeholder={`Option ${index + 1}`}
-                            autoFocus={(index === array.length - 1 && Focus)}
-                            onFocus={() => {
-                                if(index === array.length - 1 && Focus)
-                                    setFocus(false);
-                            }}
-                            MissingError={showError}
-                            onClick={
-                                showError ?
-                                props.onErrorClear : null
-                            }
-                            preview={props.preview}
-                        ></OptionInput>
-                        {props.preview ? null : <OptionDeleteButton/>}
-                    </OptionInputBar>
+            return renderCard(option, index, <>
+                {
+                    props.subtype === 'multichoice' ?
+                    <RiCheckboxBlankCircleLine className={classes.icon} size={20}/> :
+                    <MdCheckBoxOutlineBlank className={classes.icon} size={20}/>
+                }
+                <OptionInput
+                    value={option.content}
+                    id={option.key}
+                    onChange={OnOptionContentChangeHandler.bind(null, showError)}
+                    placeholder={`Option ${index + 1}`}
+                    autoFocus={(index === array.length - 1 && Focus)}
+                    onFocus={() => {
+                        if(index === array.length - 1 && Focus)
+                            setFocus(false);
+                    }}
+                    MissingError={showError}
+                    onClick={
+                        showError ?
+                        props.onErrorClear : null
+                    }
+                    preview={props.preview}
+                ></OptionInput>
+                {props.preview ? null : <OptionDeleteButton/>}
+            </>);
         })}
         {props.preview ? null : <OptionInputBar>
             <OptionInput
