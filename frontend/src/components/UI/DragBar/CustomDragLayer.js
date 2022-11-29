@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useDragLayer } from 'react-dnd';
-import { BoxDragPreview } from './BoxDragPreview.js';
+import { BoxDragPreview } from './BoxDragPreview';
 
 import classes from './CustomDragLayer.module.css';
 

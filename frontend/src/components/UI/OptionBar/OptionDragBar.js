@@ -1,5 +1,5 @@
 import { forwardRef } from 'react';
-import { MdOutlineDragIndicator } from 'react-icons/md';
+import { DragButton } from '../Icons';
 
 import classes from './OptionDragBar.module.css';
 
@@ -16,7 +16,7 @@ const OptionDragBar = forwardRef((props, ref) => {
             onMouseDown={e => {
                 if(props.preview) e.preventDefault();
             }}>
-            <MdOutlineDragIndicator />
+            <DragButton />
         </div>
     </>
 })

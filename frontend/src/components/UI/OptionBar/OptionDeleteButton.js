@@ -1,4 +1,4 @@
-import { TiDeleteOutline } from 'react-icons/ti';
+import { DeleteButton } from '../Icons';
 
 import classes from './OptionDeleteButton.module.css';
 
@@ -8,7 +8,7 @@ const OptionDeleteButton = (props) => {
         className={classes.container}
         onClick={e => e.target = e.currentTarget}
     >
-        <TiDeleteOutline size={30}/>
+        <DeleteButton size={30}/>
     </div>
 }
 

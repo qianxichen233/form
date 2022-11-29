@@ -1,4 +1,4 @@
-import { MdOutlineDragIndicator } from 'react-icons/md';
+import { DragButton } from '../Icons';
 
 import classes from './OptionInputBar.module.css';
 
@@ -12,7 +12,7 @@ const OptionInputBar = ({children, isDragging, opacity, ...leftProps}) => {
             <>
                 <span className={classes.placeholder}></span>
                 <div className={classes.icon}>
-                    <MdOutlineDragIndicator />
+                    <DragButton />
                 </div>
             </> : null}
         {children}

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import MultipleChoice from '../Forms/MultipleChoice';
 import ShortAnswer from '../Forms/ShortAnswer';
-import Cart from '../UI/Cart';
+import Cart from '../UI/Cart/Cart';
 
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';

@@ -4,12 +4,12 @@ import lodash from 'lodash';
 import { useDispatch } from 'react-redux';
 import { setQuestionStore } from '../stores/questionSlice';
 
-import Form from '../UI/Form';
-import TextInput from '../UI/TextInput';
-import QuestionInputBar from '../UI/QuestionInputBar';
-import TextInputBar from '../UI/TextInputBar';
-import RichTextEditor from '../UI/RichTextEditor';
-import RequiredInput from '../UI/RequiredInput';
+import Form from '../UI/Cart/Form';
+import TextInput from '../UI/TextInput/TextInput';
+import QuestionInputBar from '../UI/QuestionBar/QuestionInputBar';
+import TextInputBar from '../UI/TextInput/TextInputBar';
+import RichTextEditor from '../UI/RichTextEditor/RichTextEditor';
+import RequiredInput from '../UI/RequiredInput/RequiredInput';
 
 const ShortAnswer = (props) => {
     const [question, setQuestion] = useState(props.content || {

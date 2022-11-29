@@ -6,7 +6,7 @@ import TextOptionButton from './TextOptionButton';
 import 'draft-js/dist/Draft.css';
 import classes from './RichTextEditor.module.css';
 
-import { ImBold, ImItalic, ImUnderline } from 'react-icons/im';
+import { BoldIcon, ItalicIcon, UnderlineIcon } from '../Icons';
 
 const RichTextEditor = (props) => {
     const [optionState, setOptionState] = useState({
@@ -99,13 +99,13 @@ const RichTextEditor = (props) => {
         {props.preview ? null :
         <div className={`${classes.optionBar} ${Focus ? classes.optionActive: ''}`}>
             <TextOptionButton onMouseDown={onOptionClick.bind(null, 'bold')} active={optionState.bold}>
-                <ImBold size={18}/>
+                <BoldIcon size={18}/>
             </TextOptionButton>
             <TextOptionButton onMouseDown={onOptionClick.bind(null, 'italic')} active={optionState.italic}>
-                <ImItalic size={18} />
+                <ItalicIcon size={18} />
             </TextOptionButton>
             <TextOptionButton onMouseDown={onOptionClick.bind(null, 'underline')} active={optionState.underline}>
-                <ImUnderline size={18} />
+                <UnderlineIcon size={18} />
             </TextOptionButton>
         </div>}
     </div>;

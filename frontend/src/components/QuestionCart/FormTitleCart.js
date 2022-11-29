@@ -1,7 +1,6 @@
 import FormTitle from '../Forms/FormTitle';
 
-import TitleCart from "../UI/TitleCart";
-
+import TitleCart from "../UI/Cart/TitleCart";
 
 const FormTitleCart = props => {
     return <TitleCart Focus={props.Focus} onClick={props.onClick}>

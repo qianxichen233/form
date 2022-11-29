@@ -2,7 +2,7 @@ import { memo, useEffect, useState } from "react";
 
 import classes from './BoxDragPreview.module.css';
 
-import OptionInputBar from "./OptionInputBar";
+import OptionInputBar from "../OptionBar/OptionInputBar";
 
 export const BoxDragPreview = memo(function BoxDragPreview({ leftProps, children }) {
     const [tickTock, setTickTock] = useState(false);
@@ -19,4 +19,3 @@ export const BoxDragPreview = memo(function BoxDragPreview({ leftProps, children
         </div>
     );
 });
-

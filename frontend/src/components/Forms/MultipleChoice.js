@@ -6,19 +6,18 @@ import { setQuestionStore } from '../stores/questionSlice';
 
 import classes from './MultipleChoice.module.css';
 
-import Form from "../UI/Form";
-import OptionInput from '../UI/OptionInput';
-import OptionDeleteButton from "../UI/OptionDeleteButton";
-import QuestionInputBar from '../UI/QuestionInputBar';
-import OptionInputBarDrag from '../UI/OptionInputBarDrag';
-import RichTextEditor from "../UI/RichTextEditor";
-import RequiredInput from "../UI/RequiredInput";
-import { CustomDragLayer } from "../UI/CustomDragLayer";
+import Form from "../UI/Cart/Form";
+import OptionInput from '../UI/OptionBar/OptionInput';
+import OptionDeleteButton from "../UI/OptionBar/OptionDeleteButton";
+import QuestionInputBar from '../UI/QuestionBar/QuestionInputBar';
+import OptionInputBarDrag from '../UI/OptionBar/OptionInputBarDrag';
+import RichTextEditor from "../UI/RichTextEditor/RichTextEditor";
+import RequiredInput from "../UI/RequiredInput/RequiredInput";
+import { CustomDragLayer } from "../UI/DragBar/CustomDragLayer";
 
 import update from 'immutability-helper';
 
-import { RiCheckboxBlankCircleLine } from 'react-icons/ri';
-import { MdCheckBoxOutlineBlank } from 'react-icons/md';
+import { CircleCheckBox, BoxCheckBox  } from '../UI/Icons';
 
 let key = 3;
 const getKey = () => {
@@ -234,8 +233,8 @@ const MultipleChoice = (props) => {
                                   <>
                     {
                         props.subtype === 'multichoice' ?
-                        <RiCheckboxBlankCircleLine className={classes.icon} size={20}/> :
-                        <MdCheckBoxOutlineBlank className={classes.icon} size={20}/>
+                        <CircleCheckBox className={classes.icon} size={20}/> :
+                        <BoxCheckBox className={classes.icon} size={20}/>
                     }
                     <OptionInput
                         value={option.content}
