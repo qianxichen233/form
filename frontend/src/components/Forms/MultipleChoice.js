@@ -58,6 +58,8 @@ const MultipleChoice = (props) => {
     const questionRef = useRef();
     questionRef.current = question;
 
+    const optionContainerRef = useRef();
+
     useEffect(() => {
         dispatch(setQuestionStore({
             id: props.id,
@@ -170,12 +172,21 @@ const MultipleChoice = (props) => {
                 id: props.id,
                 content: newQuestion
             }));
-            
+
             return newQuestion;
         },
         )
-      }
-      const renderCard = (option, index, preview, isDragging, children) => {
+    }
+
+    const getContainerInfo = () => {
+        return {
+            y: optionContainerRef.current.getBoundingClientRect().y,
+            height: optionContainerRef.current.getBoundingClientRect().height
+
+        }
+    }
+
+    const renderCard = (option, index, preview, isDragging, children) => {
         return (
             <OptionInputBarDrag
                 key={option.key}
@@ -186,11 +197,12 @@ const MultipleChoice = (props) => {
                 Draggable={true}
                 preview={preview}
                 otherDragging={isDragging}
+                getContainerInfo={getContainerInfo}
             >
                 {children}
             </OptionInputBarDrag>
         )
-      }
+    }
 
     return <Form>
         <QuestionInputBar>
@@ -211,35 +223,41 @@ const MultipleChoice = (props) => {
                 label='Required'
             />}
         </QuestionInputBar>
-        {question.options.map((option, index, array) => {
-            const showError = props.missingItem?.type === "option" &&
-                              props.missingItem?.index === index;
-            return renderCard(option, index, props.preview, isDragging, <>
-                {
-                    props.subtype === 'multichoice' ?
-                    <RiCheckboxBlankCircleLine className={classes.icon} size={20}/> :
-                    <MdCheckBoxOutlineBlank className={classes.icon} size={20}/>
-                }
-                <OptionInput
-                    value={option.content}
-                    id={option.key}
-                    onChange={OnOptionContentChangeHandler.bind(null, showError)}
-                    placeholder={`Option ${index + 1}`}
-                    autoFocus={(index === array.length - 1 && Focus)}
-                    onFocus={() => {
-                        if(index === array.length - 1 && Focus)
-                            setFocus(false);
-                    }}
-                    MissingError={showError}
-                    onClick={
-                        showError ?
-                        props.onErrorClear : null
+        <div className={classes.optionContainer} ref={optionContainerRef}>
+            {question.options.map((option, index, array) => {
+                const showError = props.missingItem?.type === "option" &&
+                                props.missingItem?.index === index;
+                return renderCard(option,
+                                  index,
+                                  props.preview,
+                                  isDragging,
+                                  <>
+                    {
+                        props.subtype === 'multichoice' ?
+                        <RiCheckboxBlankCircleLine className={classes.icon} size={20}/> :
+                        <MdCheckBoxOutlineBlank className={classes.icon} size={20}/>
                     }
-                    preview={props.preview}
-                ></OptionInput>
-                {props.preview ? null : <OptionDeleteButton/>}
-            </>);
-        })}
+                    <OptionInput
+                        value={option.content}
+                        id={option.key}
+                        onChange={OnOptionContentChangeHandler.bind(null, showError)}
+                        placeholder={`Option ${index + 1}`}
+                        autoFocus={(index === array.length - 1 && Focus)}
+                        onFocus={() => {
+                            if(index === array.length - 1 && Focus)
+                                setFocus(false);
+                        }}
+                        MissingError={showError}
+                        onClick={
+                            showError ?
+                            props.onErrorClear : null
+                        }
+                        preview={props.preview}
+                    ></OptionInput>
+                    {props.preview ? null : <OptionDeleteButton/>}
+                </>);
+            })}
+        </div>
         <CustomDragLayer
             onDragging={setIsDargging}
         />

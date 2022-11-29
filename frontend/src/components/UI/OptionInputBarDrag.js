@@ -1,5 +1,4 @@
-import { ContentBlock } from 'draft-js';
-import { useRef, useEffect } from 'react';
+import { useRef } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 import { getEmptyImage } from "react-dnd-html5-backend";
 
@@ -17,6 +16,7 @@ const OptionInputBarDrag = (
       Draggable,
       preview,
       otherDragging,
+      getContainerInfo,
       ...leftProps }
     ) => {
     const ref = useRef(null);
@@ -55,7 +55,15 @@ const OptionInputBarDrag = (
     const [{ isDragging }, drag, dragPreview] = useDrag({
             type: 'option',
             item: () => {
-                return { id, index, leftProps, children, width: divRef.current.offsetWidth }
+                return {
+                    id,
+                    index,
+                    leftProps,
+                    children,
+                    containerInfo: getContainerInfo(),
+                    width: divRef.current.offsetWidth,
+                    height: divRef.current.offsetHeight,
+                }
             },
             collect: (monitor) => ({
                 isDragging: monitor.isDragging(),

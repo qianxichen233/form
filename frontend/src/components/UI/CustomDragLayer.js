@@ -4,14 +4,20 @@ import { BoxDragPreview } from './BoxDragPreview.js';
 
 import classes from './CustomDragLayer.module.css';
 
-const getItemStyles = (initialOffset, currentOffset) => {
+const bound = (value, upper, lower) => {
+    if(upper > lower) [upper, lower] = [lower, upper]
+    return value < upper ? upper :
+           value > lower ? lower : value;
+}
+
+const getItemStyles = (initialOffset, currentOffset, upper, lower) => {
     if (!initialOffset || !currentOffset) {
         return {
             display: 'none',
         }
     }
     const x = initialOffset.x;
-    const y = currentOffset.y;
+    const y = bound(currentOffset.y, upper, lower);
     const transform = `translate(${x}px, ${y}px)`
     return {
         transform,
@@ -47,13 +53,16 @@ export const CustomDragLayer = (props) => {
         return null;
     }
 
+    const upper = item.containerInfo.y;
+    const lower = item.containerInfo.y + item.containerInfo.height - item.height;
+
     return (
         <div
             className={classes.layer}
             style={{width: item.width}}
         >
         <div
-            style={getItemStyles(initialOffset, currentOffset)}
+            style={getItemStyles(initialOffset, currentOffset, upper, lower)}
         >
             {renderItem()}
         </div>
