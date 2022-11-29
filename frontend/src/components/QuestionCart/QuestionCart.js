@@ -11,6 +11,7 @@ import classes from './QuestionCart.module.css';
 import { HiOutlineTrash } from 'react-icons/hi';
 import { MdContentCopy } from 'react-icons/md';
 import { GrAddCircle } from 'react-icons/gr';
+import { ArrowUp, ArrowDown } from '../UI/Icons';
 
 const getInitState = (props) => {
     const type = props.content?.type;
@@ -59,7 +60,13 @@ const QuestionCart = (props) => {
             id: props.id
         });
     }
-    return <Cart onClick={props.onEdit} id={props.id} Focus={props.Focus}>
+    return <Cart
+        onClick={props.onEdit}
+        id={props.id}
+        Focus={props.Focus}
+        ScrollTo={props.ScrollTo}
+        cancelScroll={props.cancelScroll}
+    >
         {props.Focus &&
         <div className={classes.ButtonGroupTop}>
             <select
@@ -129,6 +136,20 @@ const QuestionCart = (props) => {
         <>
             <div className={classes.optionDiv}></div>
             <div className={classes.ButtonGroupBottom}>
+                <div
+                    name="MoveUp"
+                    className={classes.MoveButton}
+                    onClick={e => e.target = e.currentTarget}
+                >
+                    <ArrowUp size={20}/>
+                </div>
+                <div
+                    name="MoveDown"
+                    className={classes.MoveButton}
+                    onClick={e => e.target = e.currentTarget}
+                >
+                    <ArrowDown size={20}/>
+                </div>
                 <div
                     name="AddButton"
                     className={classes.AddButton}

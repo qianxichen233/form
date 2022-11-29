@@ -2,7 +2,7 @@
     margin-right: 10px;
 }
 
-.AddButton, .DeleteButton, .CopyButton{
+.AddButton, .DeleteButton, .CopyButton, .MoveButton{
     width: 30px;
     height: 30px;
 
@@ -21,7 +21,11 @@
     margin-right: 10px;
 }
 
-.DeleteButton:hover, .AddButton:hover, .CopyButton:hover{
+.MoveButton{
+    margin-right: 10px;
+}
+
+.DeleteButton:hover, .AddButton:hover, .CopyButton:hover, .MoveButton:hover{
     background-color: rgba(211, 211, 211, 0.3);
 }
 

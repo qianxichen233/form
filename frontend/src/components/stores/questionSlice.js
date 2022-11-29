@@ -1,38 +1,38 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 export const questionSlice = createSlice({
-  name: 'questions',
-  initialState: {
-    questions: []
-  },
-  reducers: {
-    setQuestionStore: (state, action) => {
-      for(const question of state.questions)
-      {
-        if(question.key === action.payload.id)
-        {
-          question.content = action.payload.content;
-          return state;
-        }
-      }
-      state.questions.push(
-        {
-            key: action.payload.id,
-            content: action.payload.content
-        }
-      )
-      return state;
+    name: 'questions',
+    initialState: {
+        questions: []
     },
+    reducers: {
+        setQuestionStore: (state, action) => {
+            for(const question of state.questions)
+            {
+                if(question.key === action.payload.id)
+                {
+                    question.content = action.payload.content;
+                    return state;
+                }
+            }
+            state.questions.push(
+                {
+                    key: action.payload.id,
+                    content: action.payload.content
+                }
+            )
+            return state;
+      },
 
-    deleteQuestionStore: (state, action) => {
-      state.questions = state.questions.filter(question => {
-        return question.key !== action.payload.id;
-      })
-      return state;
-    }
+      deleteQuestionStore: (state, action) => {
+          state.questions = state.questions.filter(question => {
+              return question.key !== action.payload.id;
+          })
+          return state;
+      },
   },
 })
 
-export const { setQuestionStore, deleteQuestionStore } = questionSlice.actions
+export const { setQuestionStore, deleteQuestionStore } = questionSlice.actions;
 
-export default questionSlice.reducer
+export default questionSlice.reducer;

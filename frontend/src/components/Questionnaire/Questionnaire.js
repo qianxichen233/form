@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import lodash from 'lodash';
 
 import FormTitleCart from '../QuestionCart/FormTitleCart';
 import QuestionCart from '../QuestionCart/QuestionCart';
@@ -62,6 +63,7 @@ const Questionnaire = () => {
     const [questions, setQuestions] = useState([]);
     const [EditQuestion, setEditQuestion] = useState(0);
     const [ErrorHint, setErrorHint] = useState();
+    const [ScrollTo, setScrollTo] = useState(false);
     const questionContent = useSelector((state) => state.question.questions);
 
     const dispatch = useDispatch()
@@ -84,7 +86,7 @@ const Questionnaire = () => {
         setErrorHint(null);
     }
 
-    const onAddQuestion = (e) => {
+    const onChangeQuestion = (e) => {
         OnEditQuestionChange(e.currentTarget.id);
         if(!e.target.attributes['name']) return;
         const name = e.target.attributes['name'].value;
@@ -147,6 +149,34 @@ const Questionnaire = () => {
             setQuestions(newQuestions);
             setEditQuestion(key);
         }
+        else if(name === "MoveUp")
+        {
+            let newQuestions = [];
+            let index = 0;
+            for(let i = 0; i < questionRef.current.length; ++i)
+            {
+                if(+questionRef.current[i].id === +e.currentTarget.id) index = i;
+                newQuestions.push(questionRef.current[i]);
+            }
+            if(index > 0)
+                [newQuestions[index], newQuestions[index - 1]] = [newQuestions[index - 1], newQuestions[index]];
+            setScrollTo(true);
+            setQuestions(newQuestions);
+        }
+        else if(name === "MoveDown")
+        {
+            let newQuestions = [];
+            let index = 0;
+            for(let i = 0; i < questionRef.current.length; ++i)
+            {
+                if(+questionRef.current[i].id === +e.currentTarget.id) index = i;
+                newQuestions.push(questionRef.current[i]);
+            }
+            if(index < questionRef.current.length - 1)
+                [newQuestions[index], newQuestions[index + 1]] = [newQuestions[index + 1], newQuestions[index]];
+            setScrollTo(true);
+            setQuestions(newQuestions);
+        }
     }
 
     const onTitleCartClick = e => {
@@ -167,7 +197,15 @@ const Questionnaire = () => {
     const OnSubmitHandler = async (e) => {
         e.preventDefault();
 
-        const missingPart = checkValidity(questionContent);
+        let orderArray = questionRef.current.map(elem => elem.id);
+        orderArray.unshift(0);
+
+        let storedQuestion = lodash.cloneDeep(questionContent);
+        storedQuestion.sort((a, b) => {
+            return orderArray.indexOf(a.key) - orderArray.indexOf(b.key);
+        });
+
+        const missingPart = checkValidity(storedQuestion);
         if(missingPart)
         {
             setEditQuestion(missingPart.id);
@@ -181,10 +219,9 @@ const Questionnaire = () => {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(questionContent)
+            body: JSON.stringify(storedQuestion)
         });
     }
-
     return <div className={classes.questionnaire}>
         <FormTitleCart
             Focus={TitleKey === EditQuestion}
@@ -193,7 +230,7 @@ const Questionnaire = () => {
             onClick={onTitleCartClick}
             onFocus={onTitleCartClick}
         />
-        {questions.map(question => {
+        {questions.map((question) => {
             const missingItem = ErrorHint?.id === question.key ?
                                 {
                                     type: ErrorHint.type,
@@ -202,12 +239,14 @@ const Questionnaire = () => {
             return <QuestionCart
                 key={question.key}
                 id={question.key}
-                onEdit={onAddQuestion}
+                onEdit={onChangeQuestion}
                 content={question.content}
                 Focus={question.key === EditQuestion}
                 onFocus={setEditQuestion.bind(null, question.key)}
                 missingItem={missingItem}
                 onErrorClear={ClearErrorMessage}
+                ScrollTo={ScrollTo && question.key === EditQuestion}
+                cancelScroll={setScrollTo.bind(null, false)}
             />
         })}
         <button type="submit" onClick={OnSubmitHandler}>Submit</button>
