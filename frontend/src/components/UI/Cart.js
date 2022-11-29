@@ -1,5 +1,4 @@
 import { useEffect, useRef } from 'react';
-import { animateScroll as scroller } from 'react-scroll';
 
 import classes from './Cart.module.css';
 
