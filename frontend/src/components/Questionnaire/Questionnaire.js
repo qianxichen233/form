@@ -63,7 +63,9 @@ const Questionnaire = () => {
     const [questions, setQuestions] = useState([]);
     const [EditQuestion, setEditQuestion] = useState(0);
     const [ErrorHint, setErrorHint] = useState();
-    const [ScrollTo, setScrollTo] = useState(false);
+    const [ScrollTo, setScrollTo] = useState({
+        trigger: false,
+    });
     const questionContent = useSelector((state) => state.question.questions);
 
     const dispatch = useDispatch()
@@ -160,7 +162,10 @@ const Questionnaire = () => {
             }
             if(index > 0)
                 [newQuestions[index], newQuestions[index - 1]] = [newQuestions[index - 1], newQuestions[index]];
-            setScrollTo(true);
+            setScrollTo({
+                trigger: true,
+                target: +e.currentTarget.id
+            });
             setQuestions(newQuestions);
         }
         else if(name === "MoveDown")
@@ -174,7 +179,10 @@ const Questionnaire = () => {
             }
             if(index < questionRef.current.length - 1)
                 [newQuestions[index], newQuestions[index + 1]] = [newQuestions[index + 1], newQuestions[index]];
-            setScrollTo(true);
+            setScrollTo({
+                trigger: true,
+                target: +e.currentTarget.id
+            });
             setQuestions(newQuestions);
         }
     }
@@ -210,6 +218,10 @@ const Questionnaire = () => {
         {
             setEditQuestion(missingPart.id);
             setErrorHint(missingPart);
+            setScrollTo({
+                trigger: true,
+                target: missingPart.id
+            });
             return;
         }
         
@@ -222,6 +234,7 @@ const Questionnaire = () => {
             body: JSON.stringify(storedQuestion)
         });
     }
+    
     return <div className={classes.questionnaire}>
         <FormTitleCart
             Focus={TitleKey === EditQuestion}
@@ -229,6 +242,8 @@ const Questionnaire = () => {
             onErrorClear={ClearErrorMessage}
             onClick={onTitleCartClick}
             onFocus={onTitleCartClick}
+            ScrollTo={ScrollTo.trigger && TitleKey === ScrollTo.target}
+            cancelScroll={setScrollTo.bind(null, {trigger: false})}
         />
         {questions.map((question) => {
             const missingItem = ErrorHint?.id === question.key ?
@@ -245,8 +260,8 @@ const Questionnaire = () => {
                 onFocus={setEditQuestion.bind(null, question.key)}
                 missingItem={missingItem}
                 onErrorClear={ClearErrorMessage}
-                ScrollTo={ScrollTo && question.key === EditQuestion}
-                cancelScroll={setScrollTo.bind(null, false)}
+                ScrollTo={ScrollTo.trigger && question.key === ScrollTo.target}
+                cancelScroll={setScrollTo.bind(null, {trigger: false})}
             />
         })}
         <button type="submit" onClick={OnSubmitHandler}>Submit</button>
