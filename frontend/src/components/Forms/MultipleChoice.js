@@ -10,9 +10,10 @@ import Form from "../UI/Form";
 import OptionInput from '../UI/OptionInput';
 import OptionDeleteButton from "../UI/OptionDeleteButton";
 import QuestionInputBar from '../UI/QuestionInputBar';
-import OptionInputBar from '../UI/OptionInputBar';
+import OptionInputBarDrag from '../UI/OptionInputBarDrag';
 import RichTextEditor from "../UI/RichTextEditor";
 import RequiredInput from "../UI/RequiredInput";
+import { CustomDragLayer } from "../UI/CustomDragLayer";
 
 import update from 'immutability-helper';
 
@@ -26,6 +27,7 @@ const getKey = () => {
 
 const MultipleChoice = (props) => {
     const [Focus, setFocus] = useState(false);
+    const [isDragging, setIsDargging] = useState(false);
     const [question, setQuestion] = useState(props.content || {
         type: 'MultipleChoice',
         subtype: props.subtype ? props.subtype : 'multichoice',
@@ -163,23 +165,30 @@ const MultipleChoice = (props) => {
                     [dragIndex, 1],
                     [hoverIndex, 0, prevQuestions.options[dragIndex]],
                 ],
-            })
+            });
+            dispatch(setQuestionStore({
+                id: props.id,
+                content: newQuestion
+            }));
+            
             return newQuestion;
         },
         )
       }
-      const renderCard = (option, index, children) => {
+      const renderCard = (option, index, preview, isDragging, children) => {
         return (
-            <OptionInputBar
+            <OptionInputBarDrag
                 key={option.key}
                 index={index}
                 id={option.key}
                 moveCard={moveCard}
                 onClick={DeleteOptionHandler}
-                Dragable={true}
+                Draggable={true}
+                preview={preview}
+                otherDragging={isDragging}
             >
                 {children}
-            </OptionInputBar>
+            </OptionInputBarDrag>
         )
       }
 
@@ -205,7 +214,7 @@ const MultipleChoice = (props) => {
         {question.options.map((option, index, array) => {
             const showError = props.missingItem?.type === "option" &&
                               props.missingItem?.index === index;
-            return renderCard(option, index, <>
+            return renderCard(option, index, props.preview, isDragging, <>
                 {
                     props.subtype === 'multichoice' ?
                     <RiCheckboxBlankCircleLine className={classes.icon} size={20}/> :
@@ -231,7 +240,10 @@ const MultipleChoice = (props) => {
                 {props.preview ? null : <OptionDeleteButton/>}
             </>);
         })}
-        {props.preview ? null : <OptionInputBar>
+        <CustomDragLayer
+            onDragging={setIsDargging}
+        />
+        {props.preview ? null : <OptionInputBarDrag>
             <OptionInput
                 placeholder="Add Option"
                 onClick={AddOptionHandler}
@@ -239,7 +251,7 @@ const MultipleChoice = (props) => {
                 onFocus={() => setFocus(true)}
                 tabIndex={-1}
             ></OptionInput>
-        </OptionInputBar>}
+        </OptionInputBarDrag>}
     </Form>;
 }
 

@@ -1,8 +1,17 @@
 .dragBar{
-    width: 20px;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
     height: 100%;
 }
 
 .dragBar:hover{
     cursor: grab;
+}
+
+.space{
+    width: 20px;
+    height: 20px;
 }
