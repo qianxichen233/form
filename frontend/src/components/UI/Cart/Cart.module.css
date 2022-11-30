@@ -15,6 +15,7 @@
 
     background-color: white;
     width: 70vw;
+    min-width: 950px;
 
     transition: box-shadow 0.3s ease-in-out;
 }

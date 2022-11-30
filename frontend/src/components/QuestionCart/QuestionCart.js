@@ -1,17 +1,16 @@
 import { useState } from 'react';
+
 import MultipleChoice from '../Forms/MultipleChoice';
 import ShortAnswer from '../Forms/ShortAnswer';
 import Cart from '../UI/Cart/Cart';
+import SelectBar from '../UI/SelectBar/SelectBar';
 
 import { DndProvider } from 'react-dnd';
 import { TouchBackend } from 'react-dnd-touch-backend';
 
 import classes from './QuestionCart.module.css';
 
-import { HiOutlineTrash } from 'react-icons/hi';
-import { MdContentCopy } from 'react-icons/md';
-import { GrAddCircle } from 'react-icons/gr';
-import { ArrowUp, ArrowDown } from '../UI/Icons';
+import { ArrowUp, ArrowDown, AddButton, DeleteCartButton, CopyButton } from '../UI/Icons';
 
 const getInitState = (props) => {
     const type = props.content?.type;
@@ -54,9 +53,9 @@ const getInitState = (props) => {
 const QuestionCart = (props) => {
     const [cart, setCart] = useState(getInitState(props));
 
-    const ChangeQuestionHandler = (e) => {
+    const ChangeQuestionHandler = (value) => {
         setCart({
-            type: e.target.value,
+            type: value,
             id: props.id
         });
     }
@@ -69,21 +68,29 @@ const QuestionCart = (props) => {
     >
         {props.Focus &&
         <div className={classes.ButtonGroupTop}>
-            <select
-                className={classes.QuestionType}
-                onChange={ChangeQuestionHandler}
-                value={cart.type}
-            >
-                <option value="MultipleChoice">Multiple Choice</option>
-                <option value="Checkbox">Checkbox</option>
-                <option value="ShortAnswer">Short Answer</option>
-            </select>
+            <div className={classes.SelectButton}>
+                <SelectBar
+                    onChange={ChangeQuestionHandler}
+                    value={cart.type}
+                    options={
+                        [
+                            [
+                                {value: "MultipleChoice", name: "Multiple Choice"},
+                                {value: "Checkbox", name: "Checkbox"}
+                            ],
+                            [
+                                {value: "ShortAnswer", name: "Short Answer"}
+                            ]
+                        ]
+                    }
+                />
+            </div>
             <div
                 name="DeleteButton"
                 className={classes.DeleteButton}
                 onClick={e => e.target = e.currentTarget}
             >
-                <HiOutlineTrash size={20}/>
+                <DeleteCartButton size={25} color="grey"/>
             </div>
         </div>}
         {(cart => {
@@ -141,28 +148,28 @@ const QuestionCart = (props) => {
                     className={classes.MoveButton}
                     onClick={e => e.target = e.currentTarget}
                 >
-                    <ArrowUp size={20}/>
+                    <ArrowUp size={25} color="grey"/>
                 </div>
                 <div
                     name="MoveDown"
                     className={classes.MoveButton}
                     onClick={e => e.target = e.currentTarget}
                 >
-                    <ArrowDown size={20}/>
+                    <ArrowDown size={25} color="grey"/>
                 </div>
                 <div
                     name="AddButton"
                     className={classes.AddButton}
                     onClick={e => e.target = e.currentTarget}
                 >
-                    <GrAddCircle size={20}/>
+                    <AddButton size={25} color="grey"/>
                 </div>
                 <div
                     name="CopyButton"
                     className={classes.CopyButton}
                     onClick={e => e.target = e.currentTarget}
                 >
-                    <MdContentCopy size={20}/>
+                    <CopyButton size={25} color="grey"/>
                 </div>
             </div>
         </>}

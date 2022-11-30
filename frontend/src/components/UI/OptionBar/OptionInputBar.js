@@ -12,7 +12,7 @@ const OptionInputBar = ({children, isDragging, opacity, ...leftProps}) => {
             <>
                 <span className={classes.placeholder}></span>
                 <div className={classes.icon}>
-                    <DragButton />
+                    <DragButton color="grey"/>
                 </div>
             </> : null}
         {children}

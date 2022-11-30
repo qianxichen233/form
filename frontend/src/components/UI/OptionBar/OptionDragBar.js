@@ -16,7 +16,7 @@ const OptionDragBar = forwardRef((props, ref) => {
             onMouseDown={e => {
                 if(props.preview) e.preventDefault();
             }}>
-            <DragButton />
+            <DragButton color="grey"/>
         </div>
     </>
 })

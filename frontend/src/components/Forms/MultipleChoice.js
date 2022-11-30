@@ -212,7 +212,7 @@ const MultipleChoice = (props) => {
                 onClick={props.missingItem?.type === "description" ? props.onErrorClear : null}
                 preview={props.preview}
                 onFocus={props.onFocus}
-                width={'85%'}
+                width={'70%'}
             />
             {props.preview ? null :
             <RequiredInput
@@ -232,8 +232,8 @@ const MultipleChoice = (props) => {
                                   <>
                     {
                         props.subtype === 'multichoice' ?
-                        <CircleCheckBox className={classes.icon} size={20}/> :
-                        <BoxCheckBox className={classes.icon} size={20}/>
+                        <CircleCheckBox className={classes.icon} size={20} color="grey"/> :
+                        <BoxCheckBox className={classes.icon} size={20} color="grey"/>
                     }
                     <OptionInput
                         value={option.content}

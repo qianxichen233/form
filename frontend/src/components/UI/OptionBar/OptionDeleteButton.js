@@ -1,4 +1,4 @@
-import { DeleteButton } from '../Icons';
+import { DeleteOptionButton } from '../Icons';
 
 import classes from './OptionDeleteButton.module.css';
 
@@ -8,7 +8,7 @@ const OptionDeleteButton = (props) => {
         className={classes.container}
         onClick={e => e.target = e.currentTarget}
     >
-        <DeleteButton size={30}/>
+        <DeleteOptionButton size={30} color="grey"/>
     </div>
 }
 

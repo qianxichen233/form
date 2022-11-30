@@ -62,7 +62,7 @@ const ShortAnswer = (props) => {
                 onClick={props.missingItem?.type === "description" ? props.onErrorClear : null}
                 preview={props.preview}
                 onFocus={props.onFocus}
-                width={'85%'}
+                width={'70%'}
             />
             {props.preview ? null :
             <RequiredInput

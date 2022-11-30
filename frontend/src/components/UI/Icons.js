@@ -1,22 +1,39 @@
-import { IoIosArrowUp as ArrowUp } from 'react-icons/io';
-import { IoIosArrowDown as ArrowDown } from 'react-icons/io';
-import { RiCheckboxBlankCircleLine as CircleCheckBox } from 'react-icons/ri';
-import { MdCheckBoxOutlineBlank as BoxCheckBox } from 'react-icons/md';
-import { TiDeleteOutline as DeleteButton } from 'react-icons/ti';
-import { MdOutlineDragIndicator as DragButton } from 'react-icons/md';
+import { IoIosArrowUp as ArrowUp,
+         IoIosArrowDown as ArrowDown } from 'react-icons/io';
+
+import { MdCheckBoxOutlineBlank as BoxCheckBox,
+         MdCheckBox as BoxCheckBoxFill,
+         MdOutlineDragIndicator as DragButton,
+         MdContentCopy as CopyButton,
+         MdShortText as ShortText,
+         MdAddCircleOutline as AddButton } from 'react-icons/md';
 
 import { ImBold as BoldIcon,
          ImItalic as ItalicIcon,
-         ImUnderline as UnderlineIcon } from 'react-icons/im';
+         ImUnderline as UnderlineIcon,
+         ImRadioUnchecked as CircleCheckBox,
+         ImRadioChecked as CircleCheckBoxFill } from 'react-icons/im';
+
+import { AiFillCaretDown as CaretDown } from 'react-icons/ai';
+
+import { TiDeleteOutline as DeleteOptionButton } from 'react-icons/ti';
+import { HiOutlineTrash as DeleteCartButton } from 'react-icons/hi';
 
 export {
     ArrowUp,
     ArrowDown,
     CircleCheckBox,
     BoxCheckBox,
-    DeleteButton,
+    DeleteOptionButton,
     DragButton,
     BoldIcon,
     ItalicIcon,
-    UnderlineIcon
+    UnderlineIcon,
+    CopyButton,
+    DeleteCartButton,
+    AddButton,
+    CircleCheckBoxFill,
+    BoxCheckBoxFill,
+    ShortText,
+    CaretDown
 };
