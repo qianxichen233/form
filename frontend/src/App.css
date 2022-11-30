@@ -36,3 +36,7 @@ html {
     transform: rotate(360deg);
   }
 }
+
+body.grabbing *{
+  cursor: grabbing !important;
+}

@@ -4,7 +4,7 @@ import ShortAnswer from '../Forms/ShortAnswer';
 import Cart from '../UI/Cart/Cart';
 
 import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
+import { TouchBackend } from 'react-dnd-touch-backend';
 
 import classes from './QuestionCart.module.css';
 
@@ -89,7 +89,7 @@ const QuestionCart = (props) => {
         {(cart => {
             if(cart.type === "MultipleChoice")
             {
-                return <DndProvider backend={HTML5Backend}>
+                return <DndProvider backend={TouchBackend} options={{ enableMouseEvents: true }}>
                     <MultipleChoice
                         id={cart.id}
                         subtype='multichoice'
@@ -104,7 +104,7 @@ const QuestionCart = (props) => {
             }
             else if(cart.type === "Checkbox")
             {
-                return  <DndProvider backend={HTML5Backend}>
+                return  <DndProvider backend={TouchBackend} options={{ enableMouseEvents: true }}>
                     <MultipleChoice
                         id={cart.id}
                         subtype='checkbox'
@@ -119,7 +119,7 @@ const QuestionCart = (props) => {
             }
             else if(cart.type === "ShortAnswer")
             {
-                return <DndProvider backend={HTML5Backend}>
+                return <DndProvider backend={TouchBackend} options={{ enableMouseEvents: true }}>
                     <ShortAnswer
                         id={cart.id}
                         className={classes.question}

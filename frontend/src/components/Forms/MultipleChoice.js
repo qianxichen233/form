@@ -181,7 +181,6 @@ const MultipleChoice = (props) => {
         return {
             y: optionContainerRef.current.getBoundingClientRect().y,
             height: optionContainerRef.current.getBoundingClientRect().height
-
         }
     }
 

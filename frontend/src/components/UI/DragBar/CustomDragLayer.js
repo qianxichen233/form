@@ -50,8 +50,11 @@ export const CustomDragLayer = (props) => {
     }, [isDragging]);
 
     if (!isDragging) {
+        document.body.classList.remove('grabbing');
         return null;
     }
+
+    document.body.classList.add('grabbing');
 
     const upper = item.containerInfo.y;
     const lower = item.containerInfo.y + item.containerInfo.height - item.height;
@@ -61,11 +64,11 @@ export const CustomDragLayer = (props) => {
             className={classes.layer}
             style={{width: item.width}}
         >
-        <div
-            style={getItemStyles(initialOffset, currentOffset, upper, lower)}
-        >
-            {renderItem()}
-        </div>
+            <div
+                style={getItemStyles(initialOffset, currentOffset, upper, lower)}
+            >
+                {renderItem()}
+            </div>
         </div>
     )
 }
