@@ -60,9 +60,11 @@
 }
 
 .inputContainer:hover > div.circleContainer:not(.circleContainerActive){
+    cursor: pointer;
     background-color: rgba(211, 211, 211, 0.2);
 }
 
 .inputContainer:hover > div.circleContainerActive{
+    cursor: pointer;
     background-color: rgba(103, 58, 183, 0.1);
 }

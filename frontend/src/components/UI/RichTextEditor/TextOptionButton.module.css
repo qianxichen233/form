@@ -13,6 +13,7 @@
 }
 
 .button:hover{
+    cursor: pointer;
     background-color: rgb(212, 212, 212, 0.5);
 }
 
