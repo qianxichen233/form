@@ -6,7 +6,8 @@ import { MdCheckBoxOutlineBlank as BoxCheckBox,
          MdOutlineDragIndicator as DragButton,
          MdContentCopy as CopyButton,
          MdShortText as ShortText,
-         MdAddCircleOutline as AddButton } from 'react-icons/md';
+         MdAddCircleOutline as AddButton,
+         MdAccessTime as TimeIcon } from 'react-icons/md';
 
 import { ImBold as BoldIcon,
          ImItalic as ItalicIcon,
@@ -18,6 +19,10 @@ import { AiFillCaretDown as CaretDown } from 'react-icons/ai';
 
 import { TiDeleteOutline as DeleteOptionButton } from 'react-icons/ti';
 import { HiOutlineTrash as DeleteCartButton } from 'react-icons/hi';
+
+import { GrTextAlignFull as Paragraph } from 'react-icons/gr';
+
+import { BiCalendarEvent as DateIcon } from 'react-icons/bi';
 
 export {
     ArrowUp,
@@ -35,5 +40,8 @@ export {
     CircleCheckBoxFill,
     BoxCheckBoxFill,
     ShortText,
-    CaretDown
+    Paragraph,
+    CaretDown,
+    TimeIcon,
+    DateIcon
 };

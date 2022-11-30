@@ -1,7 +1,8 @@
 import { useState } from 'react';
 
 import MultipleChoice from '../Forms/MultipleChoice';
-import ShortAnswer from '../Forms/ShortAnswer';
+import TextAnswer from '../Forms/TextAnswer';
+
 import Cart from '../UI/Cart/Cart';
 import SelectBar from '../UI/SelectBar/SelectBar';
 
@@ -40,12 +41,23 @@ const getInitState = (props) => {
             }
         }
     }
-    if(type === 'ShortAnswer')
+    if(type === 'TextAnswer')
     {
-        return {
-            type: "ShortAnswer",
-            id: props.id,
-            content: props.content
+        if(props.content.subtype === 'shortanswer')
+        {
+            return {
+                type: "ShortAnswer",
+                id: props.id,
+                content: props.content
+            }
+        }
+        if(props.content.subtype === 'paragraph')
+        {
+            return {
+                type: "Paragraph",
+                id: props.id,
+                content: props.content
+            }
         }
     }
 }
@@ -75,11 +87,12 @@ const QuestionCart = (props) => {
                     options={
                         [
                             [
-                                {value: "MultipleChoice", name: "Multiple Choice"},
-                                {value: "Checkbox", name: "Checkbox"}
+                                {value: "Paragraph", name: "Paragraph"},
+                                {value: "ShortAnswer", name: "Short Answer"}
                             ],
                             [
-                                {value: "ShortAnswer", name: "Short Answer"}
+                                {value: "MultipleChoice", name: "Multiple Choice"},
+                                {value: "Checkbox", name: "Checkbox"}
                             ]
                         ]
                     }
@@ -127,8 +140,24 @@ const QuestionCart = (props) => {
             else if(cart.type === "ShortAnswer")
             {
                 return <DndProvider backend={TouchBackend} options={{ enableMouseEvents: true }}>
-                    <ShortAnswer
+                    <TextAnswer
                         id={cart.id}
+                        subtype='shortanswer'
+                        className={classes.question}
+                        content={cart.content}
+                        missingItem={props.missingItem}
+                        onErrorClear={props.onErrorClear}
+                        preview={!props.Focus}
+                        onFocus={props.onFocus}
+                    />
+                </DndProvider>
+            }
+            else if(cart.type === "Paragraph")
+            {
+                return <DndProvider backend={TouchBackend} options={{ enableMouseEvents: true }}>
+                    <TextAnswer
+                        id={cart.id}
+                        subtype='paragraph'
                         className={classes.question}
                         content={cart.content}
                         missingItem={props.missingItem}

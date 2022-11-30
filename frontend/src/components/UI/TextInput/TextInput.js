@@ -5,16 +5,16 @@ const height = {
     big: '50px',
     normal: '30px',
     small: '20px'
-}
+};
 
 const fontsize = {
     big: '24pt',
     normal: '12pt',
     small: '8pt'
-}
+};
 
 const TextInput = (props) => {
-    const {children, MissingError, preview, size, onFocus, ...leftProps} = props;
+    const {children, MissingError, preview, size, onFocus, width, ...leftProps} = props;
 
     const inputRef = useRef(null);
     useEffect(() => {
@@ -22,7 +22,7 @@ const TextInput = (props) => {
             inputRef.current.focus();
     }, [MissingError]);
 
-    return <div className={`${classes.container}`}>
+    return <div className={`${classes.container}`} style={{width}}>
         <input
             {...leftProps}
             type="text"

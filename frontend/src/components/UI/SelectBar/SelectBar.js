@@ -3,13 +3,25 @@ import Modal from '../Modal/Modal';
 
 import classes from './SelectBar.module.css';
 
-import { ShortText, BoxCheckBoxFill, CircleCheckBoxFill, CaretDown } from '../Icons';
+import { ShortText, Paragraph, BoxCheckBoxFill, CircleCheckBoxFill, CaretDown } from '../Icons';
 
 const IconMap = {
     MultipleChoice: <CircleCheckBoxFill size={20} color="grey"/>,
     Checkbox: <BoxCheckBoxFill size={20} color="grey"/>,
-    ShortAnswer: <ShortText size={20} color="grey"/>
+    ShortAnswer: <ShortText size={20} color="grey"/>,
+    Paragraph: <Paragraph size={20} color="grey"/>
 };
+
+const bound = (value, upper, lower) => {
+    if(upper > lower) [upper, lower] = [lower, upper]
+    return value < upper ? upper :
+           value > lower ? lower : value;
+}
+
+const getPositionTop = (top, offset, containerHeight, windowHeight) => {
+    const margin = 20;
+    return bound(top - offset, margin, windowHeight - containerHeight - margin);
+}
 
 const getName = (options, value) => {
     for(const div of options)
@@ -33,13 +45,29 @@ const getIndex = (options, value) => {
     return index;
 }
 
+const calcHeight = (options, optionHeight, borderHeight) => {
+    let height = 0;
+    for(const div of options)
+    {
+        height += div.length * optionHeight;
+        height += borderHeight;
+    }
+    return height - borderHeight; //exclude last border
+}
+
 const SelectBar = props => {
     const [ModalOpen, setModalOpen] = useState(false);
+    const [BarMouseDown, setBarMouseDown] = useState(false);
 
     const ref = useRef(null);
 
     const onClickHandler = (e) => {
+        setBarMouseDown(false);
         setModalOpen(true);
+    }
+
+    const onMouseDownHandler = (e) => {
+        setBarMouseDown(true);
     }
 
     const OptionRender = (option) => {
@@ -64,8 +92,12 @@ const SelectBar = props => {
 
     return <>
         <div
-            className={classes.selectBar}
+            className={`${classes.selectBar}
+                        ${ModalOpen ? classes.selectBarActive : ''}
+                        ${BarMouseDown ? classes.selectBarAwake : ''}`}
             onClick={onClickHandler}
+            onMouseDown={onMouseDownHandler}
+            onMouseLeave={() => setBarMouseDown(false)}
             ref={ref}
         >
             <div className={classes.icon}>
@@ -81,7 +113,10 @@ const SelectBar = props => {
                 className={classes.optionContainer}
                 style={{
                     left: ref.current.getBoundingClientRect().left,
-                    top: ref.current.getBoundingClientRect().top - getIndex(props.options, props.value) * ref.current.offsetHeight
+                    top: getPositionTop(ref.current.getBoundingClientRect().top,
+                                        getIndex(props.options, props.value) * ref.current.offsetHeight,
+                                        calcHeight(props.options, ref.current.offsetHeight, 1),
+                                        window.innerHeight)
                 }}
             >
                 {props.options.map((division, index, array) => {

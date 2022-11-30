@@ -1,7 +1,6 @@
 .container{
     display: inline-block;
     position: relative;
-    width: calc(100% - 20px);
     margin-top: 5px;
 }
 
@@ -16,7 +15,7 @@
     border-left-style: hidden;
     border-right-style: hidden;
     border-bottom-style: groove;
-    border-color: grey;
+    border-color: rgb(128, 128, 128, 0.3);
     border-width: 1px;
     margin-bottom: 3px;
     background-color: white;

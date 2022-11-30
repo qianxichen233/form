@@ -21,6 +21,14 @@
     cursor: pointer;
 }
 
+.selectBarActive{
+    background-color: rgba(26,115,232,0.078);
+}
+
+.selectBarAwake{
+    background-color: #eee;
+}
+
 div.optionBar:hover:not(.selected){
     cursor: pointer;
     background-color: #eee;
@@ -34,6 +42,7 @@ div.optionBar:hover:not(.selected){
 }
 
 .text{
+    user-select: none;
     margin-left: 8px;
 }
 
@@ -54,7 +63,15 @@ div.optionBar:hover:not(.selected){
     border-color: rgba(211, 211, 211, 0.8);
     border-radius: 5px;
 
-    box-shadow: 0 1px 2px 0 rgb(60 64 67 / 30%), 0 2px 6px 2px rgb(60 64 67 / 15%)
+    box-shadow: 0 1px 2px 0 rgb(60 64 67 / 30%), 0 2px 6px 2px rgb(60 64 67 / 15%);
+
+    opacity: 0;
+    animation: enter 0.1s forwards;
+}
+
+@keyframes enter {
+    from {opacity: 0;}
+    to {opacity: 1;}
 }
 
 .division{

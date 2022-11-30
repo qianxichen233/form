@@ -11,9 +11,20 @@ import TextInputBar from '../UI/TextInput/TextInputBar';
 import RichTextEditor from '../UI/RichTextEditor/RichTextEditor';
 import RequiredInput from '../UI/RequiredInput/RequiredInput';
 
+const placeholder = {
+    shortanswer: 'Short Answer Text',
+    paragraph: 'Long Answer Text'
+};
+
+const TextBoxWidth = {
+    shortanswer: '50%',
+    paragraph: '70%'
+}
+
 const ShortAnswer = (props) => {
     const [question, setQuestion] = useState(props.content || {
-        type: 'ShortAnswer',
+        type: 'TextAnswer',
+        subtype: props.subtype,
         description: null,
         required: true
     });
@@ -74,8 +85,9 @@ const ShortAnswer = (props) => {
         <TextInputBar>
             <TextInput
                 disabled={true}
-                placeholder='Short Answer Text'
+                placeholder={placeholder[props.subtype]}
                 preview={props.preview}
+                width={TextBoxWidth[props.subtype]}
             ></TextInput>
         </TextInputBar>
     </Form>
