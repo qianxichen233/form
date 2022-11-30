@@ -33,7 +33,8 @@ const RichTextEditor = (props) => {
     }
 
     const onClickHandler = (e) => {
-        e.preventDefault();
+        if(e.target.classList.contains(classes.editor))
+            e.preventDefault();
         FocusEditor();
         if(props.onClick) props.onClick();
     }
