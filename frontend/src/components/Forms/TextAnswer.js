@@ -22,7 +22,7 @@ const TextBoxWidth = {
 }
 
 const ShortAnswer = (props) => {
-    const [question, setQuestion] = useState(props.content || {
+    const [question, setQuestion] = useState(props.content ? props.content : {
         type: 'TextAnswer',
         subtype: props.subtype,
         description: null,
@@ -39,7 +39,18 @@ const ShortAnswer = (props) => {
             id: props.id,
             content: questionRef.current
         }));
-    }, [dispatch, props.id]);
+    }, [dispatch, props.id, questionRef.current]);
+
+    useEffect(() => {
+        let newQuestion = lodash.cloneDeep(questionRef.current);
+        newQuestion.subtype = props.subtype;
+
+        dispatch(setQuestionStore({
+            id: props.id,
+            content: newQuestion
+        }));
+        setQuestion(newQuestion);
+    }, [props.subtype, props.id, dispatch]);
 
     const onQuestionChangeHandler = (clearError, content) => {
         if(clearError) props.onErrorClear();
@@ -68,6 +79,7 @@ const ShortAnswer = (props) => {
         <QuestionInputBar>
             <RichTextEditor
                 placeholder="Question Statement"
+                value={question.description}
                 passValue={onQuestionChangeHandler.bind(null, props.missingItem?.type === 'description')}
                 MissingError={props.missingItem?.type === "description"}
                 onClick={props.missingItem?.type === "description" ? props.onErrorClear : null}

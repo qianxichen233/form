@@ -13,12 +13,31 @@ import classes from './QuestionCart.module.css';
 
 import { ArrowUp, ArrowDown, AddButton, DeleteCartButton, CopyButton } from '../UI/Icons';
 
+const getType = (type) => {
+    if(!type) return null;
+    if(type.type === 'MultipleChoice')
+    {
+        if(type.subtype === 'multichoice')
+            return "MultipleChoice";
+        if(type.subtype === 'checkbox')
+            return "Checkbox";
+    }
+    if(type.type === "TextAnswer")
+    {
+        if(type.subtype === "shortanswer")
+            return "ShortAnswer";
+        if(type.subtype === "paragraph")
+            return "Paragraph";
+    }
+}
+
 const getInitState = (props) => {
     const type = props.content?.type;
     if(!type)
     {
+        const initialType = getType(props.initialType);
         return {
-            type: "MultipleChoice",
+            type: initialType ? initialType : "MultipleChoice",
             id: props.id
         }
     }

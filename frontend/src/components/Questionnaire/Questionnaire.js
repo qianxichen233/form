@@ -94,6 +94,13 @@ const Questionnaire = () => {
         const name = e.target.attributes['name'].value;
         if(name === "AddButton")
         {
+            let questionContentType;
+            for(const question of questionContentRef.current)
+            {
+                if(question.key === +e.currentTarget.id)
+                    questionContentType = {type: question.content.type, subtype: question.content.subtype}
+            }
+
             let newQuestions = [];
             const key = getKey();
             for(let i = 0; i < questionRef.current.length; ++i)
@@ -104,7 +111,8 @@ const Questionnaire = () => {
                     newQuestions.push(
                         {
                             key: key,
-                            id: key
+                            id: key,
+                            initialType: questionContentType
                         }
                     );
                 }
@@ -255,6 +263,7 @@ const Questionnaire = () => {
                 key={question.key}
                 id={question.key}
                 onEdit={onChangeQuestion}
+                initialType={question.initialType}
                 content={question.content}
                 Focus={question.key === EditQuestion}
                 onFocus={setEditQuestion.bind(null, question.key)}
