@@ -10,6 +10,7 @@
     "draft-js": "^0.11.7",
     "immutability-helper": "^3.1.1",
     "lodash": "^4.17.21",
+    "next": "^13.0.5",
     "react": "^18.2.0",
     "react-dnd": "^16.0.1",
     "react-dnd-html5-backend": "^16.0.1",
@@ -17,15 +18,13 @@
     "react-dom": "^18.2.0",
     "react-icons": "^4.6.0",
     "react-redux": "^8.0.5",
-    "react-scripts": "5.0.1",
     "react-scroll": "^1.8.8",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
   },
   "eslintConfig": {
     "extends": [

@@ -1,0 +1,25 @@
+.cart{
+    position: relative;
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 10px 0 10px 0;
+    border-radius: 10px;
+    outline: lightgrey solid 0.5px;
+    box-sizing: border-box;
+
+    background-color: white;
+    width: 70vw;
+    min-width: 950px;
+
+    transition: box-shadow 0.3s ease-in-out;
+}
+
+.focus{
+    box-shadow: 6px 0 0 #4285f4 inset, 0 2px 2px grey;
+}
