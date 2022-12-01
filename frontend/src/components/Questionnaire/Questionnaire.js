@@ -212,19 +212,30 @@ const Questionnaire = () => {
         setEditQuestion(TitleKey);
     }, []);
 
-    const OnSubmitHandler = async (e) => {
-        e.preventDefault();
-
+    const getQuestionContent = () => {
         let orderArray = questionRef.current.map(elem => elem.id);
         orderArray.unshift(TitleKey);
 
-        let storedQuestion = lodash.cloneDeep(questionContent);
-        storedQuestion.sort((a, b) => {
+        let CloneQuestion = lodash.cloneDeep(questionContent);
+        CloneQuestion.sort((a, b) => {
             return orderArray.indexOf(a.key) - orderArray.indexOf(b.key);
         });
 
+        CloneQuestion = CloneQuestion.map((question, index) => {
+            delete question.key;
+            question.order = index;
+            return question;
+        });
+
+        return CloneQuestion;
+    }
+
+    const OnSubmitHandler = async (e) => {
+        e.preventDefault();
+
+        let storedQuestion = getQuestionContent();
+
         const missingPart = checkValidity(storedQuestion);
-        console.log(missingPart);
         if(missingPart)
         {
             setEditQuestion(missingPart.id);
@@ -246,8 +257,19 @@ const Questionnaire = () => {
         });
     }
 
-    const OnSaveHandler = e => {
+    const OnSaveHandler = async (e) => {
         e.preventDefault();
+
+        let storedQuestion = getQuestionContent();
+
+        await fetch(`${process.env.REACT_APP_BACKEND_URL}/questionnaire`,{
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(storedQuestion)
+        });
     }
 
     const OnPreviewHandler = e => {
