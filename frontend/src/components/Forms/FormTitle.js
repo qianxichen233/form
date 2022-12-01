@@ -2,8 +2,6 @@ import { useState, useRef, useEffect } from 'react';
 import lodash from 'lodash';
 
 import Form from '../UI/Cart/Form';
-import TextInputBar from '../UI/TextInput/TextInputBar';
-import TextInput from '../UI/TextInput/TextInput';
 import RichTextEditor from '../UI/RichTextEditor/RichTextEditor';
 
 import { useDispatch } from 'react-redux';
@@ -12,8 +10,8 @@ import { setQuestionStore } from '../stores/questionSlice';
 const FormTitle = (props) => {
     const [content, setContent] = useState({
         type: 'title',
-        title: '',
-        description: ''
+        title: null,
+        description: null
     });
 
     const dispatch = useDispatch();
