@@ -3,6 +3,7 @@ import lodash from 'lodash';
 
 import FormTitleCart from '../QuestionCart/FormTitleCart';
 import QuestionCart from '../QuestionCart/QuestionCart';
+import UndoPopup from '../popups/UndoPopup';
 import { useSelector, useDispatch } from 'react-redux';
 import { deleteQuestionStore } from '../stores/questionSlice';
 
@@ -66,6 +67,8 @@ const Questionnaire = () => {
     const [ScrollTo, setScrollTo] = useState({
         trigger: false,
     });
+    const [undo, setUndo] = useState(null);
+
     const questionContent = useSelector((state) => state.question.questions);
 
     const dispatch = useDispatch()
@@ -86,6 +89,13 @@ const Questionnaire = () => {
 
     const ClearErrorMessage = () => {
         setErrorHint(null);
+    }
+
+    const UndoDelete = (originalQuestion, key, clearID) => {
+        setQuestions(originalQuestion);
+        setEditQuestion(key);
+        clearTimeout(clearID);
+        setUndo(null);
     }
 
     const onChangeQuestion = (e) => {
@@ -124,14 +134,43 @@ const Questionnaire = () => {
         }
         else if(name === "DeleteButton")
         {
+            let questionContentCopy;
+            for(const question of questionContentRef.current)
+            {
+                if(question.key === +e.currentTarget.id)
+                    questionContentCopy = question.content;
+            }
+
             if(questionRef.current.length === 1) return;
+
             let newQuestions = [];
+            const originalQuestions = lodash.cloneDeep(questionRef.current);
+            let originalQuestionsIndex;
             for(let i = 0; i < questionRef.current.length; ++i)
+            {
                 if(+questionRef.current[i].id !== +e.currentTarget.id)
                     newQuestions.push(questionRef.current[i]);
-            
-            dispatch(deleteQuestionStore({id: +e.currentTarget.id}))
+                else 
+                    originalQuestionsIndex = i;
+            }
+
             setQuestions(newQuestions);
+            dispatch(deleteQuestionStore({id: +e.currentTarget.id}));
+
+            if(originalQuestions[originalQuestionsIndex].initialType)
+                delete originalQuestions[originalQuestionsIndex].initialType;
+            originalQuestions[originalQuestionsIndex].content = questionContentCopy;
+
+            const clearUndo = setTimeout(() => {
+                setUndo(null);
+            }, 10000);
+
+            setUndo({
+                question: originalQuestions,
+                key: originalQuestions[originalQuestionsIndex].key,
+                clearUndo: clearUndo
+            });
+
         }
         else if(name === "CopyButton")
         {
@@ -212,19 +251,30 @@ const Questionnaire = () => {
         setEditQuestion(TitleKey);
     }, []);
 
-    const OnSubmitHandler = async (e) => {
-        e.preventDefault();
-
+    const getQuestionContent = () => {
         let orderArray = questionRef.current.map(elem => elem.id);
         orderArray.unshift(TitleKey);
 
-        let storedQuestion = lodash.cloneDeep(questionContent);
-        storedQuestion.sort((a, b) => {
+        let CloneQuestion = lodash.cloneDeep(questionContent);
+        CloneQuestion.sort((a, b) => {
             return orderArray.indexOf(a.key) - orderArray.indexOf(b.key);
         });
 
+        CloneQuestion = CloneQuestion.map((question, index) => {
+            delete question.key;
+            question.order = index;
+            return question;
+        });
+
+        return CloneQuestion;
+    }
+
+    const OnSubmitHandler = async (e) => {
+        e.preventDefault();
+
+        let storedQuestion = getQuestionContent();
+
         const missingPart = checkValidity(storedQuestion);
-        console.log(missingPart);
         if(missingPart)
         {
             setEditQuestion(missingPart.id);
@@ -246,8 +296,19 @@ const Questionnaire = () => {
         });
     }
 
-    const OnSaveHandler = e => {
+    const OnSaveHandler = async (e) => {
         e.preventDefault();
+
+        let storedQuestion = getQuestionContent();
+
+        await fetch(`${process.env.REACT_APP_BACKEND_URL}/questionnaire`,{
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(storedQuestion)
+        });
     }
 
     const OnPreviewHandler = e => {
@@ -289,6 +350,11 @@ const Questionnaire = () => {
             <button type="button" onClick={OnSaveHandler}>Save</button>
             <button type="submit" onClick={OnSubmitHandler}>Submit</button>
         </div>
+        <UndoPopup
+            undo={
+                undo ? UndoDelete.bind(null, undo.question, undo.key, undo.clearUndo) : null
+            }
+        />
     </div>
 }
 

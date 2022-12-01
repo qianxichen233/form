@@ -124,7 +124,8 @@ const SelectBar = props => {
                     top: getPositionTop(ref.current.getBoundingClientRect().top,
                                         getIndex(props.options, props.value) * ref.current.offsetHeight,
                                         calcHeight(props.options, ref.current.offsetHeight, 1),
-                                        window.innerHeight)
+                                        window.innerHeight),
+                    height: `${calcHeight(props.options, ref.current.offsetHeight, 1)}px`
                 }}
             >
                 {props.options.map((division, index, array) => {
