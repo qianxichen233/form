@@ -86,6 +86,8 @@ const ShortAnswer = (props) => {
                 preview={props.preview}
                 onFocus={props.onFocus}
                 width={'70%'}
+                size='big'
+                options={['bold', 'italic', 'underline', 'hyperlink', 'clearformat']}
             />
             {props.preview ? null :
             <RequiredInput

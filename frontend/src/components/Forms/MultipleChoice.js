@@ -212,7 +212,9 @@ const MultipleChoice = (props) => {
                 onClick={props.missingItem?.type === "description" ? props.onErrorClear : null}
                 preview={props.preview}
                 onFocus={props.onFocus}
+                size='big'
                 width={'70%'}
+                options={['bold', 'italic', 'underline', 'hyperlink', 'clearformat']}
             />
             {props.preview ? null :
             <RequiredInput

@@ -8,7 +8,19 @@ import classes from './RichTextEditor.module.css';
 
 import { BoldIcon, ItalicIcon, UnderlineIcon } from '../Icons';
 
+const fontsize = {
+    big: '20px',
+    normal: '12pt'
+};
+
+const padding = {
+    big: '20px',
+    normal: '10px'
+}
+
 const RichTextEditor = (props) => {
+    const size = props.size || 'normal';
+
     const [optionState, setOptionState] = useState({
         bold: false,
         italic: false,
@@ -80,7 +92,8 @@ const RichTextEditor = (props) => {
                              ${props.preview ? classes.preview : ''} 
                              ${props.MissingError ? classes.error : ''}
                              ${props.transparent ? classes.transparent_bg : ''}`}
-                style={{'--fontsize': props.fontsize ? props.fontsize : '20px'}}
+                style={{'--fontsize': props.fontsize || fontsize[size],
+                        '--padding': padding[size]}}
             >
                 <Editor
                     editorState={editorState}
@@ -97,17 +110,22 @@ const RichTextEditor = (props) => {
             </div>
             <span className={`${classes.bar} ${Focus ? classes.barActive : ''}`}/>
         </div>
-        {props.preview ? null :
+        {(props.preview && !props.options) ? null :
         <div className={`${classes.optionBar} ${Focus ? classes.optionActive: ''}`}>
-            <TextOptionButton onMouseDown={onOptionClick.bind(null, 'bold')} active={optionState.bold}>
-                <BoldIcon size={18}/>
-            </TextOptionButton>
-            <TextOptionButton onMouseDown={onOptionClick.bind(null, 'italic')} active={optionState.italic}>
-                <ItalicIcon size={18} />
-            </TextOptionButton>
-            <TextOptionButton onMouseDown={onOptionClick.bind(null, 'underline')} active={optionState.underline}>
-                <UnderlineIcon size={18} />
-            </TextOptionButton>
+            {props.options.map((option, index) => {
+                if(option === 'bold')
+                    return <TextOptionButton onMouseDown={onOptionClick.bind(null, 'bold')} active={optionState.bold} key={index}>
+                                <BoldIcon size={18}/>
+                           </TextOptionButton>
+                if(option === 'italic')
+                    return <TextOptionButton onMouseDown={onOptionClick.bind(null, 'italic')} active={optionState.italic} key={index}>
+                                <ItalicIcon size={18} />
+                           </TextOptionButton>
+                if(option === 'underline')
+                    return <TextOptionButton onMouseDown={onOptionClick.bind(null, 'underline')} active={optionState.underline} key={index}>
+                                <UnderlineIcon size={18} />
+                           </TextOptionButton>
+            })}
         </div>}
     </div>;
 }

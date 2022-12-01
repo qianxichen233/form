@@ -68,21 +68,23 @@ const FormTitle = (props) => {
             onFocus={props.onFocus}
             fontsize={'24pt'}
             transparent={true}
+            size='big'
+            options={['bold', 'italic', 'underline', 'hyperlink', 'clearformat']}
         />
-        <TextInputBar>
-            <TextInput
-                placeholder="Form Description"
-                value={content.description}
-                onChange={onDescriptionChangeHandler.bind(null, DescriptionError)}
-                size='normal'
-                preview={props.preview}
-                MissingError={DescriptionError}
-                onClick={
-                    DescriptionError ?
-                    props.onErrorClear : null
-                }
-            ></TextInput>
-        </TextInputBar>
+        <RichTextEditor
+            placeholder="Form Description"
+            passValue={onTitleChangeHandler.bind(null, TitleError)}
+            preview={props.preview}
+            MissingError={TitleError}
+            onClick={
+                TitleError ?
+                props.onErrorClear : null
+            }
+            onFocus={props.onFocus}
+            transparent={true}
+            size='normal'
+            options={['bold', 'italic', 'underline', 'hyperlink', 'orderedlist', 'unorderedlist', 'clearformat']}
+        />
     </Form>
 }
 
