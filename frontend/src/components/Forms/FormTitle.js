@@ -40,10 +40,10 @@ const FormTitle = (props) => {
         setContent(newContent);
     }
 
-    const onDescriptionChangeHandler = (clearError, e) => {
+    const onDescriptionChangeHandler = (clearError, content) => {
         if(clearError) props.onErrorClear();
         let newContent = lodash.cloneDeep(contentRef.current);
-        newContent['description'] = e.target.value;
+        newContent['description'] = content;
 
         dispatch(setQuestionStore({
             id: 0,
@@ -73,11 +73,11 @@ const FormTitle = (props) => {
         />
         <RichTextEditor
             placeholder="Form Description"
-            passValue={onTitleChangeHandler.bind(null, TitleError)}
+            passValue={onDescriptionChangeHandler.bind(null, DescriptionError)}
             preview={props.preview}
-            MissingError={TitleError}
+            MissingError={DescriptionError}
             onClick={
-                TitleError ?
+                DescriptionError ?
                 props.onErrorClear : null
             }
             onFocus={props.onFocus}

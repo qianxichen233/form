@@ -3,13 +3,21 @@ import Modal from '../Modal/Modal';
 
 import classes from './SelectBar.module.css';
 
-import { ShortText, Paragraph, BoxCheckBoxFill, CircleCheckBoxFill, CaretDown } from '../Icons';
+import { ShortText,
+         Paragraph,
+         BoxCheckBoxFill,
+         CircleCheckBoxFill,
+         CaretDown,
+         DateIcon,
+         TimeIcon } from '../Icons';
 
 const IconMap = {
     MultipleChoice: <CircleCheckBoxFill size={20} color="grey"/>,
     Checkbox: <BoxCheckBoxFill size={20} color="grey"/>,
     ShortAnswer: <ShortText size={20} color="grey"/>,
-    Paragraph: <Paragraph size={20} color="grey"/>
+    Paragraph: <Paragraph size={20} color="grey"/>,
+    Date: <DateIcon size={20} color="grey"/>,
+    Time: <TimeIcon size={20} color="grey"/>
 };
 
 const bound = (value, upper, lower) => {

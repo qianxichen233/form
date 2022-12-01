@@ -12,6 +12,7 @@ import { TouchBackend } from 'react-dnd-touch-backend';
 import classes from './QuestionCart.module.css';
 
 import { ArrowUp, ArrowDown, AddButton, DeleteCartButton, CopyButton } from '../UI/Icons';
+import DateTimeInput from '../Forms/DateTimeInput';
 
 const getType = (type) => {
     if(!type) return null;
@@ -28,6 +29,13 @@ const getType = (type) => {
             return "ShortAnswer";
         if(type.subtype === "paragraph")
             return "Paragraph";
+    }
+    if(type.type === "DateTimeInput")
+    {
+        if(type.subtype === "date")
+            return "Date";
+        if(type.subtype === "time")
+            return "Time";
     }
 }
 
@@ -79,6 +87,25 @@ const getInitState = (props) => {
             }
         }
     }
+    if(type === "DateTimeInput")
+    {
+        if(props.content.subtype === 'date')
+        {
+            return {
+                type: "Date",
+                id: props.id,
+                content: props.content
+            }
+        }
+        if(props.content.subtype === 'time')
+        {
+            return {
+                type: "Time",
+                id: props.id,
+                content: props.content
+            }
+        }
+    }
 }
 
 const QuestionCart = (props) => {
@@ -112,6 +139,10 @@ const QuestionCart = (props) => {
                             [
                                 {value: "MultipleChoice", name: "Multiple Choice"},
                                 {value: "Checkbox", name: "Checkbox"}
+                            ],
+                            [
+                                {value: "Time", name: "Time"},
+                                {value: "Date", name: "Date"}
                             ]
                         ]
                     }
@@ -177,6 +208,36 @@ const QuestionCart = (props) => {
                     <TextAnswer
                         id={cart.id}
                         subtype='paragraph'
+                        className={classes.question}
+                        content={cart.content}
+                        missingItem={props.missingItem}
+                        onErrorClear={props.onErrorClear}
+                        preview={!props.Focus}
+                        onFocus={props.onFocus}
+                    />
+                </DndProvider>
+            }
+            else if(cart.type === "Time")
+            {
+                return <DndProvider backend={TouchBackend} options={{ enableMouseEvents: true }}>
+                    <DateTimeInput
+                        id={cart.id}
+                        subtype='time'
+                        className={classes.question}
+                        content={cart.content}
+                        missingItem={props.missingItem}
+                        onErrorClear={props.onErrorClear}
+                        preview={!props.Focus}
+                        onFocus={props.onFocus}
+                    />
+                </DndProvider>
+            }
+            else if(cart.type === "Date")
+            {
+                return <DndProvider backend={TouchBackend} options={{ enableMouseEvents: true }}>
+                    <DateTimeInput
+                        id={cart.id}
+                        subtype='date'
                         className={classes.question}
                         content={cart.content}
                         missingItem={props.missingItem}

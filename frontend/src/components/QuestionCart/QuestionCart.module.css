@@ -40,8 +40,8 @@
 
 .optionDiv{
     background-color: rgba(211, 211, 211, 0.3);
-    width: 90%;
-    margin-left: 5%;
+    width: calc(100% - 40px);
+    margin-left: 20px;
     margin-top: 10px;
     margin-bottom: 10px;
     height: 1px

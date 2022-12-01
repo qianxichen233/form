@@ -94,12 +94,14 @@ const Questionnaire = () => {
         const name = e.target.attributes['name'].value;
         if(name === "AddButton")
         {
-            let questionContentType;
+            let AddedType;
             for(const question of questionContentRef.current)
             {
                 if(question.key === +e.currentTarget.id)
-                    questionContentType = {type: question.content.type, subtype: question.content.subtype}
+                    AddedType = {type: question.content.type, subtype: question.content.subtype}
             }
+            if(AddedType.type === 'DateTimeInput')
+                AddedType = null;
 
             let newQuestions = [];
             const key = getKey();
@@ -112,7 +114,7 @@ const Questionnaire = () => {
                         {
                             key: key,
                             id: key,
-                            initialType: questionContentType
+                            initialType: AddedType
                         }
                     );
                 }
@@ -214,7 +216,7 @@ const Questionnaire = () => {
         e.preventDefault();
 
         let orderArray = questionRef.current.map(elem => elem.id);
-        orderArray.unshift(0);
+        orderArray.unshift(TitleKey);
 
         let storedQuestion = lodash.cloneDeep(questionContent);
         storedQuestion.sort((a, b) => {
@@ -222,6 +224,7 @@ const Questionnaire = () => {
         });
 
         const missingPart = checkValidity(storedQuestion);
+        console.log(missingPart);
         if(missingPart)
         {
             setEditQuestion(missingPart.id);
@@ -241,6 +244,14 @@ const Questionnaire = () => {
             },
             body: JSON.stringify(storedQuestion)
         });
+    }
+
+    const OnSaveHandler = e => {
+        e.preventDefault();
+    }
+
+    const OnPreviewHandler = e => {
+        e.preventDefault();
     }
     
     return <div className={classes.questionnaire}>
@@ -273,7 +284,11 @@ const Questionnaire = () => {
                 cancelScroll={setScrollTo.bind(null, {trigger: false})}
             />
         })}
-        <button type="submit" onClick={OnSubmitHandler}>Submit</button>
+        <div className={classes.actionButton}>
+            <button type="button" onClick={OnPreviewHandler}>Preview</button>
+            <button type="button" onClick={OnSaveHandler}>Save</button>
+            <button type="submit" onClick={OnSubmitHandler}>Submit</button>
+        </div>
     </div>
 }
 
