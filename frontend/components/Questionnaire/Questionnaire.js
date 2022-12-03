@@ -165,10 +165,13 @@ const Questionnaire = () => {
                 setUndo(null);
             }, 10000);
 
-            setUndo({
-                question: originalQuestions,
-                key: originalQuestions[originalQuestionsIndex].key,
-                clearUndo: clearUndo
+            setUndo((prev) => {
+                if(prev) clearTimeout(prev.clearUndo);
+                return {
+                    question: originalQuestions,
+                    key: originalQuestions[originalQuestionsIndex].key,
+                    clearUndo: clearUndo
+                }
             });
 
         }
@@ -325,45 +328,47 @@ const Questionnaire = () => {
     }
     
     return <div className={classes.questionnaire}>
-        <FormTitleCart
-            Focus={TitleKey === EditQuestion}
-            missingItem={ErrorHint?.id === TitleKey ? {type: ErrorHint.type} : null}
-            onErrorClear={ClearErrorMessage}
-            onClick={onTitleCartClick}
-            onFocus={onTitleCartClick}
-            ScrollTo={ScrollTo.trigger && TitleKey === ScrollTo.target}
-            cancelScroll={setScrollTo.bind(null, {trigger: false})}
-        />
-        {questions.map((question) => {
-            const missingItem = ErrorHint?.id === question.key ?
-                                {
-                                    type: ErrorHint.type,
-                                    index: ErrorHint.index
-                                } : null;
-            return <QuestionCart
-                key={question.key}
-                id={question.key}
-                onEdit={onChangeQuestion}
-                initialType={question.initialType}
-                content={question.content}
-                Focus={question.key === EditQuestion}
-                onFocus={setEditQuestion.bind(null, question.key)}
-                missingItem={missingItem}
+        <div className={classes.container}>
+            <FormTitleCart
+                Focus={TitleKey === EditQuestion}
+                missingItem={ErrorHint?.id === TitleKey ? {type: ErrorHint.type} : null}
                 onErrorClear={ClearErrorMessage}
-                ScrollTo={ScrollTo.trigger && question.key === ScrollTo.target}
+                onClick={onTitleCartClick}
+                onFocus={onTitleCartClick}
+                ScrollTo={ScrollTo.trigger && TitleKey === ScrollTo.target}
                 cancelScroll={setScrollTo.bind(null, {trigger: false})}
             />
-        })}
-        <div className={classes.actionButton}>
-            <button type="button" onClick={OnPreviewHandler}>Preview</button>
-            <button type="button" onClick={OnSaveHandler}>Save</button>
-            <button type="submit" onClick={OnSubmitHandler}>Submit</button>
+            {questions.map((question) => {
+                const missingItem = ErrorHint?.id === question.key ?
+                                    {
+                                        type: ErrorHint.type,
+                                        index: ErrorHint.index
+                                    } : null;
+                return <QuestionCart
+                    key={question.key}
+                    id={question.key}
+                    onEdit={onChangeQuestion}
+                    initialType={question.initialType}
+                    content={question.content}
+                    Focus={question.key === EditQuestion}
+                    onFocus={setEditQuestion.bind(null, question.key)}
+                    missingItem={missingItem}
+                    onErrorClear={ClearErrorMessage}
+                    ScrollTo={ScrollTo.trigger && question.key === ScrollTo.target}
+                    cancelScroll={setScrollTo.bind(null, {trigger: false})}
+                />
+            })}
+            <div className={classes.actionButton}>
+                <button type="button" onClick={OnPreviewHandler}>Preview</button>
+                <button type="button" onClick={OnSaveHandler}>Save</button>
+                <button type="submit" onClick={OnSubmitHandler}>Publish</button>
+            </div>
+            <UndoPopup
+                undo={
+                    undo ? UndoDelete.bind(null, undo.question, undo.key, undo.clearUndo) : null
+                }
+            />
         </div>
-        <UndoPopup
-            undo={
-                undo ? UndoDelete.bind(null, undo.question, undo.key, undo.clearUndo) : null
-            }
-        />
     </div>
 }
 

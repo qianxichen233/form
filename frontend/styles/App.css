@@ -5,3 +5,7 @@ html {
 body.grabbing *{
   cursor: grabbing !important;
 }
+
+html, body, body > div:first-child, div#__next, div#__next > div {
+  height: 100%;
+}
