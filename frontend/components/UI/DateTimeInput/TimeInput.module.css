@@ -22,3 +22,36 @@
     justify-content: center;
     align-items: center;
 }
+
+.input {
+    height: 100%;
+    width: 100%;
+    font-size: 12pt;
+    text-align: left;
+    border: none;
+    outline: none;
+}
+
+.bar:after, .bar:before{
+    display: block;
+    position: absolute;
+    height: 2px;
+    bottom: 0;
+    content: '';
+    width: 0;
+    background-color: purple;
+    transition: width 0.3s ease-in-out;
+}
+
+.bar:after{
+    left: 50%;
+}
+
+.bar:before{
+    right: 50%;
+}
+
+.input:focus ~ .bar:after,
+.input:focus ~ .bar:before{
+    width: 50%;
+}

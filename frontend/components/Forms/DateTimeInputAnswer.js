@@ -9,8 +9,8 @@ import QuestionInputBar from '../UI/QuestionBar/QuestionInputBar';
 import RichTextEditorDisplay from '../UI/RichTextEditor/RichTextEditorDisplay';
 import RequiredInput from '../UI/RequiredInput/RequiredInput';
 
-import DateInput from '../UI/DateTimeInput/DateInput';
-import TimeInput from '../UI/DateTimeInput/TimeInput';
+import DateInputAnswer from '../UI/DateTimeInput/DateInputAnswer';
+import TimeInputAnswer from '../UI/DateTimeInput/TimeInputAnswer';
 
 const DateTimeInput = (props) => {
     return (
@@ -22,8 +22,16 @@ const DateTimeInput = (props) => {
                 size='big'
             />
         </QuestionInputBar>
-        {props.subtype === "date" ? <DateInput /> : null}
-        {props.subtype === "time" ? <TimeInput /> : null}
+        {props.subtype === "date" ?
+        <DateInputAnswer
+            value={props.value}
+            onChange={props.onChange}
+        /> : null}
+        {props.subtype === "time" ?
+        <TimeInputAnswer
+            value={props.value}
+            onChange={props.onChange}
+        /> : null}
     </Form>
     );
 }

@@ -54,6 +54,7 @@ const QuestionnaireAnswer = () => {
     }, []);
 
     const AnswerChangeHandler = (index, content) => {
+        console.log(content)
         setAnswers((prev) => {
             let newAnswers = lodash.cloneDeep(prev);
             newAnswers[index] = content;
@@ -80,9 +81,14 @@ const QuestionnaireAnswer = () => {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(answersRef.current)
+            body: JSON.stringify({
+                user: 'Anonymous',
+                content: answersRef.current
+            })
         });
     };
+
+    console.log(answers);
 
     return <div className={classes.questionnaire}>
         <div className={classes.container}>

@@ -25,7 +25,7 @@
     border-left-style: hidden;
     border-right-style: hidden;
     border-bottom-style: groove;
-    border-color: grey;
+    border-color: rgb(128, 128, 128, 0.3);
     border-width: 1px;
     margin-bottom: 3px;
     background-color: #f8f8f8;
@@ -94,4 +94,8 @@ div.editor:hover:not(.preview){
 
 .transparent_bg{
     background-color: white !important;
+}
+
+.noSelect{
+    user-select: none;
 }

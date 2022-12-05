@@ -14,18 +14,6 @@ const padding = {
     normal: '10px'
 }
 
-const emptyContentState = convertFromRaw({
-    entityMap: {},
-    blocks: [
-        {
-            text: "",
-            key: "foo",
-            type: "unstyled",
-            entityRanges: [],
-        },
-    ],
-});
-
 const RichTextEditorDisplay = (props) => {
     const size = props.size || 'normal';
     const content = EditorState.createWithContent(convertFromRaw(props.value));
@@ -44,6 +32,7 @@ const RichTextEditorDisplay = (props) => {
             >
                 <Editor
                     editorState={content}
+                    //blockStyleFn={() => classes.noSelect}
                     readOnly
                 />
             </div>
