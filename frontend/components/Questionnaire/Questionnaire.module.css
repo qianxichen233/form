@@ -1,5 +1,6 @@
 .questionnaire{
-    position: relative;
+    position: absolute;
+    top: 0;
     
     background-color: rgb(240, 235, 248);
 
@@ -17,10 +18,16 @@
 
 .container{
     position: relative;
-    top: 100px;
+
+    height: max-content;
+    background-color: rgb(240, 235, 248);
 
     display: flex;
     justify-content: flex-start;
     flex-direction: column;
     align-items: center;
+}
+
+.placeholder{
+    height: 100px;
 }

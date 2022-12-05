@@ -1,4 +1,4 @@
-import Questionnaire from '../components/Questionnaire/Questionnaire';
+import QuestionnaireMaking from '../components/Questionnaire/QuestionnaireMaking';
 import Header from '../components/header/header';
 
 import store from '../components/stores/questionStore';
@@ -9,7 +9,7 @@ function App() {
     <Provider store={store}>
       <div className='App'>
         <Header/>
-        <Questionnaire/>
+        <QuestionnaireMaking/>
       </div>
     </Provider>
   );

@@ -1,0 +1,14 @@
+.questionnaire{
+    position: relative;
+    
+    background-color: rgb(240, 235, 248);
+
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    align-items: center;
+    
+    width: 100vw;
+    min-height: 80vh;
+    height: 100%;
+}

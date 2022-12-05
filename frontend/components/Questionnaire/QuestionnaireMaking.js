@@ -328,6 +328,7 @@ const Questionnaire = () => {
     }
     
     return <div className={classes.questionnaire}>
+        <div className={classes.placeholder}></div>
         <div className={classes.container}>
             <FormTitleCart
                 Focus={TitleKey === EditQuestion}

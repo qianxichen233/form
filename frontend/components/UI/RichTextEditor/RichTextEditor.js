@@ -122,7 +122,7 @@ const RichTextEditor = (props) => {
             </div>
             <span className={`${classes.bar} ${Focus ? classes.barActive : ''}`}/>
         </div>
-        {(props.preview && !props.options) ? null :
+        {(props.preview || !props.options) ? null :
         <div className={`${classes.optionBar} ${Focus ? classes.optionActive: ''}`}>
             {props.options.map((option, index) => {
                 if(option === 'bold')

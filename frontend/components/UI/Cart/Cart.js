@@ -3,7 +3,7 @@ import { useEffect, useRef } from 'react';
 import classes from './Cart.module.css';
 
 const Cart = (props) => {
-    const className = `${classes.cart} ${props.Focus ? classes.focus : ''}`;
+    const className = `${classes.cart} ${props.Focus ? classes.focus : ''} ${props.Error ? classes.error : ''}`;
 
     const ref = useRef(null);
 
