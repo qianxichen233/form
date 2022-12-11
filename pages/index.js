@@ -1,14 +1,14 @@
 import { useRouter } from 'next/router';
-
 import { useSession } from "next-auth/react";
+
+import DisplayQuestionnaire from '../components/Questionnaire/DisplayQuestionnaire';
 
 function App() {
     const { data: session, status } = useSession();
 
-
     const router = useRouter();
 
-    const createNewQuestionnaire = async (email, id) => {
+    const createNewQuestionnaire = async (id) => {
         await fetch(`api/questionnaire/modify`,{
                 method: 'POST',
                 mode: 'cors',
@@ -16,7 +16,6 @@ function App() {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    creator: email,
                     content: {},
                     id: id,
                     publish: false
@@ -24,15 +23,14 @@ function App() {
             });
     }
 
-    const onClickHandler = async (email) => {
+    const onClickHandler = async () => {
         await fetch('/api/questionnaire/newID')
             .then(res => res.json())
             .then(msg => {
-                createNewQuestionnaire(email, msg.id);
+                createNewQuestionnaire(msg.id);
                 router.push(`/questionnaire/${msg.id}/edit`);
             })
             .catch(console.log);
-        
     }
 
     if(status === 'loading')
@@ -41,7 +39,10 @@ function App() {
         return <p>Please sign in first</p>
 
     return (
-        <p onClick={onClickHandler.bind(null, session.user.email)} style={{cursor: "pointer"}}>Click to create a new questionnaire</p>
+        <>
+            <p onClick={onClickHandler} style={{cursor: "pointer"}}>Click to create a new questionnaire</p>
+            <DisplayQuestionnaire />
+        </>
     );
 }
 

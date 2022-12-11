@@ -89,7 +89,7 @@ const QuestionnaireAnswer = (props) => {
         });
     };
     
-    const OnSubmitHandler = async (email, e) => {
+    const OnSubmitHandler = async (e) => {
         e.preventDefault();
         const missingIndex = answersRef.current.findIndex((answer, index) => {
             return questionssRef.current[index].content.required && isEmpty(answer);
@@ -108,7 +108,6 @@ const QuestionnaireAnswer = (props) => {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                userEmail: email,
                 questionnaireid: props.id,
                 content: answersRef.current
             })
@@ -152,7 +151,7 @@ const QuestionnaireAnswer = (props) => {
                 }
             })}
             <div className={classes.actionButton}>
-                <button type="submit" onClick={OnSubmitHandler.bind(null, session.user.email)}>Submit</button>
+                <button type="submit" onClick={OnSubmitHandler}>Submit</button>
             </div>
         </div>
     </div>

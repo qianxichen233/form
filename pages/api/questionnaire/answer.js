@@ -1,4 +1,7 @@
 const { PrismaClient } = require('@prisma/client');
+const { getSession } = require('next-auth/react');
+
+const { checkAnswerValidity } = require('../../../lib/QuestionnaireValidity');
 
 const prisma = new PrismaClient();
 
@@ -16,13 +19,16 @@ const handler = async (req, res) => {
 		return;
 	}
 
-	const count = await prisma.questionnaire.count({
+	const { content: questionnaire } = await prisma.questionnaire.findUnique({
 		where: {
 			id: req.body.questionnaireid
+		},
+		select: {
+			content: true
 		}
 	});
 	
-	if(!count)
+	if(!questionnaire)
 	{
 		res.status(404).json({
 			msg: 'Questionnaire not found'
@@ -30,12 +36,30 @@ const handler = async (req, res) => {
 		return;
 	}
 
+	try
+	{
+		if(!checkAnswerValidity(JSON.parse(questionnaire), req.body.content))
+		{
+			res.status(406).json({
+				msg: 'Invalid Answer Format'
+			});
+			return;
+		}
+	}
+	catch
+	{
+		res.status(400).json({msg: 'bad request'});
+		return;
+	}
+
+	const session = await getSession({req: req});
+
 	let userID = null;
-	if(req.body.userEmail)
+	if(session)
 	{
 		const { id } = await prisma.users.findUnique({
 			where: {
-				email: req.body.userEmail
+				email: session.user.email
 			},
 			select: {
 				id: true
