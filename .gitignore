@@ -1,3 +1,6 @@
 .DS_Store
 plan.docx
 
+node_modules
+database
+.next
