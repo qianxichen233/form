@@ -1,0 +1,46 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model answers {
+  id              BigInt        @id @default(autoincrement())
+  content         String
+  userid          BigInt?
+  questionnaireid String
+  questionnaire   questionnaire @relation(fields: [questionnaireid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  users           users?        @relation(fields: [userid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model questionnaire {
+  id                   String                 @id @unique @db.VarChar(50)
+  content              String
+  creator              BigInt
+  published            Boolean
+  answers              answers[]
+  users                users                  @relation(fields: [creator], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  userquestionrelation userquestionrelation[]
+}
+
+model users {
+  id                   BigInt                 @id @default(autoincrement())
+  username             String?                @db.VarChar(50)
+  email                String                 @unique @db.VarChar(50)
+  password             String                 @db.VarChar(200)
+  answers              answers[]
+  questionnaire        questionnaire[]
+  userquestionrelation userquestionrelation[]
+}
+
+model userquestionrelation {
+  userid          BigInt
+  questionnaireid String
+  questionnaire   questionnaire @relation(fields: [questionnaireid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "UserQuestionnaireRelation_questionnaireid_fkey")
+  users           users         @relation(fields: [userid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "UserQuestionnaireRelation_userid_fkey")
+
+  @@unique([userid, questionnaireid], map: "UserQuestionnaireRelation_userid_questionnaireid_key")
+}

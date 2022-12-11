@@ -6,6 +6,8 @@ import QuestionCartDisplay from '../QuestionCart/QuestionCartDisplay';
 import classes from './Questionnaire.module.css';
 import Answerclasses from './QuestionnaireAnswer.module.css';
 
+import { useSession } from "next-auth/react";
+
 const AnswerableQuestions = questions => {
     const isAnswerable = (question) => {
         if(question.content.type === 'title') return 0;
@@ -21,7 +23,6 @@ const AnswerableQuestions = questions => {
 }
 
 const isEmpty = (answer) => {
-    console.log(answer);
     if(!answer) return true;
     if(typeof(answer) === 'string') return false;
     if(Array.isArray(answer))
@@ -29,10 +30,14 @@ const isEmpty = (answer) => {
     return answer['blocks'][0]['text'] === '';
 }
 
-const QuestionnaireAnswer = () => {
+const QuestionnaireAnswer = (props) => {
+    const { data: session, status } = useSession();
+
+    const [notPublish, setNotPublish] = useState(true);
     const [questions, setQuestions] = useState(null);
     const [answers, setAnswers] = useState([]);
     const [missing, setMissing] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
 
     const answersRef = useRef();
     answersRef.current = answers;
@@ -42,19 +47,40 @@ const QuestionnaireAnswer = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            await fetch('/api/fetch')
-            .then(data => data.json())
+            await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/questionnaire/fetch`, {
+                method: 'POST',
+                mode: 'cors',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id: props.id
+                })
+            })
+            .then(data => {
+                if(data.status === 403)
+                    return null;
+                return data.json();
+            })
             .then(questions => {
-                setQuestions(questions);
-                setAnswers(new Array(questions.length)); 
+                if(questions)
+                {
+                    questions = JSON.parse(questions);
+                    setNotPublish(false);
+                    setQuestions(questions);
+                    setAnswers(new Array(questions.length)); 
+                }
             })
             .catch(console.log);
         }
-        fetchData();
-    }, []);
+        if(props.id)
+        {
+            fetchData();
+            setIsLoading(false);
+        }
+    }, [props.id]);
 
     const AnswerChangeHandler = (index, content) => {
-        console.log(content)
         setAnswers((prev) => {
             let newAnswers = lodash.cloneDeep(prev);
             newAnswers[index] = content;
@@ -63,7 +89,7 @@ const QuestionnaireAnswer = () => {
         });
     };
     
-    const OnSubmitHandler = async (e) => {
+    const OnSubmitHandler = async (email, e) => {
         e.preventDefault();
         const missingIndex = answersRef.current.findIndex((answer, index) => {
             return questionssRef.current[index].content.required && isEmpty(answer);
@@ -75,22 +101,33 @@ const QuestionnaireAnswer = () => {
             return;
         }
 
-        await fetch('/api/answer', {
+        await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/questionnaire/answer`, {
             method: 'POST',
             mode: 'cors',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                user: 'Anonymous',
+                userEmail: email,
+                questionnaireid: props.id,
                 content: answersRef.current
             })
         });
     };
 
-    console.log(answers);
+    if(isLoading)
+    {
+        return (
+            <p>Loading</p>
+        )
+    }
+    if(notPublish)
+    {
+        return <p>Not Published</p>
+    }
 
-    return <div className={classes.questionnaire}>
+    return (
+    <div className={classes.questionnaire}>
         <div className={classes.container}>
             {questions && questions.map((question, index) => {
                 if(question.content.type === 'title')
@@ -115,10 +152,11 @@ const QuestionnaireAnswer = () => {
                 }
             })}
             <div className={classes.actionButton}>
-                <button type="submit" onClick={OnSubmitHandler}>Submit</button>
+                <button type="submit" onClick={OnSubmitHandler.bind(null, session.user.email)}>Submit</button>
             </div>
         </div>
     </div>
+    )
 }
 
 export default QuestionnaireAnswer;

@@ -7,6 +7,8 @@ import UndoPopup from '../popups/UndoPopup';
 import { useSelector, useDispatch } from 'react-redux';
 import { deleteQuestionStore } from '../stores/questionSlice';
 
+import { useSession } from "next-auth/react";
+
 import classes from './Questionnaire.module.css';
 
 let key = 0;
@@ -60,7 +62,9 @@ const checkValidity = (questions) => {
     return null;
 }
 
-const Questionnaire = () => {
+const Questionnaire = (props) => {
+    const { data: session, status } = useSession();
+
     const [questions, setQuestions] = useState([]);
     const [EditQuestion, setEditQuestion] = useState(0);
     const [ErrorHint, setErrorHint] = useState();
@@ -271,7 +275,7 @@ const Questionnaire = () => {
         return CloneQuestion;
     }
 
-    const OnSubmitHandler = async (e) => {
+    const OnSubmitHandler = async (email, e) => {
         e.preventDefault();
 
         let storedQuestion = getQuestionContent();
@@ -293,17 +297,22 @@ const Questionnaire = () => {
             return question;
         });
         
-        await fetch(`api/questionnaire`,{
+        await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/questionnaire/modify`,{
             method: 'POST',
             mode: 'cors',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(storedQuestion)
+            body: JSON.stringify({
+                creator: email,
+                content: storedQuestion,
+                id: props.id,
+                publish: true
+            })
         });
     }
 
-    const OnSaveHandler = async (e) => {
+    const OnSaveHandler = async (email, e) => {
         e.preventDefault();
 
         let storedQuestion = getQuestionContent();
@@ -313,19 +322,29 @@ const Questionnaire = () => {
             return question;
         });
         
-        await fetch(`api/questionnaire`,{
+        await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/questionnaire/modify`,{
             method: 'POST',
             mode: 'cors',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(storedQuestion)
+            body: JSON.stringify({
+                creator: email,
+                content: storedQuestion,
+                id: props.id,
+                publish: false
+            })
         });
     }
 
     const OnPreviewHandler = e => {
         e.preventDefault();
     }
+
+    if(status === 'loading')
+        return <p>Loading</p>
+    if(status === 'unauthenticated')
+        return <p>Prohibited!</p>
     
     return <div className={classes.questionnaire}>
         <div className={classes.placeholder}></div>
@@ -361,8 +380,8 @@ const Questionnaire = () => {
             })}
             <div className={classes.actionButton}>
                 <button type="button" onClick={OnPreviewHandler}>Preview</button>
-                <button type="button" onClick={OnSaveHandler}>Save</button>
-                <button type="submit" onClick={OnSubmitHandler}>Publish</button>
+                <button type="button" onClick={OnSaveHandler.bind(null, session.user.email)}>Save</button>
+                <button type="submit" onClick={OnSubmitHandler.bind(null, session.user.email)}>Publish</button>
             </div>
             <UndoPopup
                 undo={
