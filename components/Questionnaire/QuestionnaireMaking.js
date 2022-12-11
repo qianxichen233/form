@@ -177,7 +177,6 @@ const Questionnaire = (props) => {
                     clearUndo: clearUndo
                 }
             });
-
         }
         else if(name === "CopyButton")
         {
@@ -275,7 +274,7 @@ const Questionnaire = (props) => {
         return CloneQuestion;
     }
 
-    const OnSubmitHandler = async (email, e) => {
+    const OnSubmitHandler = async (e) => {
         e.preventDefault();
 
         let storedQuestion = getQuestionContent();
@@ -304,7 +303,6 @@ const Questionnaire = (props) => {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                creator: email,
                 content: storedQuestion,
                 id: props.id,
                 publish: true
@@ -312,7 +310,7 @@ const Questionnaire = (props) => {
         });
     }
 
-    const OnSaveHandler = async (email, e) => {
+    const OnSaveHandler = async (e) => {
         e.preventDefault();
 
         let storedQuestion = getQuestionContent();
@@ -329,7 +327,6 @@ const Questionnaire = (props) => {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                creator: email,
                 content: storedQuestion,
                 id: props.id,
                 publish: false
@@ -380,8 +377,8 @@ const Questionnaire = (props) => {
             })}
             <div className={classes.actionButton}>
                 <button type="button" onClick={OnPreviewHandler}>Preview</button>
-                <button type="button" onClick={OnSaveHandler.bind(null, session.user.email)}>Save</button>
-                <button type="submit" onClick={OnSubmitHandler.bind(null, session.user.email)}>Publish</button>
+                <button type="button" onClick={OnSaveHandler}>Save</button>
+                <button type="submit" onClick={OnSubmitHandler}>Publish</button>
             </div>
             <UndoPopup
                 undo={

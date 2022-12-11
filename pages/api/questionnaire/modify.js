@@ -1,4 +1,7 @@
 const { PrismaClient } = require('@prisma/client');
+const { getSession } = require('next-auth/react');
+
+const { checkQuestionValidity } = require('../../../lib/QuestionnaireValidity');
 
 const prisma = new PrismaClient();
 
@@ -8,11 +11,15 @@ const handler = async (req, res) => {
 		res.status(405).json({msg: 'Unsupport Method!'});
 		return;
 	}
-
-	console.log(req.body);
+	
+	const session = await getSession({req: req});
+	if(!session)
+	{
+		res.status(401).json({msg: 'Unauthenticated!'});
+		return;
+	}
 
 	if(req.body.content === null ||
-	   !req.body.creator ||
 	   !req.body.id)
 	{
 		res.status(406).json({msg: 'Missing Field!'});
@@ -21,7 +28,7 @@ const handler = async (req, res) => {
 
 	const { id: userID } = await prisma.users.findUnique({
 		where: {
-			email: req.body.creator
+			email: session.user.email
 		},
 		select: {
 			id: true
@@ -33,6 +40,23 @@ const handler = async (req, res) => {
 		return;
 	}
 
+	if(req.body.publish) //make sure published questionnaire is valid
+	{
+		try
+		{
+			if(!checkQuestionValidity(req.body.content))
+			{
+				res.status(406).json({msg: 'Invalid Questionnaire Format'});
+				return;
+			}
+		}
+		catch
+		{
+			res.status(400).json({msg: 'Bad Request'});
+			return;
+		}
+	}
+
 	const count = await prisma.questionnaire.count({
 		where: {
 			id: req.body.id
@@ -41,14 +65,12 @@ const handler = async (req, res) => {
 	
 	if(!count) //create new questionnaire
 	{
-		console.log(Object.keys(req.body.content).length !== 0 && req.body.publish)
-
 		await prisma.questionnaire.create({
 			data: {
 				content: JSON.stringify(req.body.content),
 				creator: userID,
 				id: req.body.id,
-				published: Object.keys(req.body.content).length !== 0 && req.body.publish
+				published: req.body.publish
 			}
 		});
 		
