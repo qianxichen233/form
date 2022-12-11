@@ -1,0 +1,15 @@
+.icon{
+    margin-right: 5px;
+}
+.optionContainer{
+    width: 100%;
+}
+
+.container {
+    display: flex;
+    width: calc(100%);
+    align-items: center;
+    justify-content: flex-start;
+
+    z-index: 10;
+}
