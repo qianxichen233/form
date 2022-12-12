@@ -11,11 +11,6 @@ import { useSession } from "next-auth/react";
 
 import classes from './Questionnaire.module.css';
 
-let key = 0;
-const getKey = () => {
-    return ++key;
-}
-
 const TitleKey = 0;
 
 const checkRichTextEmpty = (content) => {
@@ -63,12 +58,8 @@ const checkValidity = (questions) => {
 }
 
 const Questionnaire = (props) => {
-    const { data: session, status } = useSession();
-    const [ authenticated, setAuthenticated ] = useState(false);
-
-    const [questions, setQuestions] = useState([]);
-    const [titleContent, setTitleContent] = useState();
-    const [EditQuestion, setEditQuestion] = useState(0);
+    const [questions, setQuestions] = useState(props.questions);
+    const [EditQuestion, setEditQuestion] = useState(TitleKey);
     const [ErrorHint, setErrorHint] = useState();
     const [ScrollTo, setScrollTo] = useState({
         trigger: false,
@@ -120,7 +111,7 @@ const Questionnaire = (props) => {
                 AddedType = null;
 
             let newQuestions = [];
-            const key = getKey();
+            const key = props.getKey();
             for(let i = 0; i < questionRef.current.length; ++i)
             {
                 newQuestions.push(questionRef.current[i]);
@@ -190,7 +181,7 @@ const Questionnaire = (props) => {
             }
 
             let newQuestions = [];
-            const key = getKey();
+            const key = props.getKey();
             for(let i = 0; i < questionRef.current.length; ++i)
             {
                 newQuestions.push(questionRef.current[i]);
@@ -248,63 +239,6 @@ const Questionnaire = (props) => {
         OnEditQuestionChange(TitleKey);
     }
 
-    useEffect(() => {
-        if(!session) return;
-        fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/questionnaire/fetch`, {
-            method: 'POST',
-            mode: 'cors',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                id: props.id
-            })
-        }).then(data => {
-            if(!data.ok)
-                return Promise.reject('unauthenticated');
-            return data.json();
-        })
-        .then(questionnaires => {
-            questionnaires = JSON.parse(questionnaires);
-            if(Object.keys(questionnaires).length === 0)
-            {
-                const key = getKey();
-                setQuestions([
-                    {
-                        key: key,
-                        id: key
-                    }
-                ]);
-                setEditQuestion(TitleKey);
-                setTitleContent({content: {}});
-                setAuthenticated(true);
-            }
-            else
-            {
-                let questions = [];
-                for(const questionnaire of questionnaires)
-                {
-                    if(questionnaire.content.type === 'title')
-                    {
-                        setTitleContent(questionnaire.content);
-                        continue;
-                    }
-                    const key = getKey();
-                    questions.push({
-                        key: key,
-                        id: key,
-                        content: questionnaire.content
-                    });
-                }
-                setQuestions(questions);
-                setEditQuestion(TitleKey);
-                setAuthenticated(true);
-            }
-        }).catch((err) => {
-            console.log(err);
-        });
-    }, [session]);
-
     const getQuestionContent = () => {
         let orderArray = questionRef.current.map(elem => elem.id);
         orderArray.unshift(TitleKey);
@@ -351,6 +285,7 @@ const Questionnaire = (props) => {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
+                title: props.formTitle,
                 content: storedQuestion,
                 id: props.id,
                 publish: true
@@ -375,6 +310,7 @@ const Questionnaire = (props) => {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
+                title: props.formTitle,
                 content: storedQuestion,
                 id: props.id,
                 publish: false
@@ -385,12 +321,6 @@ const Questionnaire = (props) => {
     const OnPreviewHandler = e => {
         e.preventDefault();
     }
-
-    if(status === 'loading')
-        return <p>Loading</p>
-    if(!authenticated || status === 'unauthenticated')
-        return <p>Prohibited!</p>
-    if(!titleContent) return null;
     
     return <div className={classes.questionnaire}>
         <div className={classes.placeholder}></div>
@@ -401,7 +331,7 @@ const Questionnaire = (props) => {
                 onErrorClear={ClearErrorMessage}
                 onClick={onTitleCartClick}
                 onFocus={onTitleCartClick}
-                content={titleContent}
+                content={props.titleContent}
                 ScrollTo={ScrollTo.trigger && TitleKey === ScrollTo.target}
                 cancelScroll={setScrollTo.bind(null, {trigger: false})}
             />
