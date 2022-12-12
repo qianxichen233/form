@@ -10,7 +10,6 @@ import { deleteQuestionStore } from '../stores/questionSlice';
 import { useSession } from "next-auth/react";
 
 import classes from './Questionnaire.module.css';
-import { AiOutlineConsoleSql } from 'react-icons/ai';
 
 let key = 0;
 const getKey = () => {
@@ -262,7 +261,7 @@ const Questionnaire = (props) => {
             })
         }).then(data => {
             if(!data.ok)
-                return Promise.reject(new Error('unauthenticated'));
+                return Promise.reject('unauthenticated');
             return data.json();
         })
         .then(questionnaires => {

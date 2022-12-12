@@ -1,9 +1,7 @@
-const { PrismaClient } = require('@prisma/client');
+const { prisma } = require('../../../lib/db');
 const { getSession } = require('next-auth/react');
 
 const { checkQuestionValidity } = require('../../../lib/QuestionnaireValidity');
-
-const prisma = new PrismaClient();
 
 const handler = async (req, res) => {
 	if(req.method !== 'POST')
@@ -71,7 +69,9 @@ const handler = async (req, res) => {
 		await prisma.questionnaire.create({
 			data: {
 				content: JSON.stringify(req.body.content),
+				title: req.body.title,
 				creator: userID,
+				creatat: new Date(),
 				id: req.body.id,
 				published: req.body.publish
 			}
@@ -80,7 +80,6 @@ const handler = async (req, res) => {
 		res.status(201).json({
 			msg: 'Success'
 		});
-
 		return;
 	}
 	
@@ -90,9 +89,10 @@ const handler = async (req, res) => {
 		res.status(401).json({msg: 'Unauthenticated'});
 		return;
 	}
-	
+
 	let newData = {
-		content: JSON.stringify(req.body.content)
+		content: JSON.stringify(req.body.content),
+		creatat: new Date(),
 	};
 	if(req.body.publish)
 		newData.published = req.body.publish;

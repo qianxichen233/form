@@ -1,4 +1,5 @@
 import { useRef } from "react";
+import Router from "next/router";
 
 import classes from './SignupForm.module.css';
 
@@ -23,6 +24,8 @@ const SignupForm = props => {
         }).then(response => {
             if(!response.ok)
                 return response.json();
+            else
+                Router.push('/signin');
         }).then(console.log)
         .catch(console.log);
     }

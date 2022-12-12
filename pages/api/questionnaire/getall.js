@@ -1,7 +1,5 @@
-const { PrismaClient } = require('@prisma/client');
+const { prisma } = require('../../../lib/db');
 const { getSession } = require('next-auth/react');
-
-const prisma = new PrismaClient();
 
 const handler = async (req, res) => {
     if(req.method !== 'GET')
@@ -17,14 +15,21 @@ const handler = async (req, res) => {
         return;
     }
 
-    const { id: userID } = await prisma.users.findUnique({
+    const User = await prisma.users.findUnique({
         where: {
             email: session.user.email
         },
         select: {
             id: true
         }
-    })
+    });
+    const userID = User?.id;
+
+    if(!userID)
+    {
+        res.status(403).json({msg: 'Unexist User!'});
+        return;
+    }
 
     const data = await prisma.questionnaire.findMany({
         where: {

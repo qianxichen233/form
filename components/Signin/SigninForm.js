@@ -1,5 +1,6 @@
 import { useRef } from "react";
 import { signIn, signOut, useSession } from "next-auth/react";
+import Router from "next/router";
 
 import classes from './SigninForm.module.css';
 
@@ -16,7 +17,7 @@ const SignupForm = props => {
             email: EmailRef.current.value,
             password: PasswordRef.current.value
         });
-        console.log(result);
+        if(!result.error) window.location = `${process.env.NEXT_PUBLIC_BACKEND_URL}`;
     }
 
     return (

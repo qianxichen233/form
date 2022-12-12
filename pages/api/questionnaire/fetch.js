@@ -1,8 +1,6 @@
-const { PrismaClient } = require('@prisma/client');
+const { prisma } = require('../../../lib/db');
 const { getUserIDByEmail } = require('../../../lib/utility');
 const { getSession } = require('next-auth/react');
-
-const prisma = new PrismaClient();
 
 const handler = async (req, res) => {
     if(req.method !== 'POST')
@@ -22,11 +20,19 @@ const handler = async (req, res) => {
             id: req.body.id
         },
         select: {
+            title: true,
+            creatat: true,
             creator: true,
             content: true,
             published: true
         }
     });
+
+    if(!data)
+    {
+        res.status(404).json({msg: 'Questionnaire not found!'});
+        return;
+    }
 
     if(!data.published)
     {
