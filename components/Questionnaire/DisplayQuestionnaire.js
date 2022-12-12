@@ -5,7 +5,10 @@ const DisplayQuestionnaire = props => {
 
     useEffect(() => {
         fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/questionnaire/getall`)
-            .then(data => data.json())
+            .then(data => {
+                if(!data.ok) return Promise.reject('No questionnaire');
+                return data.json();
+            })
             .then(questionnaires => setQuestionnaires(questionnaires))
             .catch(console.log)
     }, [props.email]);

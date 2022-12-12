@@ -16,6 +16,7 @@ function App() {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
+                    title: 'Untitled Form',
                     content: {},
                     id: id,
                     publish: false

@@ -1,9 +1,7 @@
-const { PrismaClient } = require('@prisma/client');
+const { prisma } = require('../../../lib/db');
 const { getSession } = require('next-auth/react');
 
 const { checkAnswerValidity } = require('../../../lib/QuestionnaireValidity');
-
-const prisma = new PrismaClient();
 
 const handler = async (req, res) => {
 	if(req.method !== 'POST')
