@@ -57,13 +57,16 @@ const handler = async (req, res) => {
 		}
 	}
 
-	const count = await prisma.questionnaire.count({
+	const questionnaire = await prisma.questionnaire.findUnique({
 		where: {
 			id: req.body.id
+		},
+		select: {
+			creator: true
 		}
 	});
 	
-	if(!count) //create new questionnaire
+	if(!questionnaire) //create new questionnaire
 	{
 		await prisma.questionnaire.create({
 			data: {
@@ -82,6 +85,12 @@ const handler = async (req, res) => {
 	}
 	
 	//modify existing questionnaire
+	if(questionnaire.creator !== userID)
+	{
+		res.status(401).json({msg: 'Unauthenticated'});
+		return;
+	}
+	
 	let newData = {
 		content: JSON.stringify(req.body.content)
 	};

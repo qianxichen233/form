@@ -28,7 +28,7 @@ input.input[type="text"]:hover:not(.preview, .readOnly){
     display: block;
     position: absolute;
     width: 0;
-    bottom: 1px;
+    bottom: 2px;
     height: 2px;
     background-color: purple;
     transition: width 0.3s ease-in-out;

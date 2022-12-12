@@ -19,12 +19,13 @@ const handler = async (req, res) => {
 		return;
 	}
 
-	const { content: questionnaire } = await prisma.questionnaire.findUnique({
+	const { content: questionnaire, published } = await prisma.questionnaire.findUnique({
 		where: {
 			id: req.body.questionnaireid
 		},
 		select: {
-			content: true
+			content: true,
+			published: true
 		}
 	});
 	
@@ -32,6 +33,14 @@ const handler = async (req, res) => {
 	{
 		res.status(404).json({
 			msg: 'Questionnaire not found'
+		});
+		return;
+	}
+
+	if(!published)
+	{
+		res.status(406).json({
+			msg: 'Questionnaire not published'
 		});
 		return;
 	}

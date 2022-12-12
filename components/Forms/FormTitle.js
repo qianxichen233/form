@@ -13,7 +13,11 @@ const RichTextEditor = dynamic(
 );
 
 const FormTitle = (props) => {
-    const [content, setContent] = useState({
+    const [content, setContent] = useState(props.content ? {
+            type: 'title',
+            title: props.content?.title,
+            description: props.content?.description
+        } : {
         type: 'title',
         title: null,
         description: null
@@ -61,6 +65,7 @@ const FormTitle = (props) => {
     return <Form>
         <RichTextEditor
             placeholder="Form Title"
+            value={content.title}
             passValue={onTitleChangeHandler.bind(null, TitleError)}
             preview={props.preview}
             MissingError={TitleError}
@@ -76,6 +81,7 @@ const FormTitle = (props) => {
         />
         <RichTextEditor
             placeholder="Form Description"
+            value={content.description}
             passValue={onDescriptionChangeHandler.bind(null, DescriptionError)}
             preview={props.preview}
             MissingError={DescriptionError}
