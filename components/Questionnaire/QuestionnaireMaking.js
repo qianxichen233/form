@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import lodash from 'lodash';
+import lodash, { reject } from 'lodash';
 
 import FormTitleCart from '../QuestionCart/FormTitleCart';
 import QuestionCart from '../QuestionCart/QuestionCart';
@@ -10,6 +10,7 @@ import { deleteQuestionStore } from '../stores/questionSlice';
 import { useSession } from "next-auth/react";
 
 import classes from './Questionnaire.module.css';
+import { AiOutlineConsoleSql } from 'react-icons/ai';
 
 let key = 0;
 const getKey = () => {
@@ -64,8 +65,10 @@ const checkValidity = (questions) => {
 
 const Questionnaire = (props) => {
     const { data: session, status } = useSession();
+    const [ authenticated, setAuthenticated ] = useState(false);
 
     const [questions, setQuestions] = useState([]);
+    const [titleContent, setTitleContent] = useState();
     const [EditQuestion, setEditQuestion] = useState(0);
     const [ErrorHint, setErrorHint] = useState();
     const [ScrollTo, setScrollTo] = useState({
@@ -247,15 +250,61 @@ const Questionnaire = (props) => {
     }
 
     useEffect(() => {
-        const key = getKey();
-        setQuestions([
+        if(!session) return;
+        fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/questionnaire/fetch`, {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                id: props.id
+            })
+        }).then(data => {
+            if(!data.ok)
+                return Promise.reject(new Error('unauthenticated'));
+            return data.json();
+        })
+        .then(questionnaires => {
+            questionnaires = JSON.parse(questionnaires);
+            if(Object.keys(questionnaires).length === 0)
             {
-                key: key,
-                id: key
+                const key = getKey();
+                setQuestions([
+                    {
+                        key: key,
+                        id: key
+                    }
+                ]);
+                setEditQuestion(TitleKey);
+                setTitleContent({content: {}});
+                setAuthenticated(true);
             }
-        ]);
-        setEditQuestion(TitleKey);
-    }, []);
+            else
+            {
+                let questions = [];
+                for(const questionnaire of questionnaires)
+                {
+                    if(questionnaire.content.type === 'title')
+                    {
+                        setTitleContent(questionnaire.content);
+                        continue;
+                    }
+                    const key = getKey();
+                    questions.push({
+                        key: key,
+                        id: key,
+                        content: questionnaire.content
+                    });
+                }
+                setQuestions(questions);
+                setEditQuestion(TitleKey);
+                setAuthenticated(true);
+            }
+        }).catch((err) => {
+            console.log(err);
+        });
+    }, [session]);
 
     const getQuestionContent = () => {
         let orderArray = questionRef.current.map(elem => elem.id);
@@ -340,8 +389,9 @@ const Questionnaire = (props) => {
 
     if(status === 'loading')
         return <p>Loading</p>
-    if(status === 'unauthenticated')
+    if(!authenticated || status === 'unauthenticated')
         return <p>Prohibited!</p>
+    if(!titleContent) return null;
     
     return <div className={classes.questionnaire}>
         <div className={classes.placeholder}></div>
@@ -352,6 +402,7 @@ const Questionnaire = (props) => {
                 onErrorClear={ClearErrorMessage}
                 onClick={onTitleCartClick}
                 onFocus={onTitleCartClick}
+                content={titleContent}
                 ScrollTo={ScrollTo.trigger && TitleKey === ScrollTo.target}
                 cancelScroll={setScrollTo.bind(null, {trigger: false})}
             />
