@@ -42,7 +42,11 @@ const handler = async (req, res) => {
             const userID = await getUserIDByEmail(session.user.email);
             if(data.creator === userID)
             {
-                res.status(200).json(data.content);
+                res.status(200).json({
+                    content: data.content,
+                    title: data.title,
+                    creatat: data.creatat
+                });
                 return;
             }
         }
@@ -51,7 +55,11 @@ const handler = async (req, res) => {
         return;
     }
 
-    res.status(200).json(data.content);
+    res.status(200).json({
+        content: data.content,
+        title: data.title,
+        creatat: data.creatat
+    });
 }
 
 export default handler;

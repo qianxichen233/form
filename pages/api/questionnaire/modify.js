@@ -92,6 +92,7 @@ const handler = async (req, res) => {
 
 	let newData = {
 		content: JSON.stringify(req.body.content),
+		title: req.body.title,
 		creatat: new Date(),
 	};
 	if(req.body.publish)

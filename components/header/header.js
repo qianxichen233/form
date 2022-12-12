@@ -1,8 +1,12 @@
 import classes from './header.module.css';
 
-const Header = () => {
+const Header = (props) => {
     return <div className={classes.header}>
-        <input text="text"></input>
+        <input
+            text="text"
+            value={props.title}
+            onChange={props.onChange}
+        ></input>
     </div>
 }
 

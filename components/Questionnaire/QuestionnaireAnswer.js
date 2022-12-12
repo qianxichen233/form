@@ -62,10 +62,10 @@ const QuestionnaireAnswer = (props) => {
                     return null;
                 return data.json();
             })
-            .then(questions => {
-                if(questions)
+            .then(questionnaire => {
+                if(questionnaire)
                 {
-                    questions = JSON.parse(questions);
+                    const questions = JSON.parse(questionnaire.content);
                     setNotPublish(false);
                     setQuestions(questions);
                     setAnswers(new Array(questions.length)); 
