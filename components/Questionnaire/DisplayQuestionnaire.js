@@ -11,7 +11,12 @@ const DisplayQuestionnaire = props => {
                 if(!data.ok) return Promise.reject('No questionnaire');
                 return data.json();
             })
-            .then(questionnaires => setQuestionnaires(questionnaires))
+            .then(questionnaires => {
+                questionnaires.sort((a, b) => {
+                    return new Date(b.creatat) - new Date(a.creatat);
+                })
+                setQuestionnaires(questionnaires);
+            })
             .catch(console.log)
     }, [props.email]);
 
@@ -24,7 +29,8 @@ const DisplayQuestionnaire = props => {
                     key={questionnaire.id}
                     formID={questionnaire.id}
                     title={questionnaire.title}
-                    time={new Date(questionnaire.creatat).toLocaleDateString()}
+                    date={new Date(questionnaire.creatat).toLocaleDateString()}
+                    time={new Date(questionnaire.creatat).toLocaleTimeString()}
                     publish={questionnaire.published}
                 />
             })}

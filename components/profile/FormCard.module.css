@@ -29,7 +29,6 @@
 }
 
 .card p {
-    font-size: small;
     margin: 0;
     margin-left: 10px;
     user-select: none;
@@ -37,4 +36,8 @@
 
 .formtitle {
     font-weight: bold;
+}
+
+.formtime {
+    font-size: 5px;
 }
