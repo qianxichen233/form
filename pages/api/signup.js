@@ -1,4 +1,4 @@
-const { prisma } = require('../../../lib/db');
+const { prisma } = require('../../lib/db');
 const bcrypt = require('bcrypt');
 
 const validateEmail = (email) => {
