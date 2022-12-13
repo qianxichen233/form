@@ -9,11 +9,14 @@ const FormCard = props => {
         onClick={() => router.push(`/questionnaire/${props.formID}/edit`)}
     >
         <div className={classes.preview}>
-
+            <img
+                src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/questionnaire/${props.formID}/preview`}
+                width='200px'
+            />
         </div>
         <div className={classes.textContainer}>
             <p className={classes.formtitle}>{props.title}</p>
-            <p>Edited At {props.time}</p>
+            <p className={classes.formtime}>Edited At {props.date} {props.time}</p>
         </div>
     </div>
 }

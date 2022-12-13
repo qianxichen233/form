@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import lodash, { reject } from 'lodash';
+import lodash, { stubTrue } from 'lodash';
 
 import FormTitleCart from '../QuestionCart/FormTitleCart';
 import QuestionCart from '../QuestionCart/QuestionCart';
@@ -7,9 +7,9 @@ import UndoPopup from '../popups/UndoPopup';
 import { useSelector, useDispatch } from 'react-redux';
 import { deleteQuestionStore } from '../stores/questionSlice';
 
-import { useSession } from "next-auth/react";
-
 import classes from './Questionnaire.module.css';
+
+import html2canvas from 'html2canvas';
 
 const TitleKey = 0;
 
@@ -65,10 +65,13 @@ const Questionnaire = (props) => {
         trigger: false,
     });
     const [undo, setUndo] = useState(null);
+    const [imageGenerator, setImageGenerator] = useState(false);
 
     const questionContent = useSelector((state) => state.question.questions);
 
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
+
+    const QuestionnaireRef = useRef();
 
     const questionRef = useRef();
     questionRef.current = questions;
@@ -78,6 +81,43 @@ const Questionnaire = (props) => {
 
     const EditQuestionRef = useRef();
     EditQuestionRef.current = EditQuestion;
+
+    const updatePreview = async () => {
+        const targetWidth = 400;
+        const targetHeight = 400;
+        const ratio = targetWidth / QuestionnaireRef.current.offsetWidth;
+
+        const canvas = await html2canvas(QuestionnaireRef.current, {
+            scale: ratio,
+            height: targetHeight / ratio,
+            backgroundColor: 'rgb(240, 235, 248)'
+        });
+
+        await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/questionnaire/updatePreview`,{
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                image: canvas.toDataURL(),
+                id: props.id
+            })
+        });
+    }
+
+    useEffect(() => {
+        if(QuestionnaireRef && !imageGenerator)
+        {
+            setTimeout(() => {
+                updatePreview();
+            }, 1000);
+            setInterval(() => {
+                updatePreview();
+            }, 60 * 1000);
+            setImageGenerator(stubTrue);
+        }
+    }, [QuestionnaireRef]);
 
     const OnEditQuestionChange = (id) => {
         if(id === EditQuestionRef) return;
@@ -324,7 +364,7 @@ const Questionnaire = (props) => {
     
     return <div className={classes.questionnaire}>
         <div className={classes.placeholder}></div>
-        <div className={classes.container}>
+        <div className={classes.container} ref={QuestionnaireRef}>
             <FormTitleCart
                 Focus={TitleKey === EditQuestion}
                 missingItem={ErrorHint?.id === TitleKey ? {type: ErrorHint.type} : null}
@@ -360,12 +400,12 @@ const Questionnaire = (props) => {
                 <button type="button" onClick={OnSaveHandler}>Save</button>
                 <button type="submit" onClick={OnSubmitHandler}>Publish</button>
             </div>
-            <UndoPopup
-                undo={
-                    undo ? UndoDelete.bind(null, undo.question, undo.key, undo.clearUndo) : null
-                }
-            />
         </div>
+        <UndoPopup
+            undo={
+                undo ? UndoDelete.bind(null, undo.question, undo.key, undo.clearUndo) : null
+            }
+        />
     </div>
 }
 
