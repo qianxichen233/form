@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 
+import FormCard from '../profile/FormCard';
+
 const DisplayQuestionnaire = props => {
     const [questionnaires, setQuestionnaires] = useState([]);
 
@@ -16,11 +18,17 @@ const DisplayQuestionnaire = props => {
     if(!questionnaires) return null;
 
     return (
-        <div>
+        <>
             {questionnaires.map(questionnaire => {
-                return <p key={questionnaire.id}>{questionnaire.id}</p>
+                return <FormCard
+                    key={questionnaire.id}
+                    formID={questionnaire.id}
+                    title={questionnaire.title}
+                    time={new Date(questionnaire.creatat).toLocaleDateString()}
+                    publish={questionnaire.published}
+                />
             })}
-        </div>
+        </>
     )
 }
 

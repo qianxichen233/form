@@ -294,7 +294,7 @@ const Questionnaire = (props) => {
     }
 
     const OnSaveHandler = async (e) => {
-        e.preventDefault();
+        if(e) e.preventDefault();
 
         let storedQuestion = getQuestionContent();
 

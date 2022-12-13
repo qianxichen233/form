@@ -1,0 +1,40 @@
+.card {
+    display: inline-block;
+    height: 240px;
+    width: 200px;
+
+    border: 1px lightgrey solid;
+    border-radius: 3px;
+
+    margin-top: 20px;
+    margin-left: 20px;
+
+    cursor: pointer;
+}
+
+.preview {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-bottom: 1px lightgrey solid;
+
+    height: 200px;
+}
+
+.textContainer {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+}
+
+.card p {
+    font-size: small;
+    margin: 0;
+    margin-left: 10px;
+    user-select: none;
+}
+
+.formtitle {
+    font-weight: bold;
+}

@@ -1,5 +1,6 @@
 import { IoIosArrowUp as ArrowUp,
-         IoIosArrowDown as ArrowDown } from 'react-icons/io';
+         IoIosArrowDown as ArrowDown,
+         IoMdPaper as FormIcon } from 'react-icons/io';
 
 import { MdCheckBoxOutlineBlank as BoxCheckBox,
          MdCheckBox as BoxCheckBoxFill,
@@ -20,7 +21,8 @@ import { AiFillCaretDown as CaretDown } from 'react-icons/ai';
 import { TiDeleteOutline as DeleteOptionButton } from 'react-icons/ti';
 import { HiOutlineTrash as DeleteCartButton } from 'react-icons/hi';
 
-import { GrTextAlignFull as Paragraph } from 'react-icons/gr';
+import { GrTextAlignFull as Paragraph,
+         GrAdd as FormAdd } from 'react-icons/gr';
 
 import { BiCalendarEvent as DateIcon } from 'react-icons/bi';
 
@@ -43,5 +45,7 @@ export {
     Paragraph,
     CaretDown,
     TimeIcon,
-    DateIcon
+    DateIcon,
+    FormIcon,
+    FormAdd
 };
