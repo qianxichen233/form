@@ -14,8 +14,6 @@ const Profile = (props) => {
 
     if(status === 'loading')
         return <p>Loading</p>
-    if(status === 'unauthenticated')
-        return <p>Please sign in first</p>
 
     return (
         <>
@@ -24,12 +22,12 @@ const Profile = (props) => {
                 status={status}
             />
             <div className={classes.placeholder}></div>
-            <div className={classes.container}>
+            {status !== 'unauthenticated' ? <div className={classes.container}>
                 <div className={classes.QuestionnaireContainer}>
                     <CreateNewQuestionnaire />
                     <DisplayQuestionnaire />
                 </div>
-            </div>
+            </div> : null}
         </>
     );
 }

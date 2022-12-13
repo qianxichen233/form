@@ -41,5 +41,12 @@
 
     margin-left: 10px;
 
+    font-weight: bold;
+
     cursor: pointer;
+}
+
+.button:hover {
+    background-color: #7c43a2;
+    color: #38015c;
 }

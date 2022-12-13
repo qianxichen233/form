@@ -12,6 +12,10 @@
     cursor: pointer;
 }
 
+.card:hover {
+    border: 1px purple solid;
+}
+
 .preview {
     display: flex;
     align-items: center;
@@ -20,6 +24,10 @@
     border-bottom: 1px lightgrey solid;
 
     height: 200px;
+}
+
+.preview img {
+    border-radius: 2px;
 }
 
 .textContainer {

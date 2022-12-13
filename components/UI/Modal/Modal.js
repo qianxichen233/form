@@ -9,7 +9,7 @@ const Modal = props => {
     }
 
     return <div
-        className={classes.modal}
+        className={`${classes.modal} ${props.center ? classes.center : ''}`}
         style={{backgroundColor: props.color}}
         onClick={onClickHandler}
     >
