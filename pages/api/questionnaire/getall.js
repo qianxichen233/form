@@ -37,7 +37,9 @@ const handler = async (req, res) => {
         },
         select: {
             id: true,
-            published: true
+            published: true,
+            creatat: true,
+            title: true
         }
     });
 
