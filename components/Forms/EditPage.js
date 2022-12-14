@@ -83,9 +83,9 @@ function EditPage() {
 
     if(status === 'loading')
         return <p>Loading</p>
-    if(!authenticated || status === 'unauthenticated')
+    if(status === 'unauthenticated')
         return <p>Prohibited!</p>
-    if(!titleContent) return <div></div>;
+    if(!titleContent || !authenticated) return <div></div>;
 
     return (
         <>

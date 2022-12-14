@@ -1,0 +1,29 @@
+.form {
+    position: relative;
+    width: 35%;
+    min-width: 300px;
+    border-radius: 8px;
+
+    background-color: white;
+}
+
+.form h2 {
+    user-select: none;
+    margin-left: 10px;
+    text-align: center;
+}
+
+.form p {
+    user-select: none;
+    margin-left: 20px;
+}
+
+.buttons {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.buttons button {
+    margin: 10px;
+}
