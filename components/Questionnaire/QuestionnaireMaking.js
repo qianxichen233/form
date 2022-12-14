@@ -202,6 +202,7 @@ const Questionnaire = (props) => {
                 setUndo(null);
             }, 10000);
 
+
             setUndo((prev) => {
                 if(prev) clearTimeout(prev.clearUndo);
                 return {
@@ -349,6 +350,7 @@ const Questionnaire = (props) => {
             headers: {
                 'Content-Type': 'application/json'
             },
+
             body: JSON.stringify({
                 title: props.formTitle,
                 content: storedQuestion,

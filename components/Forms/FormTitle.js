@@ -2,6 +2,10 @@ import { useState, useRef, useEffect } from 'react';
 import lodash from 'lodash';
 
 import Form from '../UI/Cart/Form';
+<<<<<<< HEAD:frontend/src/components/Forms/FormTitle.js
+import RichTextEditor from '../UI/RichTextEditor/RichTextEditor';
+=======
+>>>>>>> dev:components/Forms/FormTitle.js
 
 import { useDispatch } from 'react-redux';
 import { setQuestionStore } from '../stores/questionSlice';
