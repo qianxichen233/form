@@ -1,5 +1,7 @@
 const { prisma } = require('../../../lib/db');
 const { getSession } = require('next-auth/react');
+const fs = require('fs');
+const path = require('path');
 
 const handler = async (req, res) => {
 	if(req.method !== 'POST')
@@ -63,6 +65,11 @@ const handler = async (req, res) => {
             id: req.body.id
         }
     });
+
+	let filePath = path.join(process.cwd(), 'data', 'images', `${req.body.id}.png`);
+
+	if(fs.existsSync(filePath))
+		fs.unlink(filePath, err => console.log(err));
 
 	res.status(200).json({
 		msg: 'Success'

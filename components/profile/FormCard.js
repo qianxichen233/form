@@ -34,14 +34,30 @@ const FormCard = props => {
                 id: props.formID
             })
         }).then(res => res.json())
-        .then(() => {
-            router.reload(window.location.pathname);
+        .then((data) => {
+            if(!data.error)
+                router.reload(window.location.pathname);
         })
         .catch(console.log);
     }
 
-    const onRenameHandler = () => {
-        
+    const onRenameHandler = (name) => {
+        fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/questionnaire/modify`, {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                id: props.formID,
+                title: name
+            })
+        }).then(res => res.json())
+        .then((data) => {
+            if(!data.error)
+                router.reload(window.location.pathname);
+        })
+        .catch(console.log);
     }
 
     return <>
@@ -95,7 +111,6 @@ const FormCard = props => {
         ></Modal>
         <Modal
             active={deleteActive}
-            deactive={setDeleteActive.bind(null, false)}
             color='rgb(128 128 128 / 50%)'
             center={true}
         >
@@ -107,13 +122,13 @@ const FormCard = props => {
         </Modal>
         <Modal
             active={renameActive}
-            deactive={setRenameActive.bind(null, false)}
             color='rgb(128 128 128 / 50%)'
             center={true}
         >
-            <renameActive
+            <RenameCard
                 onRename={onRenameHandler}
                 onCancel={setRenameActive.bind(null, false)}
+                name={props.title}
             />
         </Modal>
     </>

@@ -6,21 +6,20 @@ const { checkQuestionValidity } = require('../../../lib/QuestionnaireValidity');
 const handler = async (req, res) => {
 	if(req.method !== 'POST')
 	{
-		res.status(405).json({msg: 'Unsupport Method!'});
+		res.status(405).json({error: 'Unsupport Method!'});
 		return;
 	}
 	
 	const session = await getSession({req: req});
 	if(!session)
 	{
-		res.status(401).json({msg: 'Unauthenticated!'});
+		res.status(401).json({error: 'Unauthenticated!'});
 		return;
 	}
 
-	if(req.body.content === null ||
-	   !req.body.id)
+	if(!req.body.id)
 	{
-		res.status(406).json({msg: 'Missing Field!'});
+		res.status(406).json({error: 'Missing Field!'});
 		return;
 	}
 
@@ -34,7 +33,7 @@ const handler = async (req, res) => {
 	});
 	if(!userID)
 	{
-		res.status(406).json({msg: 'Invalid Email Address'});
+		res.status(406).json({error: 'Invalid Email Address'});
 		return;
 	}
 
@@ -44,13 +43,13 @@ const handler = async (req, res) => {
 		{
 			if(!checkQuestionValidity(req.body.content))
 			{
-				res.status(406).json({msg: 'Invalid Questionnaire Format'});
+				res.status(406).json({error: 'Invalid Questionnaire Format'});
 				return;
 			}
 		}
 		catch
 		{
-			res.status(400).json({msg: 'Bad Request'});
+			res.status(400).json({error: 'Bad Request'});
 			return;
 		}
 	}
@@ -68,7 +67,7 @@ const handler = async (req, res) => {
 	{
 		await prisma.questionnaire.create({
 			data: {
-				content: JSON.stringify(req.body.content),
+				content: JSON.stringify(req.body.content || {}),
 				title: req.body.title,
 				creator: userID,
 				creatat: new Date(),
@@ -86,17 +85,20 @@ const handler = async (req, res) => {
 	//modify existing questionnaire
 	if(questionnaire.creator !== userID)
 	{
-		res.status(401).json({msg: 'Unauthenticated'});
+		res.status(401).json({error: 'Unauthenticated'});
 		return;
 	}
 
 	let newData = {
-		content: JSON.stringify(req.body.content),
-		title: req.body.title,
-		creatat: new Date(),
+		title: req.body.title
 	};
 	if(req.body.publish)
 		newData.published = req.body.publish;
+	if(req.body.content)
+	{
+		newData.content = JSON.stringify(req.body.content);
+		newData.creatat = new Date()
+	}
 
 	await prisma.questionnaire.update({
 		where: {
