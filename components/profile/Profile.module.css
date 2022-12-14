@@ -1,0 +1,20 @@
+.placeholder {
+    height: 50px;
+}
+
+.QuestionnaireContainer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-start;
+
+    width: 80%;
+}
+
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+}

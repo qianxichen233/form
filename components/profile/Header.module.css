@@ -1,0 +1,52 @@
+.container {
+    position: fixed;
+    top: 0;
+    height: 50px;
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    
+    background-color: #38015c;
+
+    color: white;
+}
+
+.logo {
+    position: absolute;
+    left: 10px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.account {
+    position: absolute;
+    right: 10px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.button {
+    border-radius: 5px;
+    width: 100px;
+    height: 30px;
+
+    background-color: #38015c;
+    color: white;
+    border: 2px white solid;
+
+    margin-left: 10px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+.button:hover {
+    background-color: #7c43a2;
+    color: #38015c;
+}

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import lodash from 'lodash';
+import lodash, { stubTrue } from 'lodash';
 
 import FormTitleCart from '../QuestionCart/FormTitleCart';
 import QuestionCart from '../QuestionCart/QuestionCart';
@@ -7,14 +7,9 @@ import UndoPopup from '../popups/UndoPopup';
 import { useSelector, useDispatch } from 'react-redux';
 import { deleteQuestionStore } from '../stores/questionSlice';
 
-import { useSession } from "next-auth/react";
-
 import classes from './Questionnaire.module.css';
 
-let key = 0;
-const getKey = () => {
-    return ++key;
-}
+import html2canvas from 'html2canvas';
 
 const TitleKey = 0;
 
@@ -63,19 +58,20 @@ const checkValidity = (questions) => {
 }
 
 const Questionnaire = (props) => {
-    const { data: session, status } = useSession();
-
-    const [questions, setQuestions] = useState([]);
-    const [EditQuestion, setEditQuestion] = useState(0);
+    const [questions, setQuestions] = useState(props.questions);
+    const [EditQuestion, setEditQuestion] = useState(TitleKey);
     const [ErrorHint, setErrorHint] = useState();
     const [ScrollTo, setScrollTo] = useState({
         trigger: false,
     });
     const [undo, setUndo] = useState(null);
+    const [imageGenerator, setImageGenerator] = useState(false);
 
     const questionContent = useSelector((state) => state.question.questions);
 
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
+
+    const QuestionnaireRef = useRef();
 
     const questionRef = useRef();
     questionRef.current = questions;
@@ -85,6 +81,43 @@ const Questionnaire = (props) => {
 
     const EditQuestionRef = useRef();
     EditQuestionRef.current = EditQuestion;
+
+    const updatePreview = async () => {
+        const targetWidth = 400;
+        const targetHeight = 400;
+        const ratio = targetWidth / QuestionnaireRef.current.offsetWidth;
+
+        const canvas = await html2canvas(QuestionnaireRef.current, {
+            scale: ratio,
+            height: targetHeight / ratio,
+            backgroundColor: 'rgb(240, 235, 248)'
+        });
+
+        await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/questionnaire/updatePreview`,{
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                image: canvas.toDataURL(),
+                id: props.id
+            })
+        });
+    }
+
+    useEffect(() => {
+        if(QuestionnaireRef && !imageGenerator)
+        {
+            setTimeout(() => {
+                updatePreview();
+            }, 1000);
+            setInterval(() => {
+                updatePreview();
+            }, 60 * 1000);
+            setImageGenerator(stubTrue);
+        }
+    }, [QuestionnaireRef]);
 
     const OnEditQuestionChange = (id) => {
         if(id === EditQuestionRef) return;
@@ -118,7 +151,7 @@ const Questionnaire = (props) => {
                 AddedType = null;
 
             let newQuestions = [];
-            const key = getKey();
+            const key = props.getKey();
             for(let i = 0; i < questionRef.current.length; ++i)
             {
                 newQuestions.push(questionRef.current[i]);
@@ -178,7 +211,6 @@ const Questionnaire = (props) => {
                     clearUndo: clearUndo
                 }
             });
-
         }
         else if(name === "CopyButton")
         {
@@ -190,7 +222,7 @@ const Questionnaire = (props) => {
             }
 
             let newQuestions = [];
-            const key = getKey();
+            const key = props.getKey();
             for(let i = 0; i < questionRef.current.length; ++i)
             {
                 newQuestions.push(questionRef.current[i]);
@@ -248,17 +280,6 @@ const Questionnaire = (props) => {
         OnEditQuestionChange(TitleKey);
     }
 
-    useEffect(() => {
-        const key = getKey();
-        setQuestions([
-            {
-                key: key,
-                id: key
-            }
-        ]);
-        setEditQuestion(TitleKey);
-    }, []);
-
     const getQuestionContent = () => {
         let orderArray = questionRef.current.map(elem => elem.id);
         orderArray.unshift(TitleKey);
@@ -276,7 +297,7 @@ const Questionnaire = (props) => {
         return CloneQuestion;
     }
 
-    const OnSubmitHandler = async (email, e) => {
+    const OnSubmitHandler = async (e) => {
         e.preventDefault();
 
         let storedQuestion = getQuestionContent();
@@ -305,7 +326,7 @@ const Questionnaire = (props) => {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                creator: email,
+                title: props.formTitle,
                 content: storedQuestion,
                 id: props.id,
                 publish: true
@@ -313,8 +334,8 @@ const Questionnaire = (props) => {
         });
     }
 
-    const OnSaveHandler = async (email, e) => {
-        e.preventDefault();
+    const OnSaveHandler = async (e) => {
+        if(e) e.preventDefault();
 
         let storedQuestion = getQuestionContent();
 
@@ -331,7 +352,7 @@ const Questionnaire = (props) => {
             },
 
             body: JSON.stringify({
-                creator: email,
+                title: props.formTitle,
                 content: storedQuestion,
                 id: props.id,
                 publish: false
@@ -342,22 +363,17 @@ const Questionnaire = (props) => {
     const OnPreviewHandler = e => {
         e.preventDefault();
     }
-
-
-    if(status === 'loading')
-        return <p>Loading</p>
-    if(status === 'unauthenticated')
-        return <p>Prohibited!</p>
     
     return <div className={classes.questionnaire}>
         <div className={classes.placeholder}></div>
-        <div className={classes.container}>
+        <div className={classes.container} ref={QuestionnaireRef}>
             <FormTitleCart
                 Focus={TitleKey === EditQuestion}
                 missingItem={ErrorHint?.id === TitleKey ? {type: ErrorHint.type} : null}
                 onErrorClear={ClearErrorMessage}
                 onClick={onTitleCartClick}
                 onFocus={onTitleCartClick}
+                content={props.titleContent}
                 ScrollTo={ScrollTo.trigger && TitleKey === ScrollTo.target}
                 cancelScroll={setScrollTo.bind(null, {trigger: false})}
             />
@@ -383,15 +399,15 @@ const Questionnaire = (props) => {
             })}
             <div className={classes.actionButton}>
                 <button type="button" onClick={OnPreviewHandler}>Preview</button>
-                <button type="button" onClick={OnSaveHandler.bind(null, session.user.email)}>Save</button>
-                <button type="submit" onClick={OnSubmitHandler.bind(null, session.user.email)}>Publish</button>
+                <button type="button" onClick={OnSaveHandler}>Save</button>
+                <button type="submit" onClick={OnSubmitHandler}>Publish</button>
             </div>
-            <UndoPopup
-                undo={
-                    undo ? UndoDelete.bind(null, undo.question, undo.key, undo.clearUndo) : null
-                }
-            />
         </div>
+        <UndoPopup
+            undo={
+                undo ? UndoDelete.bind(null, undo.question, undo.key, undo.clearUndo) : null
+            }
+        />
     </div>
 }
 

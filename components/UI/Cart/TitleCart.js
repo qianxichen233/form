@@ -3,7 +3,7 @@ import { useEffect, useRef } from 'react';
 import classes from './TitleCart.module.css';
 
 const TitleCart = (props) => {
-    const className = `${classes.cart} ${props.Focus ? classes.focus : ''}`;
+    const className = `${classes.borderLeft} ${props.Focus ? classes.focus : ''}`;
 
     const ref = useRef(null);
 
@@ -16,11 +16,13 @@ const TitleCart = (props) => {
     }, [props.ScrollTo, ref.current]);
 
     return <div
-        className={className}
+        className={classes.cart}
         onClick={props.onClick}
         id={props.id}
         ref={ref}
     >
+        <div className={classes.borderTop}></div>
+        <div className={className}></div>
         {props.children}
     </div>
 }

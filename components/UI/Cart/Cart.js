@@ -3,7 +3,8 @@ import { useEffect, useRef } from 'react';
 import classes from './Cart.module.css';
 
 const Cart = (props) => {
-    const className = `${classes.cart} ${props.Focus ? classes.focus : ''} ${props.Error ? classes.error : ''}`;
+    const className = `${classes.cart} ${props.Error ? classes.error : ''}`;
+    const borderClass = `${classes.borderLeft} ${props.Focus ? classes.focus : ''}`;
 
     const ref = useRef(null);
 
@@ -21,6 +22,7 @@ const Cart = (props) => {
         id={props.id}
         ref={ref}
     >
+        <div className={borderClass}></div>
         {props.children}
     </div>
 }
