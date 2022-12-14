@@ -12,17 +12,19 @@ model answers {
   content         String
   userid          BigInt?
   questionnaireid String
-  questionnaire   questionnaire @relation(fields: [questionnaireid], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  users           users?        @relation(fields: [userid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  questionnaire   questionnaire @relation(fields: [questionnaireid], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  users           users?        @relation(fields: [userid], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }
 
 model questionnaire {
   id                   String                 @id @unique @db.VarChar(50)
+  title                String                 @db.VarChar(200)
+  creatat              DateTime
   content              String
   creator              BigInt
   published            Boolean
   answers              answers[]
-  users                users                  @relation(fields: [creator], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  users                users                  @relation(fields: [creator], references: [id], onDelete: Cascade, onUpdate: NoAction)
   userquestionrelation userquestionrelation[]
 }
 
@@ -39,8 +41,8 @@ model users {
 model userquestionrelation {
   userid          BigInt
   questionnaireid String
-  questionnaire   questionnaire @relation(fields: [questionnaireid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "UserQuestionnaireRelation_questionnaireid_fkey")
-  users           users         @relation(fields: [userid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "UserQuestionnaireRelation_userid_fkey")
+  questionnaire   questionnaire @relation(fields: [questionnaireid], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "UserQuestionnaireRelation_questionnaireid_fkey")
+  users           users         @relation(fields: [userid], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "UserQuestionnaireRelation_userid_fkey")
 
   @@unique([userid, questionnaireid], map: "UserQuestionnaireRelation_userid_questionnaireid_key")
 }

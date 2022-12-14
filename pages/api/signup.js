@@ -1,7 +1,5 @@
-const { PrismaClient } = require('@prisma/client');
+const { prisma } = require('../../lib/db');
 const bcrypt = require('bcrypt');
-
-const prisma = new PrismaClient();
 
 const validateEmail = (email) => {
     return String(email)
@@ -26,17 +24,6 @@ const handler = async (req, res) => {
         return;
     }
 
-    const existedEmail = await prisma.users.count({
-        where: {
-            email: req.body.email
-        }
-    });
-    if(existedEmail > 0)
-    {
-        res.status(406).json({msg: 'Email Address Exists!'});
-        return;
-    }
-
     if(!validateEmail(req.body.email))
     {
         res.status(406).json({msg: 'Invalid Email Format!'});
@@ -54,6 +41,17 @@ const handler = async (req, res) => {
        req.body.email.length > 100)
     {
         res.status(406).json({msg: 'Too Long!'});
+        return;
+    }
+
+    const existedEmail = await prisma.users.count({
+        where: {
+            email: req.body.email
+        }
+    });
+    if(existedEmail > 0)
+    {
+        res.status(406).json({msg: 'Email Address Exists!'});
         return;
     }
 

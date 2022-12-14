@@ -18,6 +18,7 @@ const FormTitleCart = props => {
             onErrorClear={props.onErrorClear}
             preview={!props.Focus}
             onFocus={props.onFocus}
+            content={props.content}
         />}
     </TitleCart>
 }

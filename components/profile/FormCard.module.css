@@ -1,0 +1,128 @@
+.card {
+    display: inline-block;
+    height: 260px;
+    width: 200px;
+
+    border: 1px lightgrey solid;
+    border-radius: 3px;
+
+    margin-top: 20px;
+    margin-left: 20px;
+
+    cursor: pointer;
+}
+
+.card:hover {
+    border: 1px purple solid;
+}
+
+.preview {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-bottom: 1px lightgrey solid;
+
+    height: 200px;
+}
+
+.preview img {
+    border-radius: 2px;
+    user-select: none;
+}
+
+.textContainer {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-around;
+    flex-direction: column;
+
+    height: 50px;
+
+    margin-top: 5px;
+}
+
+.card p, .card span {
+    margin: 0;
+    margin-left: 5px;
+    user-select: none;
+}
+
+.optionRow {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.formtitle {
+    display: block;
+    width: 180px;
+    font-size: 10pt;
+    font-weight: bold;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.formtime {
+    font-size: 5px;
+}
+
+.optionIcon {
+    position: absolute;
+    right: 5px;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border-radius: 50%;
+}
+
+.optionIcon:hover {
+    background-color: rgba(211, 211, 211, 0.5);
+}
+
+.options {
+    position: absolute;
+    top: -100px;
+    width: 200px;
+    height: max-content;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    border: 1px transparent solid;
+    border-radius: 4px;
+
+    background-color: white;
+    z-index: 1001;
+
+    box-shadow: rgb(255 255 255 / 90%) 0px 1px 0px inset,
+                rgb(0 0 0 / 3%) 0px -1px 0px inset,
+                rgb(0 0 0 / 20%) 0px 1px 3px,
+                inset 1px 1px 0 rgb(0 0 0 / 10%),
+                inset 0 -1px 0 rgb(0 0 0 / 7%);
+}
+
+.option {
+    height: 50px;
+    width: 100%;
+
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+.option:hover {
+    background-color: lightgrey;
+}
+.option svg {
+    margin-left: 10px;
+    margin-right: 10px;
+}

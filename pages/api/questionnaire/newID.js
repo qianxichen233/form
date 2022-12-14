@@ -1,7 +1,5 @@
-const { PrismaClient } = require('@prisma/client');
+const { prisma } = require('../../../lib/db');
 const { generateRandomString } = require('../../../lib/utility');
-
-const prisma = new PrismaClient();
 
 const handler = async (req, res) => {
     if(req.method !== 'GET')

@@ -16,11 +16,33 @@
     background-color: white;
     width: 70vw;
 
-    box-shadow: 0px 8px 0 rgb(103, 58, 183) inset;
+    /*box-shadow: 0px 8px 0 rgb(103, 58, 183) inset;*/
+    /*border-top: 8px rgb(103, 58, 183) solid;*/
 
     transition: box-shadow 0.3s ease-in-out;
 }
 
+.borderLeft {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 6px;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    background-color: white;
+}
+
 .focus{
-    box-shadow: 0px 8px 0 rgb(103, 58, 183) inset, 6px 0 0 #4285f4 inset, 0 2px 2px grey;
+    background-color: #4285f4;
+}
+
+.borderTop {
+    position: absolute;
+    top: 0;
+    height: 8px;
+    width: 100%;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    background-color: rgb(103, 58, 183);
+    z-index: 1;
 }

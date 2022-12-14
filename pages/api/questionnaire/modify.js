@@ -1,6 +1,7 @@
-const { PrismaClient } = require('@prisma/client');
+const { prisma } = require('../../../lib/db');
+const { getSession } = require('next-auth/react');
 
-const prisma = new PrismaClient();
+const { checkQuestionValidity } = require('../../../lib/QuestionnaireValidity');
 
 const handler = async (req, res) => {
 	if(req.method !== 'POST')
@@ -8,11 +9,15 @@ const handler = async (req, res) => {
 		res.status(405).json({msg: 'Unsupport Method!'});
 		return;
 	}
-
-	console.log(req.body);
+	
+	const session = await getSession({req: req});
+	if(!session)
+	{
+		res.status(401).json({msg: 'Unauthenticated!'});
+		return;
+	}
 
 	if(req.body.content === null ||
-	   !req.body.creator ||
 	   !req.body.id)
 	{
 		res.status(406).json({msg: 'Missing Field!'});
@@ -21,7 +26,7 @@ const handler = async (req, res) => {
 
 	const { id: userID } = await prisma.users.findUnique({
 		where: {
-			email: req.body.creator
+			email: session.user.email
 		},
 		select: {
 			id: true
@@ -33,35 +38,62 @@ const handler = async (req, res) => {
 		return;
 	}
 
-	const count = await prisma.questionnaire.count({
+	if(req.body.publish) //make sure published questionnaire is valid
+	{
+		try
+		{
+			if(!checkQuestionValidity(req.body.content))
+			{
+				res.status(406).json({msg: 'Invalid Questionnaire Format'});
+				return;
+			}
+		}
+		catch
+		{
+			res.status(400).json({msg: 'Bad Request'});
+			return;
+		}
+	}
+
+	const questionnaire = await prisma.questionnaire.findUnique({
 		where: {
 			id: req.body.id
+		},
+		select: {
+			creator: true
 		}
 	});
 	
-	if(!count) //create new questionnaire
+	if(!questionnaire) //create new questionnaire
 	{
-		console.log(Object.keys(req.body.content).length !== 0 && req.body.publish)
-
 		await prisma.questionnaire.create({
 			data: {
 				content: JSON.stringify(req.body.content),
+				title: req.body.title,
 				creator: userID,
+				creatat: new Date(),
 				id: req.body.id,
-				published: Object.keys(req.body.content).length !== 0 && req.body.publish
+				published: req.body.publish
 			}
 		});
 		
 		res.status(201).json({
 			msg: 'Success'
 		});
-
 		return;
 	}
 	
 	//modify existing questionnaire
+	if(questionnaire.creator !== userID)
+	{
+		res.status(401).json({msg: 'Unauthenticated'});
+		return;
+	}
+
 	let newData = {
-		content: JSON.stringify(req.body.content)
+		content: JSON.stringify(req.body.content),
+		title: req.body.title,
+		creatat: new Date(),
 	};
 	if(req.body.publish)
 		newData.published = req.body.publish;
