@@ -30,7 +30,7 @@ const DisplayQuestionnaire = props => {
                     formID={questionnaire.id}
                     title={questionnaire.title}
                     date={new Date(questionnaire.creatat).toLocaleDateString()}
-                    time={new Date(questionnaire.creatat).toLocaleTimeString()}
+                    time={new Date(questionnaire.creatat).toLocaleTimeString().substring(0,5)}
                     publish={questionnaire.published}
                 />
             })}

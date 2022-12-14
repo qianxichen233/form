@@ -8,7 +8,8 @@ import { MdCheckBoxOutlineBlank as BoxCheckBox,
          MdContentCopy as CopyButton,
          MdShortText as ShortText,
          MdAddCircleOutline as AddButton,
-         MdAccessTime as TimeIcon } from 'react-icons/md';
+         MdAccessTime as TimeIcon,
+         MdDriveFileRenameOutline as Rename } from 'react-icons/md';
 
 import { ImBold as BoldIcon,
          ImItalic as ItalicIcon,
@@ -25,6 +26,8 @@ import { GrTextAlignFull as Paragraph,
          GrAdd as FormAdd } from 'react-icons/gr';
 
 import { BiCalendarEvent as DateIcon } from 'react-icons/bi';
+
+import { SlOptions as Options } from 'react-icons/sl';
 
 export {
     ArrowUp,
@@ -47,5 +50,7 @@ export {
     TimeIcon,
     DateIcon,
     FormIcon,
-    FormAdd
+    FormAdd,
+    Options,
+    Rename
 };
