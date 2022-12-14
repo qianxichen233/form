@@ -27,3 +27,27 @@
 .buttons button {
     margin: 10px;
 }
+
+.input {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 10px;
+}
+
+.input input {
+    width: calc(100% - 40px);
+    height: 25px;
+
+    padding-left: 5px;
+
+    border: 1px black solid;
+    border-radius: 3px;
+}
+
+.input input:focus {
+    outline: none;
+    border-color: purple;
+}
