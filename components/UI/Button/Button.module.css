@@ -11,6 +11,8 @@
     font-weight: bold;
 
     cursor: pointer;
+    user-select: none;
+    -webkit-user-drag: none;
 }
 
 .button:hover {

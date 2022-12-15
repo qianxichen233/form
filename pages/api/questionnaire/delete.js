@@ -69,7 +69,10 @@ const handler = async (req, res) => {
 	let filePath = path.join(process.cwd(), 'data', 'images', `${req.body.id}.png`);
 
 	if(fs.existsSync(filePath))
-		fs.unlink(filePath, err => console.log(err));
+		fs.unlink(filePath, err => {
+			if(err)
+				console.log(err);
+		});
 
 	res.status(200).json({
 		msg: 'Success'

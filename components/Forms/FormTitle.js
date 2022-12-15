@@ -29,6 +29,7 @@ const FormTitle = (props) => {
     contentRef.current = content;
 
     useEffect(() => {
+        //props.save();
         dispatch(setQuestionStore({
             id: 0,
             content: contentRef.current
@@ -37,9 +38,11 @@ const FormTitle = (props) => {
 
     const onTitleChangeHandler = (clearError, content) => {
         if(clearError) props.onErrorClear();
+        if(contentRef.current.title?.blocks[0].text === content['blocks'][0].text) return;
         let newContent = lodash.cloneDeep(contentRef.current);
         newContent['title'] = content;
 
+        props.save();
         dispatch(setQuestionStore({
             id: 0,
             content: newContent
@@ -49,9 +52,11 @@ const FormTitle = (props) => {
 
     const onDescriptionChangeHandler = (clearError, content) => {
         if(clearError) props.onErrorClear();
+        if(contentRef.current.description?.blocks[0].text === content['blocks'][0].text) return;
         let newContent = lodash.cloneDeep(contentRef.current);
         newContent['description'] = content;
 
+        props.save();
         dispatch(setQuestionStore({
             id: 0,
             content: newContent

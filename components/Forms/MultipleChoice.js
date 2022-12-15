@@ -60,6 +60,7 @@ const MultipleChoice = (props) => {
     const optionContainerRef = useRef();
 
     useEffect(() => {
+        //props.save();
         dispatch(setQuestionStore({
             id: props.id,
             content: questionRef.current
@@ -67,9 +68,11 @@ const MultipleChoice = (props) => {
     }, [dispatch, props.id]);
 
     useEffect(() => {
+        if(props.subtype === questionRef.current.subtype) return;
         let newQuestion = lodash.cloneDeep(questionRef.current);
         newQuestion.subtype = props.subtype;
 
+        props.save();
         dispatch(setQuestionStore({
             id: props.id,
             content: newQuestion
@@ -87,6 +90,7 @@ const MultipleChoice = (props) => {
                 option.content = e.target.value;
         }
 
+        props.save();
         dispatch(setQuestionStore({
             id: props.id,
             content: newQuestion
@@ -108,6 +112,7 @@ const MultipleChoice = (props) => {
                 return option.key !== +e.currentTarget.id;
             });
 
+            props.save();
             dispatch(setQuestionStore({
                 id: props.id,
                 content: newQuestion
@@ -128,6 +133,7 @@ const MultipleChoice = (props) => {
             }
         );
 
+        props.save();
         dispatch(setQuestionStore({
             id: props.id,
             content: newQuestion
@@ -137,9 +143,11 @@ const MultipleChoice = (props) => {
 
     const OnStatementChangeHandler = (clearError, content) => {
         if(clearError) props.onErrorClear();
+        if(questionRef.current.description?.blocks[0].text === content['blocks'][0].text) return;
         const newQuestion = lodash.cloneDeep(questionRef.current);
         newQuestion.description = lodash.cloneDeep(content);
 
+        props.save();
         dispatch(setQuestionStore({
             id: props.id,
             content: newQuestion
@@ -151,6 +159,7 @@ const MultipleChoice = (props) => {
         const newQuestion = lodash.cloneDeep(questionRef.current);
         newQuestion.required = state;
 
+        props.save();
         dispatch(setQuestionStore({
             id: props.id,
             content: newQuestion

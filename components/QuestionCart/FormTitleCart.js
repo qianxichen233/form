@@ -19,6 +19,7 @@ const FormTitleCart = props => {
             preview={!props.Focus}
             onFocus={props.onFocus}
             content={props.content}
+            save={props.save}
         />}
     </TitleCart>
 }
