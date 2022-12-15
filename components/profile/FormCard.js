@@ -73,6 +73,7 @@ const FormCard = props => {
                 <img
                     src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/questionnaire/${props.formID}/preview`}
                     width='200px'
+                    draggable={false}
                 />
             </div>
             <div className={classes.textContainer}>

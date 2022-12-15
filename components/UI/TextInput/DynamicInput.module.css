@@ -1,0 +1,10 @@
+.wrapper > * {
+    font-family: "Times New Roman", Times, serif;
+  }
+  
+  .hide {
+    position: absolute;
+    opacity: 0;
+    z-index: -100;
+    white-space: pre;
+  }

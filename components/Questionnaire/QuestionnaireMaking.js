@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import lodash, { stubTrue } from 'lodash';
+import lodash from 'lodash';
 
 import FormTitleCart from '../QuestionCart/FormTitleCart';
 import QuestionCart from '../QuestionCart/QuestionCart';
@@ -13,52 +13,10 @@ import html2canvas from 'html2canvas';
 
 const TitleKey = 0;
 
-const checkRichTextEmpty = (content) => {
-    if(!content) return true;
-    if(typeof(content) === 'string') return false;
-    return content['blocks'][0]['text'] === '';
-}
-
-const checkValidity = (questions) => {
-    for(const question of questions)
-    {
-        if(question.content.type === 'title')
-        {
-            if(checkRichTextEmpty(question.content.title))
-                return {
-                    id: question.key,
-                    type: 'title'
-                }
-            if(checkRichTextEmpty(question.content.description))
-                return {
-                    id: question.key,
-                    type: 'description'
-                }
-            continue;
-        }
-
-        if(checkRichTextEmpty(question.content.description))
-            return {
-                id: question.key,
-                type: 'description'
-            };
-        
-        if(question.content.options)
-        {
-            for(let i = 0; i < question.content.options.length; ++i)
-                if(!question.content.options[i].content)
-                    return {
-                        id: question.key,
-                        type: 'option',
-                        index: i
-                    }
-        }
-    }
-    return null;
-}
-
 const Questionnaire = (props) => {
-    const [questions, setQuestions] = useState(props.questions);
+    const questions = props.questions;
+    const setQuestions = props.questionsChange;
+
     const [EditQuestion, setEditQuestion] = useState(TitleKey);
     const [ErrorHint, setErrorHint] = useState();
     const [ScrollTo, setScrollTo] = useState({
@@ -81,6 +39,16 @@ const Questionnaire = (props) => {
 
     const EditQuestionRef = useRef();
     EditQuestionRef.current = EditQuestion;
+
+    useEffect(() => {
+        if(!props.error) return;
+        setEditQuestion(props.error.id);
+        setErrorHint(props.error);
+        setScrollTo({
+            trigger: true,
+            target: props.error.id
+        });
+    }, [props.error]);
 
     const updatePreview = async () => {
         const targetWidth = 400;
@@ -115,7 +83,7 @@ const Questionnaire = (props) => {
             setInterval(() => {
                 updatePreview();
             }, 60 * 1000);
-            setImageGenerator(stubTrue);
+            setImageGenerator(true);
         }
     }, [QuestionnaireRef]);
 
@@ -125,10 +93,12 @@ const Questionnaire = (props) => {
     }
 
     const ClearErrorMessage = () => {
+        props.clearError();
         setErrorHint(null);
     }
 
     const UndoDelete = (originalQuestion, key, clearID) => {
+        props.save();
         setQuestions(originalQuestion);
         setEditQuestion(key);
         clearTimeout(clearID);
@@ -273,93 +243,11 @@ const Questionnaire = (props) => {
             });
             setQuestions(newQuestions);
         }
+        props.save();
     }
 
     const onTitleCartClick = e => {
         OnEditQuestionChange(TitleKey);
-    }
-
-    const getQuestionContent = () => {
-        let orderArray = questionRef.current.map(elem => elem.id);
-        orderArray.unshift(TitleKey);
-
-        let CloneQuestion = lodash.cloneDeep(questionContent);
-        CloneQuestion.sort((a, b) => {
-            return orderArray.indexOf(a.key) - orderArray.indexOf(b.key);
-        });
-
-        CloneQuestion = CloneQuestion.map((question, index) => {
-            question.order = index;
-            return question;
-        });
-
-        return CloneQuestion;
-    }
-
-    const OnSubmitHandler = async (e) => {
-        e.preventDefault();
-
-        let storedQuestion = getQuestionContent();
-
-        const missingPart = checkValidity(storedQuestion);
-        if(missingPart)
-        {
-            setEditQuestion(missingPart.id);
-            setErrorHint(missingPart);
-            setScrollTo({
-                trigger: true,
-                target: missingPart.id
-            });
-            return;
-        }
-
-        storedQuestion = storedQuestion.map(question => {
-            delete question.key;
-            return question;
-        });
-        
-        await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/questionnaire/modify`,{
-            method: 'POST',
-            mode: 'cors',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                title: props.formTitle,
-                content: storedQuestion,
-                id: props.id,
-                publish: true
-            })
-        });
-    }
-
-    const OnSaveHandler = async (e) => {
-        if(e) e.preventDefault();
-
-        let storedQuestion = getQuestionContent();
-
-        storedQuestion = storedQuestion.map(question => {
-            delete question.key;
-            return question;
-        });
-        
-        await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/questionnaire/modify`,{
-            method: 'POST',
-            mode: 'cors',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                title: props.formTitle,
-                content: storedQuestion,
-                id: props.id,
-                publish: false
-            })
-        });
-    }
-
-    const OnPreviewHandler = e => {
-        e.preventDefault();
     }
     
     return <div className={classes.questionnaire}>
@@ -374,6 +262,7 @@ const Questionnaire = (props) => {
                 content={props.titleContent}
                 ScrollTo={ScrollTo.trigger && TitleKey === ScrollTo.target}
                 cancelScroll={setScrollTo.bind(null, {trigger: false})}
+                save={props.save}
             />
             {questions.map((question) => {
                 const missingItem = ErrorHint?.id === question.key ?
@@ -393,13 +282,9 @@ const Questionnaire = (props) => {
                     onErrorClear={ClearErrorMessage}
                     ScrollTo={ScrollTo.trigger && question.key === ScrollTo.target}
                     cancelScroll={setScrollTo.bind(null, {trigger: false})}
+                    save={(props.save)}
                 />
             })}
-            <div className={classes.actionButton}>
-                <button type="button" onClick={OnPreviewHandler}>Preview</button>
-                <button type="button" onClick={OnSaveHandler}>Save</button>
-                <button type="submit" onClick={OnSubmitHandler}>Publish</button>
-            </div>
         </div>
         <UndoPopup
             undo={

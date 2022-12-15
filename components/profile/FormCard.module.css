@@ -10,6 +10,8 @@
     margin-left: 20px;
 
     cursor: pointer;
+
+    -webkit-user-drag: none;
 }
 
 .card:hover {

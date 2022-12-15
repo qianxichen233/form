@@ -17,7 +17,8 @@ import { ImBold as BoldIcon,
          ImRadioUnchecked as CircleCheckBox,
          ImRadioChecked as CircleCheckBoxFill } from 'react-icons/im';
 
-import { AiFillCaretDown as CaretDown } from 'react-icons/ai';
+import { AiFillCaretDown as CaretDown,
+         AiOutlineEye as Preview } from 'react-icons/ai';
 
 import { TiDeleteOutline as DeleteOptionButton } from 'react-icons/ti';
 import { HiOutlineTrash as DeleteCartButton } from 'react-icons/hi';
@@ -52,5 +53,6 @@ export {
     FormIcon,
     FormAdd,
     Options,
-    Rename
+    Rename,
+    Preview
 };
