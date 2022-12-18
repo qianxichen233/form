@@ -1,7 +1,4 @@
 .questionnaire{
-    position: absolute;
-    top: 0;
-    
     background-color: rgb(240, 235, 248);
 
     width: 100vw;
@@ -30,4 +27,8 @@
 
 .placeholder{
     height: 100px;
+}
+
+.hide {
+    display: none;
 }
