@@ -51,6 +51,8 @@ const Questionnaire = (props) => {
     }, [props.error]);
 
     const updatePreview = async () => {
+        if(!QuestionnaireRef.current) return;
+        if(props.hide) return;
         const targetWidth = 400;
         const targetHeight = 400;
         const ratio = targetWidth / QuestionnaireRef.current.offsetWidth;
@@ -60,16 +62,18 @@ const Questionnaire = (props) => {
             height: targetHeight / ratio,
             backgroundColor: 'rgb(240, 235, 248)'
         });
+        
+        if(canvas.width === 0 || canvas.height === 0)
+            return;
 
-        await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/questionnaire/updatePreview`,{
+        await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/questionnaire/${props.id}/preview`,{
             method: 'POST',
             mode: 'cors',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                image: canvas.toDataURL(),
-                id: props.id
+                image: canvas.toDataURL()
             })
         });
     }
@@ -250,8 +254,7 @@ const Questionnaire = (props) => {
         OnEditQuestionChange(TitleKey);
     }
     
-    return <div className={classes.questionnaire}>
-        <div className={classes.placeholder}></div>
+    return <div className={`${classes.questionnaire} ${props.hide ? classes.hide : ''}`}>
         <div className={classes.container} ref={QuestionnaireRef}>
             <FormTitleCart
                 Focus={TitleKey === EditQuestion}

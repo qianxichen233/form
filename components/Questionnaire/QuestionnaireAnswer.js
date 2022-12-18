@@ -47,16 +47,7 @@ const QuestionnaireAnswer = (props) => {
 
     useEffect(() => {
         const fetchData = async () => {
-            await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/questionnaire/fetch`, {
-                method: 'POST',
-                mode: 'cors',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    id: props.id
-                })
-            })
+            await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/questionnaire/${props.id}`)
             .then(data => {
                 if(data.status === 403)
                     return null;
@@ -101,14 +92,13 @@ const QuestionnaireAnswer = (props) => {
             return;
         }
 
-        await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/questionnaire/answer`, {
+        await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/questionnaire/${props.id}/answer`, {
             method: 'POST',
             mode: 'cors',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                questionnaireid: props.id,
                 content: answersRef.current
             })
         });

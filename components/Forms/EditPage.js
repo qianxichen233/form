@@ -71,6 +71,12 @@ function EditPage() {
     const [formTitle, setFormTitle] = useState('');
 
     const [save, setSave] = useState(false);
+    const [saveHint, setSaveHint] = useState({
+        msg: '',
+        timeout: null
+    });
+
+    const [subpage, setSubpage] = useState('questions');
 
     const questionRef = useRef();
     questionRef.current = questions;
@@ -80,18 +86,11 @@ function EditPage() {
     const router = useRouter();
 
     useEffect(() => {
-        if(!session) return;
+        if(status !== 'authenticated') return;
         if(questions.length > 0) return;
-        fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/questionnaire/fetch`, {
-            method: 'POST',
-            mode: 'cors',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                id: router.query.questionnaireID
-            })
-        }).then(data => {
+        
+        fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/questionnaire/${router.query.questionnaireID}`)
+        .then(data => {
             if(!data.ok)
                 return Promise.reject('unauthenticated');
             return data.json();
@@ -135,7 +134,7 @@ function EditPage() {
         }).catch((err) => {
             console.log(err);
         });
-    }, [session]);
+    }, [status]);
 
     const getQuestionContent = () => {
         let orderArray = questionRef.current.map(elem => elem.id);
@@ -171,7 +170,7 @@ function EditPage() {
             return question;
         });
         
-        await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/questionnaire/modify`,{
+        await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/questionnaire/${router.query.questionnaireID}`,{
             method: 'POST',
             mode: 'cors',
             headers: {
@@ -180,7 +179,6 @@ function EditPage() {
             body: JSON.stringify({
                 title: formTitle,
                 content: storedQuestion,
-                id: router.query.questionnaireID,
                 publish: true
             })
         });
@@ -195,10 +193,16 @@ function EditPage() {
             delete question.key;
             return question;
         });
-
-        console.log('saving:', storedQuestion);
         
-        await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/questionnaire/modify`,{
+        setSaveHint((pre) => {
+            if(pre.timeout) clearTimeout(pre.timeout);
+            return {
+                msg: 'Saving...',
+                timeout: null
+            }
+        });
+        
+        await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/questionnaire/${router.query.questionnaireID}`,{
             method: 'POST',
             mode: 'cors',
             headers: {
@@ -207,9 +211,15 @@ function EditPage() {
             body: JSON.stringify({
                 title: formTitle,
                 content: storedQuestion,
-                id: router.query.questionnaireID,
                 publish: false
             })
+        });
+
+        setSaveHint({
+            msg: 'Saved',
+            timeout: setTimeout(() => {
+                setSaveHint({msg: ''});
+            }, 3000)
         });
     }
 
@@ -234,6 +244,10 @@ function EditPage() {
         router.push(`/questionnaire/${router.query.questionnaireID}/answer`);
     }
 
+    const onPageChangeHandler = (name) => {
+        setSubpage(name);
+    }
+
     if(status === 'loading')
         return <p>Loading</p>
     if(status === 'unauthenticated')
@@ -248,6 +262,9 @@ function EditPage() {
                 submit={OnSubmitHandler}
                 preview={onPreviewHandler}
                 username={session.user.username}
+                saveHint={saveHint.msg}
+                changePage={onPageChangeHandler}
+                subpage={subpage}
             />
             <QuestionnaireMaking
                 id={router.query.questionnaireID}
@@ -259,7 +276,9 @@ function EditPage() {
                 error={errorState}
                 clearError={() => setErrorState(null)}
                 save={SaveTimeOut}
+                hide={subpage !== 'questions'}
             />
+            
         </>
     );
 }

@@ -24,15 +24,8 @@ const FormCard = props => {
     }
     
     const onDeleteHandler = () => {
-        fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/questionnaire/delete`, {
-            method: 'POST',
-            mode: 'cors',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                id: props.formID
-            })
+        fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/questionnaire/${props.formID}`, {
+            method: 'DELETE'
         }).then(res => res.json())
         .then((data) => {
             if(!data.error)
@@ -42,14 +35,13 @@ const FormCard = props => {
     }
 
     const onRenameHandler = (name) => {
-        fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/questionnaire/modify`, {
+        fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/questionnaire/${props.formID}`, {
             method: 'POST',
             mode: 'cors',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                id: props.formID,
                 title: name
             })
         }).then(res => res.json())
@@ -59,6 +51,8 @@ const FormCard = props => {
         })
         .catch(console.log);
     }
+
+    const ImageSrc = `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/questionnaire/${props.formID}/preview`;
 
     return <>
         <div
@@ -71,8 +65,10 @@ const FormCard = props => {
         >
             <div className={classes.preview}>
                 <img
-                    src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/questionnaire/${props.formID}/preview`}
-                    width='200px'
+                    src={ImageSrc}
+                    width={200}
+                    height={200}
+                    alt="Questionnaire Preview"
                     draggable={false}
                 />
             </div>

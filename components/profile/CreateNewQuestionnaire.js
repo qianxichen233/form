@@ -7,7 +7,7 @@ import { FormAdd } from '../UI/Icons';
 const CreateNewQuestionnaire = props => {
     const router = useRouter();
     const createNewQuestionnaire = async (id) => {
-        await fetch(`api/questionnaire/modify`,{
+        await fetch(`api/questionnaire/${id}`,{
                 method: 'POST',
                 mode: 'cors',
                 headers: {
@@ -16,7 +16,6 @@ const CreateNewQuestionnaire = props => {
                 body: JSON.stringify({
                     title: 'Untitled Form',
                     content: {},
-                    id: id,
                     publish: false
                 })
             });
