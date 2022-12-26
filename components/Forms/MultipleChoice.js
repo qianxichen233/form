@@ -176,6 +176,7 @@ const MultipleChoice = (props) => {
                     [hoverIndex, 0, prevQuestions.options[dragIndex]],
                 ],
             });
+            props.save();
             dispatch(setQuestionStore({
                 id: props.id,
                 content: newQuestion

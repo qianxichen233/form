@@ -42,8 +42,8 @@ const QuestionnaireAnswer = (props) => {
     const answersRef = useRef();
     answersRef.current = answers;
 
-    const questionssRef = useRef();
-    questionssRef.current = questions;
+    const questionsRef = useRef();
+    questionsRef.current = questions;
 
     useEffect(() => {
         const fetchData = async () => {
@@ -83,13 +83,32 @@ const QuestionnaireAnswer = (props) => {
     const OnSubmitHandler = async (e) => {
         e.preventDefault();
         const missingIndex = answersRef.current.findIndex((answer, index) => {
-            return questionssRef.current[index].content.required && isEmpty(answer);
+            return questionsRef.current[index].content.required && isEmpty(answer);
         });
 
         if(missingIndex !== -1)
         {
             setMissing(missingIndex);
             return;
+        }
+
+        let submitedAnswers = lodash.cloneDeep(answersRef.current);
+
+        for(let i = 0; i < questionsRef.current.length; ++i)
+        {
+            let content = submitedAnswers[i];
+            if(questionsRef.current[i].content.type === 'MultipleChoice')
+            {
+                let newContent = [];
+                for(let j = 0; j < questionsRef.current[i].content.options.length; ++j)
+                    if(content[j]) newContent.push(questionsRef.current[i].content.options[j].content);
+
+                content = newContent;
+            }
+            submitedAnswers[i] = {
+                key: questionsRef.current[i].key,
+                content
+            }
         }
 
         await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/questionnaire/${props.id}/answer`, {
@@ -99,7 +118,7 @@ const QuestionnaireAnswer = (props) => {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                content: answersRef.current
+                content: submitedAnswers
             })
         });
     };

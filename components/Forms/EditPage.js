@@ -1,4 +1,5 @@
 import QuestionnaireMaking from '../Questionnaire/QuestionnaireMaking';
+import Responses from '../Responses/Responses';
 import Header from '../header/header';
 
 import lodash from 'lodash';
@@ -8,9 +9,25 @@ import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
 import { useState, useEffect, useRef } from 'react';
 
-let key = 0;
+import classes from './EditPage.module.css';
+
+const generateID = length => {
+    let result = '';
+    let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let charactersLength = characters.length;
+    for (let i = 0; i < length; ++i)
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    return result;
+}
+
+let keyList = [];
 const getKey = () => {
-    return ++key;
+    let key;
+    do
+        key = generateID(10);
+    while(keyList.includes(key));
+    keyList.push(key);
+    return key;
 }
 
 const TitleKey = 0;
@@ -75,8 +92,9 @@ function EditPage() {
         msg: '',
         timeout: null
     });
+    const [published, setPublished] = useState();
 
-    const [subpage, setSubpage] = useState('questions');
+    const [subpage, setSubpage] = useState('Questions');
 
     const questionRef = useRef();
     questionRef.current = questions;
@@ -97,6 +115,7 @@ function EditPage() {
         })
         .then(questionnaire => {
             const content = JSON.parse(questionnaire.content);
+            console.log(content);
             if(Object.keys(content).length === 0)
             {
                 const key = getKey();
@@ -109,6 +128,7 @@ function EditPage() {
                 setTitleContent({content: {}});
                 setFormTitle(questionnaire.title);
                 setAuthenticated(true);
+                setPublished(questionnaire.published);
             }
             else
             {
@@ -120,16 +140,17 @@ function EditPage() {
                         setTitleContent(question.content);
                         continue;
                     }
-                    const key = getKey();
+                    keyList.push(question.key);
                     questions.push({
-                        key: key,
-                        id: key,
+                        key: question.key,
+                        id: question.key,
                         content: question.content
                     });
                 }
                 setFormTitle(questionnaire.title);
                 setQuestions(questions);
                 setAuthenticated(true);
+                setPublished(questionnaire.published);
             }
         }).catch((err) => {
             console.log(err);
@@ -164,13 +185,8 @@ function EditPage() {
             setErrorState(missingPart);
             return;
         }
-
-        storedQuestion = storedQuestion.map(question => {
-            delete question.key;
-            return question;
-        });
         
-        await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/questionnaire/${router.query.questionnaireID}`,{
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/questionnaire/${router.query.questionnaireID}`,{
             method: 'POST',
             mode: 'cors',
             headers: {
@@ -182,17 +198,13 @@ function EditPage() {
                 publish: true
             })
         });
+        if(response.ok) setPublished(true);
     }
 
     const OnSaveHandler = async (e) => {
         if(e) e.preventDefault();
 
         let storedQuestion = getQuestionContent();
-
-        storedQuestion = storedQuestion.map(question => {
-            delete question.key;
-            return question;
-        });
         
         setSaveHint((pre) => {
             if(pre.timeout) clearTimeout(pre.timeout);
@@ -202,7 +214,7 @@ function EditPage() {
             }
         });
         
-        await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/questionnaire/${router.query.questionnaireID}`,{
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/questionnaire/${router.query.questionnaireID}`,{
             method: 'POST',
             mode: 'cors',
             headers: {
@@ -215,12 +227,24 @@ function EditPage() {
             })
         });
 
+        if(!response.ok)
+        {
+            setSaveHint({
+                msg: 'Error',
+                timeout: setTimeout(() => {
+                    setSaveHint({msg: ''});
+                }, 3000)
+            });
+            return;
+        }
+
         setSaveHint({
             msg: 'Saved',
             timeout: setTimeout(() => {
                 setSaveHint({msg: ''});
             }, 3000)
         });
+        setPublished(false);
     }
 
     if(save)
@@ -241,7 +265,8 @@ function EditPage() {
     }
 
     const onPreviewHandler = () => {
-        router.push(`/questionnaire/${router.query.questionnaireID}/answer`);
+        window.open(`/questionnaire/${router.query.questionnaireID}/answer`, '_blank', 'noopener,noreferrer');
+        //router.push(`/questionnaire/${router.query.questionnaireID}/answer`);
     }
 
     const onPageChangeHandler = (name) => {
@@ -255,7 +280,7 @@ function EditPage() {
     if(!titleContent || !authenticated) return <div></div>;
 
     return (
-        <>
+        <div className={classes.container}>
             <Header
                 title={formTitle}
                 onChange={onFormTitleChange}
@@ -271,15 +296,19 @@ function EditPage() {
                 questions={questions}
                 questionsChange={setQuestions}
                 titleContent={titleContent}
-                currentKey={key}
                 getKey={getKey}
                 error={errorState}
                 clearError={() => setErrorState(null)}
                 save={SaveTimeOut}
-                hide={subpage !== 'questions'}
+                hide={subpage !== 'Questions'}
             />
-            
-        </>
+            <Responses
+                id={router.query.questionnaireID}
+                hide={subpage !== 'Responses'}
+                questions={questionContent}
+                published={published}
+            />
+        </div>
     );
 }
 

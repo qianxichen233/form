@@ -1,0 +1,51 @@
+.container {
+    padding: 0;
+}
+
+.top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    width: 100%;
+}
+
+.top > div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.top > div > p {
+    margin-right: 20px;
+    font-weight: bold;
+    user-select: none;
+}
+
+.top > p {
+    margin-left: 20px;
+    font-size: 16pt;
+    font-weight: bold;
+}
+
+.icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 20px;
+}
+
+.publish {
+    color: green;
+}
+
+.notpublish {
+    color: red;
+}
+
+.choice {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}

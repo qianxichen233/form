@@ -93,7 +93,7 @@ const Questionnaire = (props) => {
 
     const OnEditQuestionChange = (id) => {
         if(id === EditQuestionRef) return;
-        setEditQuestion(+id);
+        setEditQuestion(id);
     }
 
     const ClearErrorMessage = () => {
@@ -118,7 +118,7 @@ const Questionnaire = (props) => {
             let AddedType;
             for(const question of questionContentRef.current)
             {
-                if(question.key === +e.currentTarget.id)
+                if(question.key === e.currentTarget.id)
                     AddedType = {type: question.content.type, subtype: question.content.subtype}
             }
             if(AddedType.type === 'DateTimeInput')
@@ -129,7 +129,7 @@ const Questionnaire = (props) => {
             for(let i = 0; i < questionRef.current.length; ++i)
             {
                 newQuestions.push(questionRef.current[i]);
-                if(+questionRef.current[i].id === +e.currentTarget.id)
+                if(questionRef.current[i].id === e.currentTarget.id)
                 {
                     newQuestions.push(
                         {
@@ -141,14 +141,14 @@ const Questionnaire = (props) => {
                 }
             }
             setQuestions(newQuestions);
-            setEditQuestion(+key);
+            setEditQuestion(key);
         }
         else if(name === "DeleteButton")
         {
             let questionContentCopy;
             for(const question of questionContentRef.current)
             {
-                if(question.key === +e.currentTarget.id)
+                if(question.key === e.currentTarget.id)
                     questionContentCopy = question.content;
             }
 
@@ -159,14 +159,14 @@ const Questionnaire = (props) => {
             let originalQuestionsIndex;
             for(let i = 0; i < questionRef.current.length; ++i)
             {
-                if(+questionRef.current[i].id !== +e.currentTarget.id)
+                if(questionRef.current[i].id !== e.currentTarget.id)
                     newQuestions.push(questionRef.current[i]);
                 else 
                     originalQuestionsIndex = i;
             }
 
             setQuestions(newQuestions);
-            dispatch(deleteQuestionStore({id: +e.currentTarget.id}));
+            dispatch(deleteQuestionStore({id: e.currentTarget.id}));
 
             if(originalQuestions[originalQuestionsIndex].initialType)
                 delete originalQuestions[originalQuestionsIndex].initialType;
@@ -190,7 +190,7 @@ const Questionnaire = (props) => {
             let questionContentCopy;
             for(const question of questionContentRef.current)
             {
-                if(question.key === +e.currentTarget.id)
+                if(question.key === e.currentTarget.id)
                     questionContentCopy = question.content;
             }
 
@@ -199,7 +199,7 @@ const Questionnaire = (props) => {
             for(let i = 0; i < questionRef.current.length; ++i)
             {
                 newQuestions.push(questionRef.current[i]);
-                if(+questionRef.current[i].id === +e.currentTarget.id)
+                if(questionRef.current[i].id === e.currentTarget.id)
                 {
                     newQuestions.push(
                         {
@@ -219,14 +219,14 @@ const Questionnaire = (props) => {
             let index = 0;
             for(let i = 0; i < questionRef.current.length; ++i)
             {
-                if(+questionRef.current[i].id === +e.currentTarget.id) index = i;
+                if(questionRef.current[i].id === e.currentTarget.id) index = i;
                 newQuestions.push(questionRef.current[i]);
             }
             if(index > 0)
                 [newQuestions[index], newQuestions[index - 1]] = [newQuestions[index - 1], newQuestions[index]];
             setScrollTo({
                 trigger: true,
-                target: +e.currentTarget.id
+                target: e.currentTarget.id
             });
             setQuestions(newQuestions);
         }
@@ -236,14 +236,14 @@ const Questionnaire = (props) => {
             let index = 0;
             for(let i = 0; i < questionRef.current.length; ++i)
             {
-                if(+questionRef.current[i].id === +e.currentTarget.id) index = i;
+                if(questionRef.current[i].id === e.currentTarget.id) index = i;
                 newQuestions.push(questionRef.current[i]);
             }
             if(index < questionRef.current.length - 1)
                 [newQuestions[index], newQuestions[index + 1]] = [newQuestions[index + 1], newQuestions[index]];
             setScrollTo({
                 trigger: true,
-                target: +e.currentTarget.id
+                target: e.currentTarget.id
             });
             setQuestions(newQuestions);
         }

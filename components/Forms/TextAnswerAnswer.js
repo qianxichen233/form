@@ -21,6 +21,7 @@ const TextAnswerAnswer = (props) => {
                 value={props.description}
                 width={'100%'}
                 size='big'
+                placeholder="Question Statement"
             />
         </QuestionInputBar>
         <TextInputBar>

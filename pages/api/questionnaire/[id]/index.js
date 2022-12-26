@@ -105,7 +105,7 @@ const updateForm = async (req, res, id, userID) => {
 	let newData = {
 		title: req.body.title
 	};
-	if(req.body.publish)
+	if(typeof(req.body.publish) === 'boolean')
 		newData.published = req.body.publish;
 	if(req.body.content)
 	{
@@ -195,7 +195,8 @@ const getForm = async (req, res, id, userID) => {
             res.status(200).json({
                 content: data.content,
                 title: data.title,
-                creatat: data.creatat
+                creatat: data.creatat,
+				published: data.published
             });
             return;
         }
@@ -207,7 +208,8 @@ const getForm = async (req, res, id, userID) => {
     res.status(200).json({
         content: data.content,
         title: data.title,
-        creatat: data.creatat
+        creatat: data.creatat,
+		published: data.published
     });
 }
 
