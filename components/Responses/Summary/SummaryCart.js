@@ -8,6 +8,7 @@ const SummaryCart = props => {
         return <MultipleChoiceCart
             question={props.question}
             responses={props.responses}
+            setHint={props.setHint}
         />
     }
     if(props.question.type === 'TextAnswer')
@@ -15,6 +16,7 @@ const SummaryCart = props => {
         return <TextAnswerCart
             question={props.question}
             responses={props.responses}
+            setHint={props.setHint}
         />
     }
     if(props.question.type === 'DateTimeInput')
@@ -22,6 +24,7 @@ const SummaryCart = props => {
         return <DateTimeInputCart
             question={props.question}
             responses={props.responses}
+            setHint={props.setHint}
         />
     }
 }

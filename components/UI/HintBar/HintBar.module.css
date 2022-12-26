@@ -1,0 +1,32 @@
+.container {
+    position: fixed;
+    bottom: -50px;
+    left: 20px;
+
+    width: 300px;
+    height: 50px;
+
+    display: flex;
+    align-items: center;
+
+    background-color: #323232;
+
+    z-index: 100;
+
+    transition: bottom 0.1s ease-in-out;
+}
+
+.active {
+    bottom: 20px;
+}
+
+.text {
+    position: absolute;
+    left: 15px;
+
+    font-size: 14px;
+    user-select: none;
+    font-weight: bold;
+
+    color: #fff;
+}
