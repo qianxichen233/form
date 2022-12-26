@@ -15,12 +15,14 @@ const RichTextEditorDisplay = dynamic(
 const FormTitleDisplay = (props) => {
     return <Form>
         <RichTextEditorDisplay
+            placeholder="Form Title"
             value={props.title}
             display={true}
             fontsize={'24pt'}
             size='big'
         />
         <RichTextEditorDisplay
+            placeholder="Form Description"
             value={props.description}
             display={true}
             size='normal'

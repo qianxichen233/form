@@ -33,6 +33,7 @@ const RichTextEditorDisplay = (props) => {
                 <Editor
                     editorState={content}
                     //blockStyleFn={() => classes.noSelect}
+                    placeholder={props.placeholder}
                     readOnly
                 />
             </div>

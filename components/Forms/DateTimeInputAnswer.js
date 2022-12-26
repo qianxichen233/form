@@ -20,6 +20,7 @@ const DateTimeInput = (props) => {
                 value={props.description}
                 width={'100%'}
                 size='big'
+                placeholder="Question Statement"
             />
         </QuestionInputBar>
         {props.subtype === "date" ?

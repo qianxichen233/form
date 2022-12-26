@@ -1,5 +1,6 @@
 import DynamicInput from '../UI/TextInput/DynamicInput';
 import Button from '../UI/Button/Button';
+import ChoiceBar from '../UI/ChoiceBar/ChoiceBar';
 
 import classes from './header.module.css';
 
@@ -8,30 +9,7 @@ import { useRef } from 'react';
 import Link from 'next/link';
 
 const Header = (props) => {
-    const QuestionRef = useRef();
-    const ResponseRef = useRef();
-    const SettingRef = useRef();
     const HeaderRef = useRef();
-
-    const getLeftValue = (subpage) => {
-        if(!QuestionRef.current) return;
-        if(subpage === 'questions')
-            return QuestionRef.current.getBoundingClientRect().left;
-        if(subpage === 'responses')
-            return ResponseRef.current.getBoundingClientRect().left;
-        if(subpage === 'settings')
-            return SettingRef.current.getBoundingClientRect().left;
-    }
-
-    const getWidthValue = (subpage) => {
-        if(!QuestionRef.current) return;
-        if(subpage === 'questions')
-            return QuestionRef.current.offsetWidth;
-        if(subpage === 'responses')
-            return ResponseRef.current.offsetWidth;
-        if(subpage === 'settings')
-            return SettingRef.current.offsetWidth;
-    }
 
     return <>
         <div className={classes.header} ref={HeaderRef}>
@@ -64,27 +42,11 @@ const Header = (props) => {
                 </div>
             </div>
             <div className={classes.choice}>
-                <span
-                    className={`${props.subpage === 'questions' ? classes.active : ''}`}
-                    ref={QuestionRef}
-                    onClick={props.changePage.bind(null, 'questions')}
-                >Questions</span>
-                <span
-                    className={`${props.subpage === 'responses' ? classes.active : ''}`}
-                    ref={ResponseRef}
-                    onClick={props.changePage.bind(null, 'responses')}
-                >Responses</span>
-                <span
-                    className={`${props.subpage === 'settings' ? classes.active : ''}`}
-                    ref={SettingRef}
-                    onClick={props.changePage.bind(null, 'settings')}
-                >Settings</span>
-                <div
-                    style={{
-                        left: getLeftValue(props.subpage),
-                        width: getWidthValue(props.subpage)
-                    }}
-                ></div>
+                <ChoiceBar
+                    options={['Questions', 'Responses', 'Settings']}
+                    active={props.subpage}
+                    onChange={props.changePage}
+                />
             </div>
         </div>
         <div

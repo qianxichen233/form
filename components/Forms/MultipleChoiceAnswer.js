@@ -48,6 +48,7 @@ const MultipleChoiceAnswer = (props) => {
                 value={props.description}
                 size='big'
                 width={'100%'}
+                placeholder="Question Statement"
             />
         </QuestionInputBar>
         <div className={classes.optionContainer}>
@@ -67,6 +68,7 @@ const MultipleChoiceAnswer = (props) => {
                             RenderBoxCheckBox(answer[index])
                         }
                         <OptionInputAnswer
+                            placeholder={`Option ${index + 1}`}
                             value={option.content}
                         />
                 </div>
