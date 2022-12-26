@@ -1,6 +1,8 @@
 import SummaryCart from "./SummaryCart";
+import HintBar from '../../UI/HintBar/HintBar';
 
 import classes from './Summary.module.css';
+import { useState } from "react";
 
 const ResponsesTransform = (responses) => {
     let transformed = {};
@@ -18,9 +20,29 @@ const ResponsesTransform = (responses) => {
 }
 
 const Summary = props => {
+    const [hintText, setHintText] = useState({
+        timeout: null,
+        text: ''
+    });
     const questions = props.questions.filter(question => question.key !== 0); //exclude title cart
 
     const transformedResponses = ResponsesTransform(props.responses);
+
+    const setHintHandler = (text) => {
+        setHintText((prev) => {
+            if(prev.timeout) clearTimeout(prev.timeout);
+            const timeout = setTimeout(() => {
+                setHintText({
+                    timeout: null,
+                    text: ''
+                });
+            }, 3000);
+            return {
+                timeout,
+                text
+            }
+        });
+    }
 
     return <div className={classes.container}>
         {questions.map(question => {
@@ -28,8 +50,13 @@ const Summary = props => {
                 key={question.key}
                 question={question.content}
                 responses={transformedResponses[question.key]}
+                setHint={setHintHandler}
             />
         })}
+        <HintBar
+            active={hintText.text !== ''}
+            text={hintText.text}
+        />
     </div>
 }
 

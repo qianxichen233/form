@@ -17,7 +17,8 @@ const Cart = React.forwardRef((props, cartRef) => {
     }, [props.ScrollTo, ref.current]);
 
     useEffect(() => {
-        if(cartRef)
+        if(typeof(cartRef) == 'function') cartRef(ref.current);
+        else if(cartRef)
             cartRef.current = ref.current;
     }, [ref.current]);
 

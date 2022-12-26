@@ -2,30 +2,22 @@ import Cart from "../../UI/Cart/Cart";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { Pie } from "react-chartjs-2";
-import html2canvas from "html2canvas";
+
+import { generateRandomColor, copyToClipBoard } from './utils';
 
 import classes from './MultipleChoiceCart.module.css';
 
 import { CopyButton } from '../../UI/Icons';
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useRef, useState, useCallback } from "react";
 
 ChartJS.register(ArcElement, Tooltip, Legend, ChartDataLabels);
 
-const copyToClipBoard = async (cart) => {
-    if(!cart) return;
-    const canvas = await html2canvas(cart);
-    canvas.toBlob(function(blob) { 
-        const item = new ClipboardItem({ "image/png": blob });
-        navigator.clipboard.write([item]); 
-    });
-}
-
-const colors = [
-    {r: 51, g: 102, b: 204},
-    {r: 220, g: 57, b: 18},
-    {r: 255, g: 153, b: 0},
-    {r: 16, g: 150, b: 24},
-    {r: 153, g: 0, b: 153}
+let colors = [
+    {r: 51, g: 102, b: 204}, //blue
+    {r: 220, g: 57, b: 18},  //red
+    {r: 255, g: 153, b: 0},  //yellow
+    {r: 16, g: 150, b: 24},  //green
+    {r: 153, g: 0, b: 153}   //purple
 ];
 
 const mergeResponse = (responses, question) => {
@@ -60,12 +52,16 @@ const MultipleChoiceCart = props => {
     ).join('\n');
 
     const ChartRef = useRef();
-    const CartRef = useRef();
-    const [copyCallback, setCopyCallback] = useState();
+    const [CartRef, setCartRef] = useState();
 
-    useEffect(() => {
-        setCopyCallback(copyToClipBoard.bind(null, CartRef.current));
-    }, [CartRef.current]);
+    const colorOrder = ['blue', 'red', 'yellow', 'green', 'purple'];
+    for(let i = 5; i < Object.keys(mergedResponse).length; ++i)
+        colors.push(generateRandomColor(colorOrder[i % colorOrder.length]));
+
+    const measuredRef = useCallback(node => {
+        if (node !== null)
+            setCartRef(node);
+    }, []);
 
     const getColor = (length, opacity = 1) => {
         return colors.slice(0, length).map((color) => {
@@ -124,7 +120,7 @@ const MultipleChoiceCart = props => {
             datalabels: {
                 formatter: (value, ctx) => {
                     if(value === 0) return null;
-                    const percentage = (value * 100 / total).toFixed(2)+"%";
+                    const percentage = (value * 100 / total).toFixed(2) + "%";
                     return percentage;
                 },
                 color: '#fff',
@@ -135,7 +131,7 @@ const MultipleChoiceCart = props => {
             tooltip: {
                 callbacks: {
                     label: function(context) {
-                        return `${context.parsed} (${(context.parsed * 100 / total).toFixed(2)+"%"})`;
+                        return `${context.parsed} (${(context.parsed * 100 / total).toFixed(2) + "%"})`;
                     }
                 },
                 displayColors: false
@@ -165,15 +161,18 @@ const MultipleChoiceCart = props => {
         },
     };
 
-    return <Cart ref={CartRef}>
+    return <Cart ref={measuredRef}>
         <header className={classes.header}>
             <div>
                 <h3>{description}</h3>
                 <p>{`${responses.length} response${responses.length === 1 ? '' : 's'}`}</p>
                 {responseCount === 0 && <p>No responses yet for this question</p>}
             </div>
-            <div data-html2canvas-ignore="true">
-                <div onClick={copyCallback}>
+            <div data-html2canvas-ignore="true" onClick={() => {
+                props.setHint('Chart Copied to Clipboard.');
+                copyToClipBoard(CartRef);
+            }}>
+                <div>
                     <CopyButton size={25} color="blue"/>
                 </div>
                 <p>Copy</p>
