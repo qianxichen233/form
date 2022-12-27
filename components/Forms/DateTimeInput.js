@@ -7,7 +7,7 @@ import { setQuestionStore } from '../stores/questionSlice';
 import Form from '../UI/Cart/Form';
 import QuestionInputBar from '../UI/QuestionBar/QuestionInputBar';
 import RichTextEditor from '../UI/RichTextEditor/RichTextEditor';
-import RequiredInput from '../UI/RequiredInput/RequiredInput';
+import SlideButton from '../UI/Button/SlideButton';
 
 import DateInput from '../UI/DateTimeInput/DateInput';
 import TimeInput from '../UI/DateTimeInput/TimeInput';
@@ -88,7 +88,7 @@ const DateTimeInput = (props) => {
                 options={['bold', 'italic', 'underline', 'hyperlink', 'clearformat']}
             />
             {props.preview ? null :
-            <RequiredInput
+            <SlideButton
                 checked={question.required}
                 onChange={OnRequiredChangeHandler}
                 label='Required'

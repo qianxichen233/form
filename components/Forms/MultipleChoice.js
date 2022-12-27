@@ -12,7 +12,7 @@ import OptionDeleteButton from "../UI/OptionBar/OptionDeleteButton";
 import QuestionInputBar from '../UI/QuestionBar/QuestionInputBar';
 import OptionInputBarDrag from '../UI/OptionBar/OptionInputBarDrag';
 import RichTextEditor from "../UI/RichTextEditor/RichTextEditor";
-import RequiredInput from "../UI/RequiredInput/RequiredInput";
+import SlideButton from '../UI/Button/SlideButton';
 import { CustomDragLayer } from "../UI/DragBar/CustomDragLayer";
 
 import update from 'immutability-helper';
@@ -227,7 +227,7 @@ const MultipleChoice = (props) => {
                 options={['bold', 'italic', 'underline', 'hyperlink', 'clearformat']}
             />
             {props.preview ? null :
-            <RequiredInput
+            <SlideButton
                 checked={question.required}
                 onChange={OnRequiredChangeHandler}
                 label='Required'
