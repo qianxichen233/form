@@ -28,7 +28,8 @@ const RichTextEditorDisplay = (props) => {
                             ${classes.preview} 
                             ${classes.transparent_bg}`}
                 style={{'--fontsize': props.fontsize || fontsize[size],
-                        '--padding': padding[size]}}
+                        '--paddingVertical': props.paddingVertical || padding[size],
+                        '--paddingHorizontal': props.paddingHorizontal || '10px'}}
             >
                 <Editor
                     editorState={content}

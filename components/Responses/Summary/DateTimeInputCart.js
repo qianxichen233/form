@@ -1,6 +1,9 @@
 import Cart from "../../UI/Cart/Cart";
+import RichTextEditorDisplay from '../../UI/RichTextEditor/RichTextEditorDisplay';
 
 import classes from './DateTimeInputCart.module.css';
+
+const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun","Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
 const mergeResponse = (responses, type) => {
     let mergedResponses = {};
@@ -27,6 +30,11 @@ const mergeResponse = (responses, type) => {
     return mergedResponses;
 }
 
+const transformMonth = date => {
+    const [year, month] = date.split('-');
+    return monthNames[(+month) - 1] + ' ' + year;
+}
+
 const generateList = (responses, type) => {
     return Object.keys(responses).map((key, index) => {
         let displayedKey;
@@ -38,7 +46,7 @@ const generateList = (responses, type) => {
                 <div className={classes.timeKey_underscore}></div>
             </>
         }
-        else displayedKey = <span>{key}</span>;
+        else displayedKey = <span>{transformMonth(key)}</span>;
         return <li key={index}>
             <div>
                 {displayedKey}
@@ -67,21 +75,25 @@ const DateTimeInputCart = props => {
     });
     const mergedResponses = mergeResponse(responses, props.question.subtype);
 
-    const description = props.question.description.blocks.map(
-        block => (!block.text.trim() && '\n') || block.text
-    ).join('\n');
-
     return <Cart>
         <header className={classes.header}>
             <div>
-                <h3>{description}</h3>
+                <RichTextEditorDisplay
+                    value={props.question.description}
+                    size='big'
+                    width={'100%'}
+                    placeholder="Question Statement"
+                    paddingVertical='20px'
+                    paddingHorizontal='0'
+                />
                 <p>{`${responses.length} response${responses.length === 1 ? '' : 's'}`}</p>
                 {responses.length === 0 && <p>No responses yet for this question</p>}
             </div>
         </header>
+        {responses.length > 0 &&
         <ul className={classes.dataContainer}>
             {generateList(mergedResponses, props.question.subtype)}
-        </ul>
+        </ul>}
     </Cart>
 }
 

@@ -2,6 +2,7 @@ import Cart from "../../UI/Cart/Cart";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { Pie } from "react-chartjs-2";
+import RichTextEditorDisplay from '../../UI/RichTextEditor/RichTextEditorDisplay';
 
 import { generateRandomColor, copyToClipBoard } from './utils';
 
@@ -49,9 +50,6 @@ const MultipleChoiceCart = props => {
         if(response) return true;
     }) || [];
     const [mergedResponse, total] = mergeResponse(responses, props.question);
-    const description = props.question.description.blocks.map(
-        block => (!block.text.trim() && '\n') || block.text
-    ).join('\n');
 
     const ChartRef = useRef();
     const [CartRef, setCartRef] = useState();
@@ -166,7 +164,14 @@ const MultipleChoiceCart = props => {
     return <Cart ref={measuredRef}>
         <header className={classes.header}>
             <div>
-                <h3>{description}</h3>
+                <RichTextEditorDisplay
+                    value={props.question.description}
+                    size='big'
+                    width={'100%'}
+                    placeholder="Question Statement"
+                    paddingVertical='20px'
+                    paddingHorizontal='0'
+                />
                 <p>{`${responses.length} response${responses.length === 1 ? '' : 's'}`}</p>
                 {responseCount === 0 && <p>No responses yet for this question</p>}
             </div>

@@ -7,7 +7,6 @@ import { setQuestionStore } from '../stores/questionSlice';
 import Form from '../UI/Cart/Form';
 import QuestionInputBar from '../UI/QuestionBar/QuestionInputBar';
 import RichTextEditorDisplay from '../UI/RichTextEditor/RichTextEditorDisplay';
-import RequiredInput from '../UI/RequiredInput/RequiredInput';
 
 import DateInputAnswer from '../UI/DateTimeInput/DateInputAnswer';
 import TimeInputAnswer from '../UI/DateTimeInput/TimeInputAnswer';

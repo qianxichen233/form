@@ -9,7 +9,7 @@ import TextInput from '../UI/TextInput/TextInput';
 import QuestionInputBar from '../UI/QuestionBar/QuestionInputBar';
 import TextInputBar from '../UI/TextInput/TextInputBar';
 import RichTextEditor from '../UI/RichTextEditor/RichTextEditor';
-import RequiredInput from '../UI/RequiredInput/RequiredInput';
+import SlideButton from '../UI/Button/SlideButton';
 
 const placeholder = {
     shortanswer: 'Short Answer Text',
@@ -96,7 +96,7 @@ const ShortAnswer = (props) => {
                 options={['bold', 'italic', 'underline', 'hyperlink', 'clearformat']}
             />
             {props.preview ? null :
-            <RequiredInput
+            <SlideButton
                 checked={question.required}
                 onChange={OnRequiredChangeHandler}
                 label='Required'
