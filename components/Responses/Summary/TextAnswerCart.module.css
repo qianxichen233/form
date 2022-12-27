@@ -1,0 +1,28 @@
+.header {
+    width: 100%;
+}
+
+.header > div {
+    text-align: left;
+    margin-left: 30px;
+}
+
+.responseContainer {
+    width: 100%;
+    padding: 0;
+    margin-left: 30px;
+    list-style: none;
+}
+
+.responseContainer li {
+    width: 90%;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    text-align: left;
+    padding: 10px;
+    background-color: rgba(211, 211, 211, 0.3);
+}
+
+.responseContainer li:last-child {
+    margin-bottom: 0;
+}

@@ -45,7 +45,9 @@ const mergeResponse = (responses, question) => {
 }
 
 const MultipleChoiceCart = props => {
-    const responses = props.responses || [];
+    const responses = props.responses?.filter(response => {
+        if(response) return true;
+    }) || [];
     const [mergedResponse, total] = mergeResponse(responses, props.question);
     const description = props.question.description.blocks.map(
         block => (!block.text.trim() && '\n') || block.text
