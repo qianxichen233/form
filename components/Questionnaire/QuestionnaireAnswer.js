@@ -97,7 +97,7 @@ const QuestionnaireAnswer = (props) => {
         for(let i = 0; i < questionsRef.current.length; ++i)
         {
             let content = submitedAnswers[i];
-            if(questionsRef.current[i].content.type === 'MultipleChoice')
+            if(content && questionsRef.current[i].content.type === 'MultipleChoice')
             {
                 let newContent = [];
                 for(let j = 0; j < questionsRef.current[i].content.options.length; ++j)
@@ -111,7 +111,7 @@ const QuestionnaireAnswer = (props) => {
             }
         }
 
-        await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/questionnaire/${props.id}/answer`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/questionnaire/${props.id}/answer`, {
             method: 'POST',
             mode: 'cors',
             headers: {
@@ -121,6 +121,9 @@ const QuestionnaireAnswer = (props) => {
                 content: submitedAnswers
             })
         });
+        if(response.ok) return;
+        const error = await response.json();
+        console.log(error);
     };
 
     if(isLoading)
