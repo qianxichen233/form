@@ -102,7 +102,7 @@ const MultipleChoiceCart = props => {
                 borderColor: getColor(mergedResponse.length, 1),
                 borderWidth: 1,
                 borderAlign: 'inner',
-                hoverOffset: 5,
+                hoverOffset: 10,
             }
         ]
     };

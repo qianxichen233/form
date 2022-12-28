@@ -13,6 +13,11 @@ const Responses = props => {
 
     const [responseStatus, setResponseStatus] = useState('Summary');
 
+    const questions = props.questions.filter(question => {
+        if(question.key === 0) return false;
+        return true;
+    })
+
     useEffect(() => {
         if(props.hide)
         {
@@ -71,21 +76,21 @@ const Responses = props => {
                 {
                     return <Summary
                         responses={responses}
-                        questions={props.questions}
+                        questions={questions}
                     />
                 }
                 if(status === 'Question')
                 {
                     return <Question
                         responses={responses}
-                        questions={props.questions}
+                        questions={questions}
                     />
                 }
                 if(status === 'Individual')
                 {
                     return <Individual
                         responses={responses}
-                        questions={props.questions}
+                        questions={questions}
                     />
                 }
             })(responseStatus)}
