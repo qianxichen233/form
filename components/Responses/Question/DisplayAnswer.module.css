@@ -1,0 +1,36 @@
+.footer {
+    margin: 20px 30px;
+}
+
+.line {
+    height: 1px;
+    width: calc(100% - 60px);
+    margin-left: auto;
+    margin-right: auto;
+    background-color: lightgrey;
+}
+
+.blank {
+    width: 100%;
+    text-align: left;
+    color: grey;
+    font-style: italic;
+    user-select: none;
+}
+
+.questionContainer {
+    display: flex;
+    justify-content: flex-start;
+    width: calc(100% - 60px);
+    margin: 20px 30px;
+}
+
+.textAnswer {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 300;
+}
+
+.cart {
+    margin-top: 20px;
+}

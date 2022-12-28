@@ -1,5 +1,7 @@
 import { IoIosArrowUp as ArrowUp,
          IoIosArrowDown as ArrowDown,
+         IoIosArrowBack as ArrowLeft,
+         IoIosArrowForward as ArrowRight,
          IoMdPaper as FormIcon } from 'react-icons/io';
 
 import { MdCheckBoxOutlineBlank as BoxCheckBox,
@@ -33,6 +35,8 @@ import { SlOptions as Options } from 'react-icons/sl';
 export {
     ArrowUp,
     ArrowDown,
+    ArrowLeft,
+    ArrowRight,
     CircleCheckBox,
     BoxCheckBox,
     DeleteOptionButton,
