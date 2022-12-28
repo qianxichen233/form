@@ -34,3 +34,66 @@
 .cart {
     margin-top: 20px;
 }
+
+.date {
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-start;
+}
+
+.date > div {
+    display: flex;
+    flex-direction: column;
+    margin: 0 10px;
+}
+
+.date > div:first-child {
+    margin-left: 0;
+}
+
+.date > div:last-child {
+    margin-right: 0;
+}
+
+.date > div > span:first-child, .time > span {
+    font-size: 10px;
+    color: grey;
+}
+
+.date > div > span:nth-child(2) {
+    margin-top: 5px;
+    border-bottom: 1px solid lightgrey;
+}
+
+.time {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.time > div{
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 5px;
+}
+
+.time > div > span {
+    margin: 0 5px;
+    border-bottom: 1px solid lightgrey;
+}
+
+.time > div > span:first-child {
+    margin-left: 0;
+}
+
+.time > div > span:nth-child(2) {
+    position: relative;
+    bottom: 2px;
+    border-bottom: none;
+}
+
+.time > div > span:last-child {
+    margin-right: 0;
+}
