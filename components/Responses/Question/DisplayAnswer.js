@@ -63,9 +63,37 @@ const QuestionCart = (response, type) => {
     }
     if(type === 'shortanswer' || type === 'paragraph')
         return <p className={classes.textAnswer}>{response.response}</p>
-    if(type === 'date' || type === 'time')
+    if(type === 'date')
     {
-
+        const [year, month, day] = response.response.split('-');
+        return <div className={classes.date}>
+            <div>
+                <span>MM</span>
+                <span>{month}</span>
+            </div>
+            <span>/</span>
+            <div>
+                <span>DD</span>
+                <span>{day}</span>
+            </div>
+            <span>/</span>
+            <div>
+                <span>YYYY</span>
+                <span>{year}</span>
+            </div>
+        </div>
+    }
+    if(type === 'time')
+    {
+        const [hour, min] = response.response.split(':');
+        return <div className={classes.time}>
+            <span>Time</span>
+            <div>
+                <span>{hour}</span>
+                <span>:</span>
+                <span>{min}</span>
+            </div>
+        </div>
     }
 }
 

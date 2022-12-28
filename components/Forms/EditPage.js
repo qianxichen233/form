@@ -305,7 +305,7 @@ function EditPage() {
             <Responses
                 id={router.query.questionnaireID}
                 hide={subpage !== 'Responses'}
-                questions={questionContent}
+                getQuestions={getQuestionContent}
                 published={published}
             />
         </div>

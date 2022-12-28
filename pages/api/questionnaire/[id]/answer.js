@@ -44,6 +44,12 @@ const handler = async (req, res) => {
 		return;
 	}
 
+	if(req.method === 'DELETE')
+	{
+		await deleteAnswer(req, res, id, userID, creator);
+		return;
+	}
+
 	res.status(405).json({error: 'Unsupport Method!'});
 	return;
 }
@@ -109,11 +115,42 @@ const getAnswer = async (req, res, id, userID, creator) => {
 					email: true
 				}
 			},
-			content: true
+			content: true,
+			id: true
 		}
 	});
+	for(const answer of answers)
+		answer.id = Number(answer.id);
 
 	res.status(200).json(answers);
+}
+
+const deleteAnswer = async (req, res, id, userID, creator) => {
+	if(userID !== creator)
+	{
+		res.status(401).json({error: 'Unauthorized'});
+		return;
+	}
+	if(req.body.id)
+	{
+		const deleted = await prisma.answers.delete({
+			where: {
+				id: req.body.id
+			}
+		});
+		if(!deleted)
+		{
+			res.status(404).json({error: 'Answer Not Found'});
+			return;
+		}
+	}
+	await prisma.answers.deleteMany({
+		where: {
+			questionnaireid: id
+		}
+	});
+	res.status(200).json({msg: 'success'});
+	return;
 }
 
 export default handler;

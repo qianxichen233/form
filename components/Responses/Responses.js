@@ -9,14 +9,10 @@ import classes from './Responses.module.css';
 
 const Responses = props => {
     const [responses, setResponses] = useState([]);
+    const [questions, setQuestions] = useState();
     const [loading, setLoading] = useState(true);
 
     const [responseStatus, setResponseStatus] = useState('Summary');
-
-    const questions = props.questions.filter(question => {
-        if(question.key === 0) return false;
-        return true;
-    })
 
     useEffect(() => {
         if(props.hide)
@@ -24,6 +20,7 @@ const Responses = props => {
             setLoading(true);
             return;
         }
+        setQuestions(props.getQuestions().filter(e => e.key !== 0));
         fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/questionnaire/${props.id}/answer`)
         .then(res => res.json())
         .then(data => {
@@ -33,9 +30,13 @@ const Responses = props => {
         .catch(console.log)
     }, [props.hide]);
 
-    const deleteAllResponses = () => {
-
-    }
+    const deleteAllResponses = async () => {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/questionnaire/${props.id}/answer`, {
+            method: 'DELETE',
+        });
+        if(!response.ok)
+            console.log(await response.json());
+    };
 
     if(props.hide) return null;
 
