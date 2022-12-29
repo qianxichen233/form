@@ -24,7 +24,12 @@ const Responses = props => {
         fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/questionnaire/${props.id}/answer`)
         .then(res => res.json())
         .then(data => {
-            if(data) setResponses(data);
+            if(data)
+            {
+                for(const response of data)
+                    response.content = JSON.parse(response.content);
+                setResponses(data);
+            }
             setLoading(false);
         })
         .catch(console.log)
