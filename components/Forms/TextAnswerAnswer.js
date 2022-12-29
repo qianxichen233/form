@@ -6,6 +6,7 @@ import TextInputAnswer from '../UI/TextInput/TextInputAnswer';
 import QuestionInputBar from '../UI/QuestionBar/QuestionInputBar';
 import TextInputBar from '../UI/TextInput/TextInputBar';
 import RichTextEditorDisplay from '../UI/RichTextEditor/RichTextEditorDisplay';
+import RichTextEditor from '../UI/RichTextEditor/RichTextEditor';
 
 const TextBoxWidth = {
     shortanswer: '50%',

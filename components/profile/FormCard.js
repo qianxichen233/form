@@ -2,8 +2,8 @@ import { useRouter } from 'next/router';
 import classes from './FormCard.module.css';
 
 import Modal from '../UI/Modal/Modal';
-import DeleteCard from './DeleteCard';
 import RenameCard from './RenameCard';
+import ConfirmCard from '../UI/Cart/ConfirmCard';
 
 import { Options } from '../UI/Icons';
 import { useState } from 'react';
@@ -111,9 +111,23 @@ const FormCard = props => {
             color='rgb(128 128 128 / 50%)'
             center={true}
         >
-            <DeleteCard
-                title={props.title}
-                onDelete={onDeleteHandler}
+            <ConfirmCard
+                title="Delete Form"
+                description={`Are you sure you want to permanently delete the Form "${props.title}"?`}
+                ConfirmName="Delete"
+                CancelButton={{
+                    bgcolor: "white",
+                    textcolor: "purple",
+                    hoverbg: "rgba(211,211,211,0.3)",
+                    hovertext: "black",
+                    hoverborder: "#4d90fe"
+                }}
+                ConfirmButton={{
+                    bgcolor: "#4d90fe",
+                    textcolor: "white",
+                    hoverbg: "#407bda"
+                }}
+                onConfirm={onDeleteHandler}
                 onCancel={setDeleteActive.bind(null, false)}
             />
         </Modal>

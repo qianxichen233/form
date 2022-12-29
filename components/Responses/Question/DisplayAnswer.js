@@ -98,6 +98,8 @@ const QuestionCart = (response, type) => {
 }
 
 const DisplayAnswer = props => {
+    if(!props.responses)
+        return <p>No Response Yet</p>
     const responses = mergeResponse(props.responses, props.type);
     return <>
         {responses.map((response, index) => {

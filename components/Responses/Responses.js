@@ -14,13 +14,8 @@ const Responses = props => {
 
     const [responseStatus, setResponseStatus] = useState('Summary');
 
-    useEffect(() => {
-        if(props.hide)
-        {
-            setLoading(true);
-            return;
-        }
-        setQuestions(props.getQuestions().filter(e => e.key !== 0));
+    const loadResponses = () => {
+        setLoading(true);
         fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/questionnaire/${props.id}/answer`)
         .then(res => res.json())
         .then(data => {
@@ -32,7 +27,18 @@ const Responses = props => {
             }
             setLoading(false);
         })
-        .catch(console.log)
+        .catch(console.log);
+    }
+
+    useEffect(() => {
+        if(props.hide)
+        {
+            setLoading(true);
+            return;
+        }
+        setQuestions(props.getQuestions().filter(e => e.key !== 0));
+        loadResponses();
+        
     }, [props.hide]);
 
     const deleteAllResponses = async () => {
@@ -41,7 +47,24 @@ const Responses = props => {
         });
         if(!response.ok)
             console.log(await response.json());
+        else loadResponses();
     };
+
+    const deleteOneResponse = async (id) => {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/questionnaire/${props.id}/answer`, {
+            method: 'DELETE',
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                id
+            })
+        });
+        if(!response.ok)
+            console.log(await response.json());
+        else loadResponses();
+    }
 
     if(props.hide) return null;
 
@@ -97,6 +120,7 @@ const Responses = props => {
                     return <Individual
                         responses={responses}
                         questions={questions}
+                        delete={deleteOneResponse}
                     />
                 }
             })(responseStatus)}

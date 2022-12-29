@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import Button from '../UI/Button/Button';
 
-import classes from './DeleteCard.module.css';
+import classes from './RenameCard.module.css';
 
 const RenameCard = props => {
     const [name, setName] = useState(props.name);

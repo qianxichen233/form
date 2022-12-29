@@ -40,7 +40,7 @@ const updateAnswer = (answer, index, type) => {
 }
 
 const MultipleChoiceAnswer = (props) => {
-    const answer = props.value || new Array();
+    const answer = props.value || (props.display ? new Array() : new Array(props.options.length).fill(false));
 
     return <Form>
         <QuestionInputBar>
@@ -64,8 +64,8 @@ const MultipleChoiceAnswer = (props) => {
                     >
                         {
                             props.subtype === 'multichoice' ?
-                            RenderCircleCheckBox(answer.includes(option.content)) :
-                            RenderBoxCheckBox(answer.includes(option.content))
+                            RenderCircleCheckBox(props.display ? answer.includes(option.content) : answer[index]) :
+                            RenderBoxCheckBox(props.display ? answer.includes(option.content) : answer[index])
                         }
                         <OptionInputAnswer
                             placeholder={`Option ${index + 1}`}
