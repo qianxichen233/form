@@ -4,6 +4,7 @@ const Modal = props => {
     if(!props.active) return null;
 
     const onClickHandler = (e) => {
+        if(!props.deactive) return;
         if(e.target === e.currentTarget)
             props.deactive();
     }

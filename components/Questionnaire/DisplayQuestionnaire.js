@@ -6,7 +6,7 @@ const DisplayQuestionnaire = props => {
     const [questionnaires, setQuestionnaires] = useState([]);
 
     useEffect(() => {
-        fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/questionnaire/getall`)
+        fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/questionnaire/`)
             .then(data => {
                 if(!data.ok) return Promise.reject('No questionnaire');
                 return data.json();

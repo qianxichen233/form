@@ -1,11 +1,12 @@
 import { useState } from 'react';
-import classes from './RequiredInput.module.css';
+import classes from './SlideButton.module.css';
 
-const RequiredInput = (props) => {
+const SlideButton = (props) => {
     const [state, setState] = useState(props.checked ? props.checked : false);
 
     return(
     <div className={classes.container}>
+        {props.labelPos === 'left' && <label>{props.label}</label>}
         <div
             className={classes.inputContainer}
             onClick={() => {
@@ -18,8 +19,8 @@ const RequiredInput = (props) => {
             </div>
             <div className={`${classes.bar} ${state ? classes.barActive : ''}`}></div>
         </div>
-        <label>{props.label}</label>
+        {props.labelPos !== 'left' && <label>{props.label}</label>}
     </div>)
 }
 
-export default RequiredInput;
+export default SlideButton;

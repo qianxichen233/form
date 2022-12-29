@@ -9,7 +9,7 @@ import TextInput from '../UI/TextInput/TextInput';
 import QuestionInputBar from '../UI/QuestionBar/QuestionInputBar';
 import TextInputBar from '../UI/TextInput/TextInputBar';
 import RichTextEditor from '../UI/RichTextEditor/RichTextEditor';
-import RequiredInput from '../UI/RequiredInput/RequiredInput';
+import SlideButton from '../UI/Button/SlideButton';
 
 const placeholder = {
     shortanswer: 'Short Answer Text',
@@ -35,6 +35,7 @@ const ShortAnswer = (props) => {
     questionRef.current = question;
 
     useEffect(() => {
+        //props.save();
         dispatch(setQuestionStore({
             id: props.id,
             content: questionRef.current
@@ -42,9 +43,11 @@ const ShortAnswer = (props) => {
     }, [dispatch, props.id, questionRef.current]);
 
     useEffect(() => {
+        if(props.subtype === questionRef.current.subtype) return;
         let newQuestion = lodash.cloneDeep(questionRef.current);
         newQuestion.subtype = props.subtype;
 
+        props.save();
         dispatch(setQuestionStore({
             id: props.id,
             content: newQuestion
@@ -54,9 +57,11 @@ const ShortAnswer = (props) => {
 
     const onQuestionChangeHandler = (clearError, content) => {
         if(clearError) props.onErrorClear();
+        if(questionRef.current.description?.blocks[0].text === content['blocks'][0].text) return;
         let newQuestion = lodash.cloneDeep(questionRef.current);
         newQuestion.description = content;
 
+        props.save();
         dispatch(setQuestionStore({
             id: props.id,
             content: newQuestion
@@ -68,6 +73,7 @@ const ShortAnswer = (props) => {
         const newQuestion = lodash.cloneDeep(questionRef.current);
         newQuestion.required = state;
 
+        props.save();
         dispatch(setQuestionStore({
             id: props.id,
             content: newQuestion
@@ -90,7 +96,7 @@ const ShortAnswer = (props) => {
                 options={['bold', 'italic', 'underline', 'hyperlink', 'clearformat']}
             />
             {props.preview ? null :
-            <RequiredInput
+            <SlideButton
                 checked={question.required}
                 onChange={OnRequiredChangeHandler}
                 label='Required'

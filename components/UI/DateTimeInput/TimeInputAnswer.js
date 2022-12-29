@@ -7,9 +7,10 @@ const TimeInput = (props) => {
         className={classes.input}
         value={props.value || ''}
         onChange={e => props.onChange(e.target.value)}
+        readOnly={props.display}
     >
     </input>
-    <span className={classes.bar}></span>
+    {props.display || <span className={classes.bar}></span>}
     </div>
 }
 

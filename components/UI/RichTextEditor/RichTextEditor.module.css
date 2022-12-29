@@ -17,10 +17,10 @@
     width: calc(100% - 20px);
     height: 100%;
     font-size: var(--fontsize);
-    padding-top: var(--padding);
-    padding-bottom: var(--padding);
-    padding-left: 10px;
-    padding-right: 10px;
+    padding-top: var(--paddingVertical);
+    padding-bottom: var(--paddingVertical);
+    padding-left: var(--paddingHorizontal);
+    padding-right: var(--paddingHorizontal);
     border-top-style: hidden;
     border-left-style: hidden;
     border-right-style: hidden;

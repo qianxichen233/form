@@ -170,6 +170,7 @@ const QuestionCart = (props) => {
                         onErrorClear={props.onErrorClear}
                         preview={!props.Focus}
                         onFocus={props.onFocus}
+                        save={props.save}
                     />
                 </DndProvider>
             }
@@ -185,6 +186,7 @@ const QuestionCart = (props) => {
                         onErrorClear={props.onErrorClear}
                         preview={!props.Focus}
                         onFocus={props.onFocus}
+                        save={props.save}
                     />
                 </DndProvider>
             }
@@ -200,6 +202,7 @@ const QuestionCart = (props) => {
                         onErrorClear={props.onErrorClear}
                         preview={!props.Focus}
                         onFocus={props.onFocus}
+                        save={props.save}
                     />
                 </DndProvider>
             }
@@ -215,6 +218,7 @@ const QuestionCart = (props) => {
                         onErrorClear={props.onErrorClear}
                         preview={!props.Focus}
                         onFocus={props.onFocus}
+                        save={props.save}
                     />
                 </DndProvider>
             }
@@ -230,6 +234,7 @@ const QuestionCart = (props) => {
                         onErrorClear={props.onErrorClear}
                         preview={!props.Focus}
                         onFocus={props.onFocus}
+                        save={props.save}
                     />
                 </DndProvider>
             }
@@ -245,6 +250,7 @@ const QuestionCart = (props) => {
                         onErrorClear={props.onErrorClear}
                         preview={!props.Focus}
                         onFocus={props.onFocus}
+                        save={props.save}
                     />
                 </DndProvider>
             }

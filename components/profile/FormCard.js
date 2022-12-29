@@ -2,8 +2,8 @@ import { useRouter } from 'next/router';
 import classes from './FormCard.module.css';
 
 import Modal from '../UI/Modal/Modal';
-import DeleteCard from './DeleteCard';
 import RenameCard from './RenameCard';
+import ConfirmCard from '../UI/Cart/ConfirmCard';
 
 import { Options } from '../UI/Icons';
 import { useState } from 'react';
@@ -24,25 +24,35 @@ const FormCard = props => {
     }
     
     const onDeleteHandler = () => {
-        fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/questionnaire/delete`, {
+        fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/questionnaire/${props.formID}`, {
+            method: 'DELETE'
+        }).then(res => res.json())
+        .then((data) => {
+            if(!data.error)
+                router.reload(window.location.pathname);
+        })
+        .catch(console.log);
+    }
+
+    const onRenameHandler = (name) => {
+        fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/questionnaire/${props.formID}`, {
             method: 'POST',
             mode: 'cors',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                id: props.formID
+                title: name
             })
         }).then(res => res.json())
-        .then(() => {
-            router.reload(window.location.pathname);
+        .then((data) => {
+            if(!data.error)
+                router.reload(window.location.pathname);
         })
         .catch(console.log);
     }
 
-    const onRenameHandler = () => {
-        
-    }
+    const ImageSrc = `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/questionnaire/${props.formID}/preview`;
 
     return <>
         <div
@@ -55,8 +65,11 @@ const FormCard = props => {
         >
             <div className={classes.preview}>
                 <img
-                    src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/questionnaire/${props.formID}/preview`}
-                    width='200px'
+                    src={ImageSrc}
+                    width={200}
+                    height={200}
+                    alt="Questionnaire Preview"
+                    draggable={false}
                 />
             </div>
             <div className={classes.textContainer}>
@@ -95,25 +108,38 @@ const FormCard = props => {
         ></Modal>
         <Modal
             active={deleteActive}
-            deactive={setDeleteActive.bind(null, false)}
             color='rgb(128 128 128 / 50%)'
             center={true}
         >
-            <DeleteCard
-                title={props.title}
-                onDelete={onDeleteHandler}
+            <ConfirmCard
+                title="Delete Form"
+                description={`Are you sure you want to permanently delete the Form "${props.title}"?`}
+                ConfirmName="Delete"
+                CancelButton={{
+                    bgcolor: "white",
+                    textcolor: "purple",
+                    hoverbg: "rgba(211,211,211,0.3)",
+                    hovertext: "black",
+                    hoverborder: "#4d90fe"
+                }}
+                ConfirmButton={{
+                    bgcolor: "#4d90fe",
+                    textcolor: "white",
+                    hoverbg: "#407bda"
+                }}
+                onConfirm={onDeleteHandler}
                 onCancel={setDeleteActive.bind(null, false)}
             />
         </Modal>
         <Modal
             active={renameActive}
-            deactive={setRenameActive.bind(null, false)}
             color='rgb(128 128 128 / 50%)'
             center={true}
         >
-            <renameActive
+            <RenameCard
                 onRename={onRenameHandler}
                 onCancel={setRenameActive.bind(null, false)}
+                name={props.title}
             />
         </Modal>
     </>

@@ -18,16 +18,17 @@ const TextInput = (props) => {
 
     return <div className={`${classes.container}`} style={{width}}>
         <input
-            placeholder={placeholder}
+            placeholder={props.display ? '' : placeholder}
             type="text"
             className={`${classes.input}`}
             style={{'--height': height[size],
                     '--fontsize': fontsize[size]}}
             value={value ? value : ''}
             onChange={(e) => onChange(e.target.value)}
+            readOnly={props.display}
         >
         </input>
-        <span className={classes.bar}/>
+        {props.display || <span className={classes.bar}/>}
     </div>
 }
 

@@ -42,21 +42,12 @@ const QuestionnaireAnswer = (props) => {
     const answersRef = useRef();
     answersRef.current = answers;
 
-    const questionssRef = useRef();
-    questionssRef.current = questions;
+    const questionsRef = useRef();
+    questionsRef.current = questions;
 
     useEffect(() => {
         const fetchData = async () => {
-            await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/questionnaire/fetch`, {
-                method: 'POST',
-                mode: 'cors',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    id: props.id
-                })
-            })
+            await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/questionnaire/${props.id}`)
             .then(data => {
                 if(data.status === 403)
                     return null;
@@ -92,7 +83,7 @@ const QuestionnaireAnswer = (props) => {
     const OnSubmitHandler = async (e) => {
         e.preventDefault();
         const missingIndex = answersRef.current.findIndex((answer, index) => {
-            return questionssRef.current[index].content.required && isEmpty(answer);
+            return questionsRef.current[index].content.required && isEmpty(answer);
         });
 
         if(missingIndex !== -1)
@@ -101,17 +92,38 @@ const QuestionnaireAnswer = (props) => {
             return;
         }
 
-        await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/questionnaire/answer`, {
+        let submitedAnswers = lodash.cloneDeep(answersRef.current);
+
+        for(let i = 0; i < questionsRef.current.length; ++i)
+        {
+            let content = submitedAnswers[i];
+            if(content && questionsRef.current[i].content.type === 'MultipleChoice')
+            {
+                let newContent = [];
+                for(let j = 0; j < questionsRef.current[i].content.options.length; ++j)
+                    if(content[j]) newContent.push(questionsRef.current[i].content.options[j].content);
+
+                content = newContent;
+            }
+            submitedAnswers[i] = {
+                key: questionsRef.current[i].key,
+                content
+            }
+        }
+
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/questionnaire/${props.id}/answer`, {
             method: 'POST',
             mode: 'cors',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                questionnaireid: props.id,
-                content: answersRef.current
+                content: submitedAnswers
             })
         });
+        if(response.ok) return;
+        const error = await response.json();
+        console.log(error);
     };
 
     if(isLoading)

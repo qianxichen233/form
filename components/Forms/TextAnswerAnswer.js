@@ -21,6 +21,7 @@ const TextAnswerAnswer = (props) => {
                 value={props.description}
                 width={'100%'}
                 size='big'
+                placeholder="Question Statement"
             />
         </QuestionInputBar>
         <TextInputBar>
@@ -33,19 +34,28 @@ const TextAnswerAnswer = (props) => {
                         onChange={props.onChange}
                         width={TextBoxWidth[props.subtype]}
                         size='normal'
+                        display={props.display}
                     ></TextInputAnswer>
                 }
                 if(type === 'paragraph')
                 {
-                    return <RichTextEditor
-                        placeholder="Your Answer"
-                        value={props.value}
-                        passValue={props.onChange}
-                        onFocus={props.onFocus}
-                        transparent={true}
-                        size='normal'
-                        width={'100%'}
-                    />
+                    if(props.display)
+                        return <RichTextEditorDisplay
+                            value={props.value}
+                            width={'100%'}
+                            size='normal'
+                            underline={true}
+                        />
+                    else
+                        return <RichTextEditor
+                            placeholder="Your Answer"
+                            value={props.value}
+                            passValue={props.onChange}
+                            onFocus={props.onFocus}
+                            transparent={true}
+                            size='normal'
+                            width={'100%'}
+                        />
                 }
             })(props.subtype)}
         </TextInputBar>
