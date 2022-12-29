@@ -40,7 +40,7 @@ const updateAnswer = (answer, index, type) => {
 }
 
 const MultipleChoiceAnswer = (props) => {
-    const answer = props.value || new Array(props.options.length).fill(false);
+    const answer = props.value || new Array();
 
     return <Form>
         <QuestionInputBar>
@@ -56,7 +56,7 @@ const MultipleChoiceAnswer = (props) => {
                 return <div
                     key={option.key}
                     className={classes.container}
-                    onClick={() => {
+                    onClick={props.display ? null : () => {
                         let newAnswer = lodash.cloneDeep(answer);
                         newAnswer = updateAnswer(newAnswer, index, props.subtype);
                         props.onChange(newAnswer);
@@ -64,8 +64,8 @@ const MultipleChoiceAnswer = (props) => {
                     >
                         {
                             props.subtype === 'multichoice' ?
-                            RenderCircleCheckBox(answer[index]) :
-                            RenderBoxCheckBox(answer[index])
+                            RenderCircleCheckBox(answer.includes(option.content)) :
+                            RenderBoxCheckBox(answer.includes(option.content))
                         }
                         <OptionInputAnswer
                             placeholder={`Option ${index + 1}`}

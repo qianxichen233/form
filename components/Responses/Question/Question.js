@@ -16,8 +16,7 @@ const ResponsesTransform = (responses) => {
     let transformed = {};
     for(const response of responses)
     {
-        const parsedResponse = JSON.parse(response.content);
-        for(const answer of parsedResponse)
+        for(const answer of response.content)
         {
             if(answer.key === 0) continue;
             if(!transformed[answer.key]) transformed[answer.key] = new Array();
@@ -44,8 +43,6 @@ const Question = props => {
     const questionContent = props.questions.map(question => {
         return RichTextToPlain(question.content.description);
     });
-
-    console.log(responsesByQuestion);
 
     return <div>
         <Cart>

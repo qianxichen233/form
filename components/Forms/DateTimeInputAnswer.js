@@ -26,11 +26,13 @@ const DateTimeInput = (props) => {
         <DateInputAnswer
             value={props.value}
             onChange={props.onChange}
+            display={props.display}
         /> : null}
         {props.subtype === "time" ?
         <TimeInputAnswer
             value={props.value}
             onChange={props.onChange}
+            display={props.display}
         /> : null}
     </Form>
     );
