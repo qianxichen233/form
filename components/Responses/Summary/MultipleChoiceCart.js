@@ -51,8 +51,8 @@ const MultipleChoiceCart = props => {
     }) || [];
     const [mergedResponse, total] = mergeResponse(responses, props.question);
 
-    const ChartRef = useRef();
     const [CartRef, setCartRef] = useState();
+    const [ChartRef, setChartRef] = useState();
 
     const colorOrder = ['blue', 'red', 'yellow', 'green', 'purple'];
     for(let i = 5; i < Object.keys(mergedResponse).length; ++i)
@@ -79,18 +79,20 @@ const MultipleChoiceCart = props => {
     );
 
     const DeHighlight = () => {
-        ChartRef.current.setActiveElements([]);
-        ChartRef.current.update();
+        if(!ChartRef) return;
+        ChartRef.setActiveElements([]);
+        ChartRef.update();
     }
 
     const Highlight = (index) => {
-        ChartRef.current.setActiveElements([
+        if(!ChartRef) return;
+        ChartRef.setActiveElements([
             {
                 datasetIndex: 0,
                 index
             }
         ]);
-        ChartRef.current.update();
+        ChartRef.update();
     }
 
     const ChartData = {
@@ -190,7 +192,7 @@ const MultipleChoiceCart = props => {
                 data={ChartData}
                 height={200}
                 options={options}
-                ref={ChartRef}
+                ref={node => setChartRef(node)}
             />
             <ul>
                 {Object.keys(mergedResponse).map((option, index) => {

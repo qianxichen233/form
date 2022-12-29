@@ -144,11 +144,14 @@ const deleteAnswer = async (req, res, id, userID, creator) => {
 			return;
 		}
 	}
-	await prisma.answers.deleteMany({
-		where: {
-			questionnaireid: id
-		}
-	});
+	else
+	{
+		await prisma.answers.deleteMany({
+			where: {
+				questionnaireid: id
+			}
+		});
+	}
 	res.status(200).json({msg: 'success'});
 	return;
 }

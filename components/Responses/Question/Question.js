@@ -26,19 +26,18 @@ const ResponsesTransform = (responses) => {
     return transformed;
 }
 
-let responsesByQuestion = [];
-
 const Question = props => {
     const [questionIndex, setQuestionIndex] = useState(1);
     const [showOption, setShowOption] = useState(false);
+    const [responsesByQuestion, setResponsesByQuestion] = useState([]);
 
-    if(responsesByQuestion.length === 0)
-    {
-        responsesByQuestion = [];
+    useEffect(() => {
+        let NewResponses = [];
         const transformedResponses = ResponsesTransform(props.responses);
         for(const question of props.questions)
-            responsesByQuestion.push(transformedResponses[question.key]);
-    }
+            NewResponses.push(transformedResponses[question.key]);
+        setResponsesByQuestion(NewResponses);
+    }, [props.responses]);
 
     const questionContent = props.questions.map(question => {
         return RichTextToPlain(question.content.description);

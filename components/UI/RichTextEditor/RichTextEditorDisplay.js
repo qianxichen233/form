@@ -32,7 +32,6 @@ const RichTextEditorDisplay = (props) => {
     const content = props.value ?
         EditorState.createWithContent(convertFromRaw(props.value)) :
         EditorState.createWithContent(emptyContentState);
-    console.log(props.value);
 
     return <div
         className={`${classes.container}`}
