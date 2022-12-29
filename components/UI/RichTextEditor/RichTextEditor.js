@@ -18,6 +18,8 @@ const padding = {
     normal: '10px'
 }
 
+<<<<<<< HEAD:frontend/src/components/UI/RichTextEditor/RichTextEditor.js
+=======
 const emptyContentState = convertFromRaw({
     entityMap: {},
     blocks: [
@@ -30,6 +32,7 @@ const emptyContentState = convertFromRaw({
     ],
 });
 
+>>>>>>> dev:components/UI/RichTextEditor/RichTextEditor.js
 const RichTextEditor = (props) => {
     const size = props.size || 'normal';
 
@@ -123,7 +126,11 @@ const RichTextEditor = (props) => {
             </div>
             <span className={`${classes.bar} ${Focus ? classes.barActive : ''}`}/>
         </div>
+<<<<<<< HEAD:frontend/src/components/UI/RichTextEditor/RichTextEditor.js
+        {(props.preview && !props.options) ? null :
+=======
         {(props.preview || !props.options) ? null :
+>>>>>>> dev:components/UI/RichTextEditor/RichTextEditor.js
         <div className={`${classes.optionBar} ${Focus ? classes.optionActive: ''}`}>
             {props.options.map((option, index) => {
                 if(option === 'bold')
