@@ -1,7 +1,4 @@
 .questionnaire{
-    position: absolute;
-    top: 0;
-    
     background-color: rgb(240, 235, 248);
 
     width: 100vw;
@@ -14,6 +11,7 @@
     display: flex;
     align-items: center;
     justify-content: space-around;
+    user-select: none;
 }
 
 .container{
@@ -30,4 +28,8 @@
 
 .placeholder{
     height: 100px;
+}
+
+.hide {
+    display: none;
 }

@@ -1,0 +1,59 @@
+.container {
+    padding: 0;
+}
+
+.top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    width: 100%;
+}
+
+.top > div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.top > div > p {
+    margin-right: 20px;
+    font-weight: bold;
+    user-select: none;
+}
+
+.top > p {
+    margin-left: 20px;
+    font-size: 16pt;
+    font-weight: bold;
+}
+
+.icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 20px;
+}
+
+.icon:hover {
+    cursor: pointer;
+    background-color: rgba(211, 211, 211, 0.3);
+}
+
+.publish {
+    color: green;
+}
+
+.notpublish {
+    color: red;
+}
+
+.choice {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}

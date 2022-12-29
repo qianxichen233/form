@@ -1,5 +1,7 @@
 import { IoIosArrowUp as ArrowUp,
          IoIosArrowDown as ArrowDown,
+         IoIosArrowBack as ArrowLeft,
+         IoIosArrowForward as ArrowRight,
          IoMdPaper as FormIcon } from 'react-icons/io';
 
 import { MdCheckBoxOutlineBlank as BoxCheckBox,
@@ -17,7 +19,9 @@ import { ImBold as BoldIcon,
          ImRadioUnchecked as CircleCheckBox,
          ImRadioChecked as CircleCheckBoxFill } from 'react-icons/im';
 
-import { AiFillCaretDown as CaretDown } from 'react-icons/ai';
+import { AiFillCaretDown as CaretDown,
+         AiOutlineEye as Preview,
+         AiOutlineCheck as Check } from 'react-icons/ai';
 
 import { TiDeleteOutline as DeleteOptionButton } from 'react-icons/ti';
 import { HiOutlineTrash as DeleteCartButton } from 'react-icons/hi';
@@ -32,6 +36,8 @@ import { SlOptions as Options } from 'react-icons/sl';
 export {
     ArrowUp,
     ArrowDown,
+    ArrowLeft,
+    ArrowRight,
     CircleCheckBox,
     BoxCheckBox,
     DeleteOptionButton,
@@ -52,5 +58,7 @@ export {
     FormIcon,
     FormAdd,
     Options,
-    Rename
+    Rename,
+    Preview,
+    Check
 };

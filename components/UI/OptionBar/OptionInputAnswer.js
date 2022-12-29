@@ -7,7 +7,7 @@ const OptionInputAnswer = props => {
             <div
                 className={`${classes.input} ${classes.readOnly}`}
             >
-                {props.value}
+                {props.value || props.placeholder}
             </div>
         </div>
     </div>

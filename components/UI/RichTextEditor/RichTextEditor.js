@@ -108,7 +108,8 @@ const RichTextEditor = (props) => {
                              ${props.MissingError ? classes.error : ''}
                              ${props.transparent ? classes.transparent_bg : ''}`}
                 style={{'--fontsize': props.fontsize || fontsize[size],
-                        '--padding': padding[size]}}
+                        '--paddingVertical': props.paddingVertical || padding[size],
+                        '--paddingHorizontal': props.paddingHorizontal || '10px'}}
             >
                 <Editor
                     editorState={editorState}

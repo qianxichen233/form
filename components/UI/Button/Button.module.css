@@ -1,0 +1,22 @@
+.button {
+    width: 100px;
+    height: 30px;
+
+    border-radius: 3px;
+    border: 1px rgba(128, 128, 128, 0.3) solid;
+
+    background-color: var(--bg);
+    color: var(--text);
+
+    font-weight: bold;
+
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-drag: none;
+}
+
+.button:hover {
+    background-color: var(--hoverbg);
+    color: var(--hovertext);
+    border-color: var(--hoverborder);
+}

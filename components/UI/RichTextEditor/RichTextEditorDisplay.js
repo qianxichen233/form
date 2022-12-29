@@ -14,9 +14,24 @@ const padding = {
     normal: '10px'
 }
 
+const emptyContentState = convertFromRaw({
+    entityMap: {},
+    blocks: [
+        {
+            text: "",
+            key: "foo",
+            type: "unstyled",
+            entityRanges: [],
+        },
+    ],
+});
+
 const RichTextEditorDisplay = (props) => {
     const size = props.size || 'normal';
-    const content = EditorState.createWithContent(convertFromRaw(props.value));
+    //const content = EditorState.createWithContent(convertFromRaw(props.value));
+    const content = props.value ?
+        EditorState.createWithContent(convertFromRaw(props.value)) :
+        EditorState.createWithContent(emptyContentState);
 
     return <div
         className={`${classes.container}`}
@@ -24,15 +39,15 @@ const RichTextEditorDisplay = (props) => {
     >
         <div className={classes.inputContainer}>
             <div
-                className={`${classes.editor} 
-                            ${classes.preview} 
-                            ${classes.transparent_bg}`}
+                className={`${classes.editor} ${props.underline ? '' : classes.preview} ${classes.transparent_bg}`}
                 style={{'--fontsize': props.fontsize || fontsize[size],
-                        '--padding': padding[size]}}
+                        '--paddingVertical': props.paddingVertical || padding[size],
+                        '--paddingHorizontal': props.paddingHorizontal || '10px'}}
             >
                 <Editor
                     editorState={content}
                     //blockStyleFn={() => classes.noSelect}
+                    placeholder={props.placeholder}
                     readOnly
                 />
             </div>

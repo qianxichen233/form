@@ -42,8 +42,13 @@ div.optionBar:hover:not(.selected){
 }
 
 .text{
+    text-align: left;
+    width: 80%;
     user-select: none;
     margin-left: 8px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .arrow{
