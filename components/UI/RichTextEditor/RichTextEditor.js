@@ -1,4 +1,4 @@
-import { useRef, useState, useCallback } from "react";
+import { useRef, useState, useCallback, useEffect } from "react";
 import {
     Editor,
     EditorState,
@@ -56,6 +56,11 @@ const RichTextEditor = (props) => {
                 : EditorState.createWithContent(convertFromRaw(props.value))
             : EditorState.createWithContent(emptyContentState);
     });
+
+    useEffect(() => {
+        if (!props.value)
+            setEditorState(EditorState.createWithContent(emptyContentState));
+    }, [props.value]);
 
     const editorRef = useRef(null);
     const editorStateRef = useRef(null);

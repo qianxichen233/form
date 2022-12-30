@@ -84,6 +84,17 @@ function EditPage() {
     const [errorState, setErrorState] = useState();
 
     const [questions, setQuestions] = useState([]);
+    const [options, setOptions] = useState({
+        quiz: false,
+        collectEmail: false,
+        limitResponse: false,
+        shuffleOrder: false,
+        linkToNewResponse: false,
+        defaultRequired: false,
+        confirmMessage: "Your response has been recorded",
+    });
+    const [optionsChange, setOptionsChange] = useState(false);
+
     const [titleContent, setTitleContent] = useState();
     const [formTitle, setFormTitle] = useState("");
 
@@ -104,6 +115,13 @@ function EditPage() {
     const router = useRouter();
 
     useEffect(() => {
+        if (optionsChange) {
+            OnSettingSaveHandler(options);
+            setOptionsChange(false);
+        }
+    }, [optionsChange, options]);
+
+    useEffect(() => {
         if (status !== "authenticated") return;
         if (questions.length > 0) return;
 
@@ -116,7 +134,9 @@ function EditPage() {
             })
             .then((questionnaire) => {
                 const content = JSON.parse(questionnaire.content);
+                const options = JSON.parse(questionnaire.options);
                 console.log(content);
+                console.log(options);
                 if (Object.keys(content).length === 0) {
                     const key = getKey();
                     setQuestions([
@@ -148,6 +168,7 @@ function EditPage() {
                     setAuthenticated(true);
                     setPublished(questionnaire.published);
                 }
+                if (Object.keys(options).length !== 0) setOptions(options);
             })
             .catch((err) => {
                 console.log(err);
@@ -248,6 +269,28 @@ function EditPage() {
         setPublished(false);
     };
 
+    const OnOptionsChangeHandler = (newOptions) => {
+        setOptions(newOptions);
+        setOptionsChange(true);
+    };
+
+    const OnSettingSaveHandler = async (options) => {
+        const response = await fetch(
+            `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/questionnaire/${router.query.questionnaireID}/settings`,
+            {
+                method: "POST",
+                mode: "cors",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    options: options,
+                }),
+            }
+        );
+        if (!response.ok) console.log(await response.json());
+    };
+
     if (save) {
         OnSaveHandler();
         setSave(false);
@@ -312,6 +355,8 @@ function EditPage() {
             <Settings
                 id={router.query.questionnaireID}
                 hide={subpage !== "Settings"}
+                options={options}
+                setOptions={OnOptionsChangeHandler}
             />
         </div>
     );

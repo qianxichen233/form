@@ -1,0 +1,21 @@
+.container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 30px;
+}
+
+.container > p span {
+    font-weight: bold;
+}
+
+.container > span {
+    margin-left: 20px;
+    color: blue;
+    cursor: default;
+}
+
+.container > span:hover {
+    cursor: pointer;
+}
