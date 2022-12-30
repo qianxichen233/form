@@ -1,9 +1,10 @@
 .container {
-    width: 100%;
+    width: calc(100% - 60px);
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     margin-left: 30px;
+    margin-right: 30px;
 }
 
 .container > p span {
@@ -18,4 +19,10 @@
 
 .container > span:hover {
     cursor: pointer;
+}
+
+.requiredHint {
+    color: red;
+    margin-left: 30px;
+    margin-bottom: 5px;
 }

@@ -78,6 +78,16 @@ const checkValidity = (questions) => {
 
 let saveTimeoutIdentifier;
 
+const defaultOptions = {
+    quiz: false,
+    collectEmail: false,
+    limitResponse: false,
+    shuffleOrder: false,
+    linkToNewResponse: true,
+    defaultRequired: false,
+    confirmMessage: "Your response has been recorded",
+};
+
 function EditPage() {
     const { data: session, status } = useSession();
     const [authenticated, setAuthenticated] = useState(false);
@@ -85,13 +95,8 @@ function EditPage() {
 
     const [questions, setQuestions] = useState([]);
     const [options, setOptions] = useState({
-        quiz: false,
-        collectEmail: false,
-        limitResponse: false,
-        shuffleOrder: false,
-        linkToNewResponse: false,
-        defaultRequired: false,
-        confirmMessage: "Your response has been recorded",
+        saveID: null,
+        content: defaultOptions,
     });
     const [optionsChange, setOptionsChange] = useState(false);
 
@@ -116,7 +121,23 @@ function EditPage() {
 
     useEffect(() => {
         if (optionsChange) {
-            OnSettingSaveHandler(options);
+            if (options.saveID) clearTimeout(options.saveID);
+            const id = setTimeout(() => {
+                setOptions((prev) => {
+                    return {
+                        saveID: null,
+                        content: prev.content,
+                    };
+                });
+                OnSettingSaveHandler(options.content);
+            }, 1000);
+
+            setOptions((prev) => {
+                return {
+                    saveID: id,
+                    content: prev.content,
+                };
+            });
             setOptionsChange(false);
         }
     }, [optionsChange, options]);
@@ -168,7 +189,11 @@ function EditPage() {
                     setAuthenticated(true);
                     setPublished(questionnaire.published);
                 }
-                if (Object.keys(options).length !== 0) setOptions(options);
+                if (Object.keys(options).length !== 0)
+                    setOptions({
+                        saveID: null,
+                        content: options,
+                    });
             })
             .catch((err) => {
                 console.log(err);
@@ -194,6 +219,8 @@ function EditPage() {
 
     const OnSubmitHandler = async (e) => {
         e.preventDefault();
+
+        if (saveTimeoutIdentifier) clearTimeout(saveTimeoutIdentifier);
 
         let storedQuestion = getQuestionContent();
 
@@ -270,7 +297,15 @@ function EditPage() {
     };
 
     const OnOptionsChangeHandler = (newOptions) => {
-        setOptions(newOptions);
+        setOptions((prev) => {
+            return {
+                saveID: prev.saveID,
+                content:
+                    typeof newOptions === "function"
+                        ? newOptions(prev.content)
+                        : newOptions,
+            };
+        });
         setOptionsChange(true);
     };
 
@@ -345,6 +380,7 @@ function EditPage() {
                 clearError={() => setErrorState(null)}
                 save={SaveTimeOut}
                 hide={subpage !== "Questions"}
+                defaultRequired={options.content.defaultRequired}
             />
             <Responses
                 id={router.query.questionnaireID}
@@ -355,7 +391,7 @@ function EditPage() {
             <Settings
                 id={router.query.questionnaireID}
                 hide={subpage !== "Settings"}
-                options={options}
+                options={options.content}
                 setOptions={OnOptionsChangeHandler}
             />
         </div>
