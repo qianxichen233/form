@@ -8,16 +8,6 @@ import DivLine from "../UI/DivLine/DivLine";
 import classes from "./Settings.module.css";
 
 const Settings = (props) => {
-    const [options, setOptions] = useState({
-        quiz: false,
-        collectEmail: false,
-        limitResponse: false,
-        shuffleOrder: false,
-        linkToNewResponse: false,
-        defaultRequired: false,
-        confirmMessage: "Your response has been recorded",
-    });
-
     if (props.hide) return;
     return (
         <div className={classes.container}>
@@ -28,9 +18,9 @@ const Settings = (props) => {
                     <EnableBar
                         text="Make this a quiz"
                         description="Assign point values, set answers, and automatically provide feedback"
-                        enable={options.quiz}
+                        enable={props.options.quiz}
                         onChange={(status) => {
-                            setOptions((prev) => {
+                            props.setOptions((prev) => {
                                 return { ...prev, quiz: status };
                             });
                         }}
@@ -45,10 +35,10 @@ const Settings = (props) => {
                     >
                         <div className={classes.subOption}>
                             <EnableBar
-                                text="Requires sign in"
-                                enable={options.collectEmail}
+                                text="Collect Email Address"
+                                enable={props.options.collectEmail}
                                 onChange={(status) => {
-                                    setOptions((prev) => {
+                                    props.setOptions((prev) => {
                                         return {
                                             ...prev,
                                             collectEmail: status,
@@ -60,9 +50,9 @@ const Settings = (props) => {
                         <div className={classes.subOption}>
                             <EnableBar
                                 text="Limit to 1 Response"
-                                enable={options.limitResponse}
+                                enable={props.options.limitResponse}
                                 onChange={(status) => {
-                                    setOptions((prev) => {
+                                    props.setOptions((prev) => {
                                         return {
                                             ...prev,
                                             limitResponse: status,
@@ -83,9 +73,9 @@ const Settings = (props) => {
                         <div className={classes.subOption}>
                             <EnableBar
                                 text="Shuffle question order"
-                                enable={options.shuffleOrder}
+                                enable={props.options.shuffleOrder}
                                 onChange={(status) => {
-                                    setOptions((prev) => {
+                                    props.setOptions((prev) => {
                                         return {
                                             ...prev,
                                             shuffleOrder: status,
@@ -97,9 +87,9 @@ const Settings = (props) => {
                         <div className={classes.subOption}>
                             <TextBar
                                 text="Confirmation message"
-                                content={options.confirmMessage}
+                                content={props.options.confirmMessage}
                                 onChange={(newText) => {
-                                    setOptions((prev) => {
+                                    props.setOptions((prev) => {
                                         return {
                                             ...prev,
                                             confirmMessage: newText,
@@ -111,9 +101,9 @@ const Settings = (props) => {
                         <div className={classes.subOption}>
                             <EnableBar
                                 text="Show link to submit another response"
-                                enable={options.linkToNewResponse}
+                                enable={props.options.linkToNewResponse}
                                 onChange={(status) => {
-                                    setOptions((prev) => {
+                                    props.setOptions((prev) => {
                                         return {
                                             ...prev,
                                             linkToNewResponse: status,
@@ -133,9 +123,9 @@ const Settings = (props) => {
                         <div className={classes.subOption}>
                             <EnableBar
                                 text="Make questions required by default"
-                                enable={options.defaultRequired}
+                                enable={props.options.defaultRequired}
                                 onChange={(status) => {
-                                    setOptions((prev) => {
+                                    props.setOptions((prev) => {
                                         return {
                                             ...prev,
                                             defaultRequired: status,

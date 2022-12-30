@@ -3,7 +3,7 @@
     height: 30px;
 
     border-radius: 3px;
-    border: 1px rgba(128, 128, 128, 0.3) solid;
+    border: 1px var(--border) solid;
 
     background-color: var(--bg);
     color: var(--text);

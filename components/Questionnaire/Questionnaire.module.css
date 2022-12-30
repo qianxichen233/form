@@ -1,4 +1,4 @@
-.questionnaire{
+.questionnaire {
     background-color: rgb(240, 235, 248);
 
     width: 100vw;
@@ -6,15 +6,16 @@
     height: 100%;
 }
 
-.actionButton{
-    width: 30%;
+.actionButton {
+    width: 70vw;
     display: flex;
     align-items: center;
-    justify-content: space-around;
+    justify-content: space-between;
     user-select: none;
+    margin-bottom: 30px;
 }
 
-.container{
+.container {
     position: relative;
 
     height: max-content;
@@ -26,10 +27,21 @@
     align-items: center;
 }
 
-.placeholder{
+.placeholder {
     height: 100px;
 }
 
 .hide {
     display: none;
+}
+
+.link {
+    margin-left: 30px;
+    color: blue;
+    text-decoration: underline;
+    cursor: default;
+}
+
+.link:hover {
+    cursor: pointer;
 }
