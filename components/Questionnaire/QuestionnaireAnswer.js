@@ -25,6 +25,19 @@ const AnswerableQuestions = (questions) => {
     }, 0);
 };
 
+const shuffle = (array) => {
+    let currentIndex = array.length,
+        randomIndex;
+    while (currentIndex != 1) {
+        randomIndex = Math.floor(Math.random() * (currentIndex - 1)) + 1;
+        currentIndex--;
+        [array[currentIndex], array[randomIndex]] = [
+            array[randomIndex],
+            array[currentIndex],
+        ];
+    }
+};
+
 const isEmpty = (answer) => {
     if (!answer) return true;
     if (typeof answer === "string") return false;
@@ -33,22 +46,50 @@ const isEmpty = (answer) => {
     return answer["blocks"][0]["text"] === "";
 };
 
+const defaultOptions = {
+    quiz: false,
+    collectEmail: false,
+    limitResponse: false,
+    shuffleOrder: false,
+    linkToNewResponse: true,
+    defaultRequired: false,
+    confirmMessage: "Your response has been recorded",
+};
+
+const submitButton = {
+    enable: {
+        bgcolor: "rgb(103, 58, 183)",
+        textcolor: "white",
+        hoverbg: "rgb(122 79 199)",
+    },
+    disable: {
+        bgcolor: "lightgrey",
+        textcolor: "grey",
+    },
+};
+
 const QuestionnaireAnswer = (props) => {
     const { data: session, status } = useSession();
     const router = useRouter();
 
     const [notPublish, setNotPublish] = useState(true);
     const [questions, setQuestions] = useState(null);
+    const [options, setOptions] = useState(null);
     const [answers, setAnswers] = useState([]);
     const [missing, setMissing] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [submited, setSubmited] = useState(false);
+    const [responded, setResponded] = useState(false);
+    const [previewMode, setPreviewMode] = useState(false);
+    const [hasRequiredQuestion, setHasRequiredQuestion] = useState(false);
 
     const answersRef = useRef();
     answersRef.current = answers;
 
     const questionsRef = useRef();
     questionsRef.current = questions;
+
+    const submitNotValid = options?.limitResponse && (!session || responded);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -62,9 +103,21 @@ const QuestionnaireAnswer = (props) => {
                 .then((questionnaire) => {
                     if (questionnaire) {
                         const questions = JSON.parse(questionnaire.content);
+                        let options = JSON.parse(questionnaire.options);
+                        if (Object.keys(options).length === 0)
+                            options = defaultOptions;
+                        if (options.shuffleOrder) shuffle(questions);
                         setNotPublish(false);
                         setQuestions(questions);
                         setAnswers(new Array(questions.length));
+                        setOptions(options);
+                        setResponded(questionnaire.responded);
+                        setPreviewMode(!questionnaire.published);
+                        setHasRequiredQuestion(
+                            questions.reduce((acc, question) => {
+                                return acc | question.content.required;
+                            }, false)
+                        );
                     }
                 })
                 .catch(console.log);
@@ -85,6 +138,7 @@ const QuestionnaireAnswer = (props) => {
     };
 
     const OnSubmitHandler = async () => {
+        if (submitNotValid || previewMode) return;
         const missingIndex = answersRef.current.findIndex((answer, index) => {
             return (
                 questionsRef.current[index].content.required && isEmpty(answer)
@@ -174,7 +228,12 @@ const QuestionnaireAnswer = (props) => {
                                             }
                                         />
                                         <AccountCart
-                                            email={session.user.email}
+                                            email={session?.user.email}
+                                            record={options.collectEmail}
+                                            required={options.limitResponse}
+                                            responded={responded}
+                                            preview={previewMode}
+                                            requiredHint={hasRequiredQuestion}
                                         />
                                     </Fragment>
                                 );
@@ -201,9 +260,11 @@ const QuestionnaireAnswer = (props) => {
                         <Button
                             onClick={OnSubmitHandler}
                             name="Submit"
-                            bgcolor="rgb(103, 58, 183)"
-                            textcolor="white"
-                            hoverbg="rgb(122 79 199)"
+                            {...submitButton[
+                                submitNotValid || previewMode
+                                    ? "disable"
+                                    : "enable"
+                            ]}
                         />
                         <Button
                             onClick={setAnswers.bind(
@@ -225,16 +286,18 @@ const QuestionnaireAnswer = (props) => {
                     <FormTitleCart
                         display={true}
                         title={getFormTitle(questions)}
-                        description={"test"}
+                        description={options.confirmMessage}
                     >
-                        <p
-                            className={classes.link}
-                            onClick={() => {
-                                router.reload();
-                            }}
-                        >
-                            Submit another response
-                        </p>
+                        {options.linkToNewResponse && (
+                            <p
+                                className={classes.link}
+                                onClick={() => {
+                                    router.reload();
+                                }}
+                            >
+                                Submit another response
+                            </p>
+                        )}
                     </FormTitleCart>
                 </div>
             )}

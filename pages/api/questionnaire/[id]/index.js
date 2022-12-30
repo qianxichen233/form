@@ -176,6 +176,23 @@ const getForm = async (req, res, id, userID) => {
         return;
     }
 
+    let responded = false;
+
+    if (data.options) {
+        const options = JSON.parse(data.options);
+        if (options.limitResponse) {
+            if (
+                await prisma.answers.findFirst({
+                    where: {
+                        userid: userID,
+                        questionnaireid: id,
+                    },
+                })
+            )
+                responded = true;
+        }
+    }
+
     if (!data.published) {
         if (data.creator === userID) {
             res.status(200).json({
@@ -198,6 +215,7 @@ const getForm = async (req, res, id, userID) => {
         creatat: data.creatat,
         published: data.published,
         options: data.options,
+        responded: responded,
     });
 };
 
