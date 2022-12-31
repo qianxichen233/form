@@ -1,4 +1,3 @@
 1. (to add) more question types
-2. (to fix) auto scroll hidden by header
 3. (to add) user account page
 4. (to add) convert to quiz
