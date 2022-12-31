@@ -11,6 +11,8 @@ import { useState, useEffect, useRef } from "react";
 
 import classes from "./EditPage.module.css";
 import Settings from "../Settings/Settings";
+import Modal from "../UI/Modal/Modal";
+import SendFormCart from "./SendFormCart";
 
 const generateID = (length) => {
     let result = "";
@@ -111,6 +113,7 @@ function EditPage() {
     const [published, setPublished] = useState();
 
     const [subpage, setSubpage] = useState("Questions");
+    const [sendForm, setSendForm] = useState(false);
 
     const questionRef = useRef();
     questionRef.current = questions;
@@ -226,6 +229,7 @@ function EditPage() {
 
         const missingPart = checkValidity(storedQuestion);
         if (missingPart) {
+            if (subpage !== "Questions") setSubpage("Questions");
             setErrorState(missingPart);
             return;
         }
@@ -245,7 +249,10 @@ function EditPage() {
                 }),
             }
         );
-        if (response.ok) setPublished(true);
+        if (response.ok) {
+            setPublished(true);
+            setSendForm(true);
+        }
     };
 
     const OnSaveHandler = async (e) => {
@@ -394,6 +401,17 @@ function EditPage() {
                 options={options.content}
                 setOptions={OnOptionsChangeHandler}
             />
+            <Modal
+                active={sendForm}
+                deactive={setSendForm.bind(null, false)}
+                color="rgb(128 128 128 / 50%)"
+            >
+                <SendFormCart
+                    id={router.query.questionnaireID}
+                    getQuestions={getQuestionContent}
+                    onCancel={setSendForm.bind(null, false)}
+                />
+            </Modal>
         </div>
     );
 }

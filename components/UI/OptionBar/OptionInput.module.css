@@ -9,22 +9,24 @@
     font-size: 15px;
     height: 30px;
     border-style: hidden;
-    margin-bottom: 5px;
+    border-bottom-style: groove;
+    border-color: transparent;
     padding-left: 0;
     padding-right: 0;
     border-width: 1px;
 }
 
-input.input[type="text"]:hover:not(.preview, .readOnly){
-    border-bottom-style: groove;
+input.input[type="text"]:hover:not(.preview, .readOnly) {
+    border-color: lightgrey;
 }
 
 .input[type="text"]:focus {
     outline: none;
 }
 
-.bar:after, .bar:before{
-    content: '';
+.bar:after,
+.bar:before {
+    content: "";
     display: block;
     position: absolute;
     width: 0;
@@ -34,11 +36,11 @@ input.input[type="text"]:hover:not(.preview, .readOnly){
     transition: width 0.3s ease-in-out;
 }
 
-.bar:after{
+.bar:after {
     left: 50%;
 }
 
-.bar:before{
+.bar:before {
     right: 50%;
 }
 
@@ -54,11 +56,11 @@ input.input[type="text"]:hover:not(.preview, .readOnly){
     height: 35px;
 }
 
-.error{
+.error {
     border-bottom-style: groove !important;
     border-color: red !important;
 }
 
-.readOnly{
+.readOnly {
     user-select: none;
 }
