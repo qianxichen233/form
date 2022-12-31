@@ -2,5 +2,3 @@
 2. (to fix) auto scroll hidden by header
 3. (to add) user account page
 4. (to add) convert to quiz
-5. (to add) answer page feedback
-6. (to add) setting handle
