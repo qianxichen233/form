@@ -5,6 +5,7 @@
     justify-content: flex-start;
     flex-direction: column;
     width: 400px;
+    height: -webkit-max-content;
     height: max-content;
     border-radius: 5px;
     background-color: #543884;
@@ -27,7 +28,8 @@
     color: white;
 
     margin-bottom: 10px;
-    user-select: none;
+    -webkit-user-select: none;
+            user-select: none;
 }
 
 .input {

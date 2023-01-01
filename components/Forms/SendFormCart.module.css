@@ -9,6 +9,7 @@
     min-width: 400px;
     width: 40%;
     max-width: 600px;
+    height: -webkit-max-content;
     height: max-content;
 
     margin-left: auto;
@@ -20,6 +21,7 @@
 }
 
 .container.outscreen {
+    max-height: -webkit-max-content;
     max-height: max-content;
     overflow: scroll;
 }
@@ -44,7 +46,8 @@
     margin-left: 20px;
     font-weight: 500;
     font-size: 20px;
-    user-select: none;
+    -webkit-user-select: none;
+            user-select: none;
 }
 
 .container header > div:first-child div {
@@ -95,7 +98,8 @@
 .input {
     margin-left: 20px;
     width: 100%;
-    user-select: all;
+    -webkit-user-select: all;
+            user-select: all;
 }
 
 .input input {

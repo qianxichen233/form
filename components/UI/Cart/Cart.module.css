@@ -1,23 +1,23 @@
 .cart {
     position: relative;
-
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
-
     margin-top: 10px;
     margin-bottom: 10px;
     padding: 10px 0 10px 0;
     border-radius: 10px;
     outline: lightgrey solid 0.5px;
     box-sizing: border-box;
-
     background-color: white;
     width: 70vw;
     min-width: 950px;
-
     transition: box-shadow 0.3s ease-in-out;
+    -webkit-transition: box-shadow 0.3s ease-in-out;
+    -moz-transition: box-shadow 0.3s ease-in-out;
+    -ms-transition: box-shadow 0.3s ease-in-out;
+    -o-transition: box-shadow 0.3s ease-in-out;
 }
 
 @media screen and (max-width: 950px) {

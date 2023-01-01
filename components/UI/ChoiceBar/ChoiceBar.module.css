@@ -1,4 +1,4 @@
-.choice{
+.choice {
     position: relative;
     width: 100%;
     display: flex;
@@ -9,6 +9,7 @@
 }
 
 .choice span {
+    -webkit-user-select: none;
     user-select: none;
     font-weight: bold;
     padding-left: 15px;

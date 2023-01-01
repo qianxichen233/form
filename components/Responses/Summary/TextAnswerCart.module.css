@@ -37,7 +37,9 @@
     font-size: 14pt;
     color: blue;
 
-    user-select: none;
+    -webkit-user-select: none;
+
+            user-select: none;
     margin-top: 5px;
 
     transition: background-color 0.1s ease-in-out;

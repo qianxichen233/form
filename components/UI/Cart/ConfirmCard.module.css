@@ -8,13 +8,15 @@
 }
 
 .form h2 {
-    user-select: none;
+    -webkit-user-select: none;
+            user-select: none;
     margin-left: 10px;
     text-align: center;
 }
 
 .form p {
-    user-select: none;
+    -webkit-user-select: none;
+            user-select: none;
     margin-left: 20px;
 }
 
