@@ -3,7 +3,7 @@
     top: 50px;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     flex-direction: column;
 
     min-width: 400px;
@@ -16,6 +16,11 @@
 
     border-radius: 8px;
     background-color: white;
+    overflow: scroll;
+}
+
+.container.outscreen {
+    max-height: max-content;
     overflow: scroll;
 }
 

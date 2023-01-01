@@ -1,6 +1,6 @@
 import classes from "./SendFormCart.module.css";
 import { Close } from "../UI/Icons";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ChoiceBar from "../UI/ChoiceBar/ChoiceBar";
 import Button from "../UI/Button/Button";
 import HintBar from "../UI/HintBar/HintBar";
@@ -21,6 +21,7 @@ const SendFormCart = (props) => {
         timeout: null,
         text: "",
     });
+    const cartRef = useRef();
 
     const [emailContent, setEmailContent] = useState({
         to: "",
@@ -43,6 +44,18 @@ const SendFormCart = (props) => {
             };
         });
     }, []);
+
+    useEffect(() => {
+        if (!cartRef.current) return;
+        const bottom = cartRef.current.getBoundingClientRect().bottom;
+        const viewHeight =
+            window.innerHeight || document.documentElement.clientHeight;
+        if (bottom > viewHeight) {
+            cartRef.current.classList.add(classes.outscreen);
+            cartRef.current.style.height = `${viewHeight - 100}px`;
+        } else if (cartRef.current.classList.contains(classes.outscreen))
+            cartRef.current.style.height = `${viewHeight - 100}px`;
+    }, [cartRef.current]);
 
     const setHintHandler = (text) => {
         setHintText((prev) => {
@@ -103,7 +116,7 @@ const SendFormCart = (props) => {
     };
 
     return (
-        <div className={classes.container}>
+        <div className={classes.container} ref={cartRef}>
             <header>
                 <div>
                     <p>Send Form</p>
