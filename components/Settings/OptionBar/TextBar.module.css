@@ -26,13 +26,15 @@
 
 .button p {
     text-align: center;
-    user-select: none;
+    -webkit-user-select: none;
+            user-select: none;
     color: blue;
 }
 
 .cancelButton p {
     text-align: center;
-    user-select: none;
+    -webkit-user-select: none;
+            user-select: none;
     color: grey;
 }
 
@@ -75,6 +77,7 @@
     display: flex;
     align-items: center;
     min-height: 50px;
+    height: -webkit-max-content;
     height: max-content;
     width: 70%;
     outline: 1px solid black;
@@ -84,7 +87,8 @@
 
 .input > span {
     position: absolute;
-    user-select: none;
+    -webkit-user-select: none;
+            user-select: none;
     padding: 0 4px;
     top: -10px;
     left: 10px;

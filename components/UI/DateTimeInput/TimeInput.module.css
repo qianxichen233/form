@@ -11,7 +11,8 @@
 }
 
 .text {
-    user-select: none;
+    -webkit-user-select: none;
+            user-select: none;
     color: grey;
     margin-left: 5px;
 }

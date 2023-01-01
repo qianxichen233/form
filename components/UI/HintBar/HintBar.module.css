@@ -25,7 +25,8 @@
     left: 15px;
 
     font-size: 14px;
-    user-select: none;
+    -webkit-user-select: none;
+            user-select: none;
     font-weight: bold;
 
     color: #fff;

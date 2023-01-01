@@ -9,7 +9,8 @@
 }
 
 .container label {
-    user-select: none;
+    -webkit-user-select: none;
+            user-select: none;
 }
 
 .inputContainer{
@@ -46,7 +47,8 @@
 }
 
 .circleContainerActive{
-    transform: translate(20px, 0);
+    -webkit-transform: translate(20px, 0);
+            transform: translate(20px, 0);
 }
 
 .circle{

@@ -1,11 +1,9 @@
 .cart {
     position: relative;
-
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
-
     margin-top: 10px;
     margin-bottom: 10px;
     padding: 10px 0 10px 0;
@@ -13,14 +11,16 @@
     min-width: 950px;
     outline: lightgrey solid 0.5px;
     box-sizing: border-box;
-
     background-color: white;
     width: 70vw;
-
-    /*box-shadow: 0px 8px 0 rgb(103, 58, 183) inset;*/
-    /*border-top: 8px rgb(103, 58, 183) solid;*/
-
+    /*box-shadow: 0px 8px 0 rgb(103, 58, 183) inset;
+    */ /*border-top: 8px rgb(103, 58, 183) solid;
+    */
     transition: box-shadow 0.3s ease-in-out;
+    -webkit-transition: box-shadow 0.3s ease-in-out;
+    -moz-transition: box-shadow 0.3s ease-in-out;
+    -ms-transition: box-shadow 0.3s ease-in-out;
+    -o-transition: box-shadow 0.3s ease-in-out;
 }
 
 @media screen and (max-width: 950px) {
