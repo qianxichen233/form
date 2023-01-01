@@ -16,7 +16,7 @@ const Settings = (props) => {
                 <DivLine width={`calc(100% - 60px)`} />
                 <div className={classes.mainOption}>
                     <EnableBar
-                        text="Make this a quiz"
+                        text="Make this a quiz (under development)"
                         description="Assign point values, set answers, and automatically provide feedback"
                         enable={props.options.quiz}
                         onChange={(status) => {

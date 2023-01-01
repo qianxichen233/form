@@ -1,3 +1,7 @@
+Will do:
+1. email handling
+
+May do:
 1. (to add) more question types
-3. (to add) user account page
-4. (to add) convert to quiz
+2. (to add) user account page
+3. (to add) convert to quiz

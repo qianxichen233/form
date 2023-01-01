@@ -1,15 +1,16 @@
-.cart{
+.cart {
     position: relative;
-    
+
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
-    
+
     margin-top: 10px;
     margin-bottom: 10px;
     padding: 10px 0 10px 0;
     border-radius: 10px;
+    min-width: 950px;
     outline: lightgrey solid 0.5px;
     box-sizing: border-box;
 
@@ -22,6 +23,13 @@
     transition: box-shadow 0.3s ease-in-out;
 }
 
+@media screen and (max-width: 950px) {
+    .cart {
+        width: 100vw;
+        min-width: 300px;
+    }
+}
+
 .borderLeft {
     position: absolute;
     top: 0;
@@ -32,7 +40,7 @@
     background-color: white;
 }
 
-.focus{
+.focus {
     background-color: #4285f4;
 }
 
