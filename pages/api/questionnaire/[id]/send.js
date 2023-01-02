@@ -1,7 +1,8 @@
 const { prisma } = require("../../../../lib/db");
 const { getSession } = require("next-auth/react");
 
-const { getUserIDByEmail } = require("../../../../lib/utility");
+const { getUserIDByEmail, validateEmail } = require("../../../../lib/utility");
+const { sendEmail } = require("../../../../lib/emailHandler");
 
 const handler = async (req, res) => {
     if (req.method !== "POST") {
@@ -45,7 +46,23 @@ const handler = async (req, res) => {
         return;
     }
 
-    //send email
+    if (!validateEmail(req.body.options.to)) {
+        res.status(406).json({ error: "Invalid Email Format" });
+        return;
+    }
+
+    const targetURL = `${process.env.NEXT_PUBLIC_FRONTEND_URL}/questionnaire/${id}/answer`;
+
+    const result = await sendEmail({
+        to: req.body.options.to,
+        subject: req.body.options.subject,
+        message: req.body.options.message + " " + targetURL,
+    });
+    if (result.error) {
+        console.log(result.error);
+        res.status(500).json({ error: "send email failed" });
+    }
+
     res.status(200).json({ msg: "success" });
     return;
 };

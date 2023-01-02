@@ -377,30 +377,37 @@ function EditPage() {
                 changePage={onPageChangeHandler}
                 subpage={subpage}
             />
-            <QuestionnaireMaking
-                id={router.query.questionnaireID}
-                questions={questions}
-                questionsChange={setQuestions}
-                titleContent={titleContent}
-                getKey={getKey}
-                error={errorState}
-                clearError={() => setErrorState(null)}
-                save={SaveTimeOut}
-                hide={subpage !== "Questions"}
-                defaultRequired={options.content.defaultRequired}
-            />
-            <Responses
-                id={router.query.questionnaireID}
-                hide={subpage !== "Responses"}
-                getQuestions={getQuestionContent}
-                published={published}
-            />
-            <Settings
-                id={router.query.questionnaireID}
-                hide={subpage !== "Settings"}
-                options={options.content}
-                setOptions={OnOptionsChangeHandler}
-            />
+            {subpage === "Questions" && (
+                <QuestionnaireMaking
+                    id={router.query.questionnaireID}
+                    questions={questions}
+                    questionsChange={setQuestions}
+                    titleContent={titleContent}
+                    getKey={getKey}
+                    error={errorState}
+                    clearError={() => setErrorState(null)}
+                    save={SaveTimeOut}
+                    hide={subpage !== "Questions"}
+                    defaultRequired={options.content.defaultRequired}
+                />
+            )}
+
+            {subpage === "Responses" && (
+                <Responses
+                    id={router.query.questionnaireID}
+                    hide={subpage !== "Responses"}
+                    getQuestions={getQuestionContent}
+                    published={published}
+                />
+            )}
+            {subpage === "Settings" && (
+                <Settings
+                    id={router.query.questionnaireID}
+                    hide={subpage !== "Settings"}
+                    options={options.content}
+                    setOptions={OnOptionsChangeHandler}
+                />
+            )}
             <Modal
                 active={sendForm}
                 deactive={setSendForm.bind(null, false)}
