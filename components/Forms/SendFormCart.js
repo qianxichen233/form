@@ -106,13 +106,16 @@ const SendFormCart = (props) => {
                     options: {
                         to: emailContent.to,
                         subject: emailContent.subject,
-                        message: emailContent.message + url,
+                        message: emailContent.message,
                     },
                 }),
             }
         );
-        if (!response.ok) console.log(await response.json());
-        else setHintHandler("Email Sent");
+        if (!response.ok) {
+            const error = await response.json();
+            if (error.error) setHintHandler(error.error);
+            else console.log(error);
+        } else setHintHandler("Email Sent");
     };
 
     return (

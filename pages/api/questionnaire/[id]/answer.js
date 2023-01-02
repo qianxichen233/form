@@ -1,10 +1,12 @@
+import { sendEmail } from "../../../../lib/emailHandler";
+
 const { prisma } = require("../../../../lib/db");
 const { getSession } = require("next-auth/react");
 
 const {
     checkAnswerValidity,
 } = require("../../../../lib/QuestionnaireValidity");
-const { getUserIDByEmail } = require("../../../../lib/utility");
+const { getUserIDByEmail, getFormTitle } = require("../../../../lib/utility");
 
 const handler = async (req, res) => {
     const { id } = req.query;
@@ -43,10 +45,11 @@ const handler = async (req, res) => {
             req,
             res,
             id,
-            questionnaire,
+            JSON.parse(questionnaire),
             published,
             userID,
-            JSON.parse(options)
+            JSON.parse(options),
+            session?.user.email
         );
         return;
     }
@@ -72,7 +75,8 @@ const addAnswer = async (
     questionnaire,
     published,
     userID,
-    options
+    options,
+    email
 ) => {
     if (!req.body.content) {
         res.status(406).json({ error: "Missing Field!" });
@@ -109,7 +113,7 @@ const addAnswer = async (
     }
 
     try {
-        if (!checkAnswerValidity(JSON.parse(questionnaire), req.body.content)) {
+        if (!checkAnswerValidity(questionnaire, req.body.content)) {
             res.status(406).json({
                 error: "Invalid Answer Format",
             });
@@ -128,6 +132,15 @@ const addAnswer = async (
     if (options.collectEmail) data.userid = userID;
 
     await prisma.answers.create({ data });
+
+    if (email) {
+        const formTitle = getFormTitle(questionnaire);
+        sendEmail({
+            to: email,
+            subject: "Your response has been recorded",
+            message: `Your response to ${formTitle} has been successfully recorded`,
+        });
+    }
 
     res.status(201).json({
         msg: "Success",
