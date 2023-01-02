@@ -4,5 +4,6 @@ plan.docx
 node_modules
 database
 .next
+.env
 
 ./to_do.txt
