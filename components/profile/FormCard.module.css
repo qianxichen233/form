@@ -2,12 +2,14 @@
     display: inline-block;
     height: 260px;
     width: 200px;
+    min-width: 200px;
 
     border: 1px lightgrey solid;
     border-radius: 3px;
 
     margin-top: 20px;
-    margin-left: 20px;
+    margin-left: 10px;
+    margin-right: 10px;
 
     cursor: pointer;
 
@@ -30,7 +32,8 @@
 
 .preview img {
     border-radius: 2px;
-    user-select: none;
+    -webkit-user-select: none;
+            user-select: none;
 }
 
 .textContainer {
@@ -44,10 +47,12 @@
     margin-top: 5px;
 }
 
-.card p, .card span {
+.card p,
+.card span {
     margin: 0;
     margin-left: 5px;
-    user-select: none;
+    -webkit-user-select: none;
+            user-select: none;
 }
 
 .optionRow {
@@ -93,6 +98,7 @@
     position: absolute;
     top: -100px;
     width: 200px;
+    height: -webkit-max-content;
     height: max-content;
 
     display: flex;
@@ -105,7 +111,7 @@
 
     background-color: white;
     z-index: 1001;
-    
+
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 }
 

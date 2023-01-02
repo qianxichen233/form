@@ -15,7 +15,8 @@
     text-align: left;
     color: grey;
     font-style: italic;
-    user-select: none;
+    -webkit-user-select: none;
+            user-select: none;
 }
 
 .questionContainer {

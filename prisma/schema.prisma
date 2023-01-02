@@ -21,6 +21,7 @@ model questionnaire {
   title                String                 @db.VarChar(200)
   creatat              DateTime
   content              String
+  options              String
   creator              BigInt
   published            Boolean
   answers              answers[]

@@ -19,7 +19,8 @@
 .top > div > p {
     margin-right: 20px;
     font-weight: bold;
-    user-select: none;
+    -webkit-user-select: none;
+            user-select: none;
 }
 
 .top > p {

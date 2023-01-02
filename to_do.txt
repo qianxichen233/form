@@ -1,4 +1,7 @@
-1. questionnaire making cut and paste function
-2. more question types
-3. auto scroll hidden by header
-4. user account page
+Will do:
+1. email handling
+
+May do:
+1. (to add) more question types
+2. (to add) user account page
+3. (to add) convert to quiz

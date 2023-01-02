@@ -1,0 +1,60 @@
+.container {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.barContainer {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.barContainer > div:first-child {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    flex-direction: column;
+    text-align: left;
+    margin-left: 30px;
+}
+
+.barContainer > div:last-child {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    margin-right: 30px;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.barContainer > div:last-child:hover {
+    cursor: pointer;
+    background-color: rgba(211, 211, 211, 0.5);
+}
+
+.barContainer h4 {
+    font-size: 18px;
+    margin: 0;
+    padding: 0;
+    font-weight: normal;
+}
+
+.barContainer p {
+    margin: 0;
+    padding: 0;
+    font-size: 14px;
+    color: grey;
+}
+
+.content {
+    position: relative;
+    bottom: 10px;
+    width: calc(100% - 30px);
+}
