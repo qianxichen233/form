@@ -13,6 +13,7 @@ import classes from "./EditPage.module.css";
 import Settings from "../Settings/Settings";
 import Modal from "../UI/Modal/Modal";
 import SendFormCart from "./SendFormCart";
+import Head from "next/head";
 
 const generateID = (length) => {
     let result = "";
@@ -367,6 +368,9 @@ function EditPage() {
 
     return (
         <div className={classes.container}>
+            <Head>
+                <title>{`${router.query.questionnaireID} - Nextjs Form`}</title>
+            </Head>
             <Header
                 title={formTitle}
                 onChange={onFormTitleChange}

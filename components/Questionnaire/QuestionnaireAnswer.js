@@ -213,6 +213,7 @@ const QuestionnaireAnswer = (props) => {
 
     return (
         <div className={classes.questionnaire}>
+            <Head>{`${props.id} - Nextjs Form`}</Head>
             {!submited && (
                 <div className={classes.container}>
                     {questions &&
