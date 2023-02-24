@@ -123,6 +123,8 @@ function EditPage() {
 
     const router = useRouter();
 
+    console.log(questionContent);
+
     useEffect(() => {
         if (optionsChange) {
             if (options.saveID) clearTimeout(options.saveID);

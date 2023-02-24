@@ -7,6 +7,7 @@ import AccountCart from "../Forms/AccountCart";
 import classes from "./Questionnaire.module.css";
 import Answerclasses from "./QuestionnaireAnswer.module.css";
 import Button from "../UI/Button/Button";
+import Head from "next/head";
 
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
@@ -115,7 +116,7 @@ const QuestionnaireAnswer = (props) => {
                         setPreviewMode(!questionnaire.published);
                         setHasRequiredQuestion(
                             questions.reduce((acc, question) => {
-                                return acc | question.content.required;
+                                return acc || question.content.required;
                             }, false)
                         );
                     }

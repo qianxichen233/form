@@ -1,6 +1,8 @@
+
 # Lightweight clone of google form with nextjs
 ---
-This project cloned Basic functionalities that google form provides, including
+#### demo video: https://youtu.be/YccNnOZ80BE
+This project cloned Basic features that google form provides, including
 1. Form making
 - Support 6 types of question, can be easily extended to more question types.
 - Support rich text editor to style question descriptions.
